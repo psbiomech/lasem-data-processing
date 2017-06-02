@@ -1,4 +1,4 @@
-%% RUN BODYBUILDER DATA EXTRACTION
+%% RUN BODY BUILDER DATA EXTRACTION
 % Prasanna Sritharan, June 2017
 
 
@@ -7,5 +7,9 @@ c3dfile = 'FAILT01_Walk01';
 
 
 
+% pull Body Builder data from C3D
+bb = pullBBpoint(c3dpath,c3dfile,[1 1 1]);
 
-bb = pullC3Ddata(c3dpath,c3dfile,[1 1 1]);
+% resample Body Builder data
+bb = resampleBBdata(bb,100);
+

@@ -1,10 +1,10 @@
-function [bb,sflag] = pullC3Ddata(c3dpath,c3dfile,amp)
+function [point,sflag] = pullBBpoint(c3dpath,c3dfile,amp)
 
-%pullC3Ddata Get BodyBuilder data from C3D file
+%pullC3Ddata Get Body Builder point data from C3D file
 %   Prasanna Sritharan, June 2017
    
     % Body Builder data groups
-    BBGROUPS = {'POWERS','ANGLES','MOMENTS'};
+    BBGROUPS = {'ANGLES','MOMENTS','POWERS'};
 
     try
 
@@ -52,9 +52,9 @@ function [bb,sflag] = pullC3Ddata(c3dpath,c3dfile,amp)
             for n=0:nvals-1
                 qname = itf.GetParameterValue(idx,n);
                 vchan = find(strcmp(qname,vlist))-1;
-                bb.(outgrps{g}).(qname) = zeros(nframes,3);    % initialise Body Builder output data matrix
+                point.(outgrps{g}).(qname) = zeros(nframes,3);    % initialise Body Builder output data matrix
                 for x=1:3
-                   bb.(outgrps{g}).(qname)(:,x) = double(cell2mat(itf.GetPointDataEx(vchan,x-1,vfrange(1),vfrange(2),'1')));
+                   point.(outgrps{g}).(qname)(:,x) = double(cell2mat(itf.GetPointDataEx(vchan,x-1,vfrange(1),vfrange(2),'1')));
                 end
             end            
         end                   
