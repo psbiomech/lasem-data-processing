@@ -1,4 +1,4 @@
-function [point,sflag] = pullBBpoint(c3dpath,c3dfile,amp)
+function [point,sflag] = pullBBpoint(c3dfile,amp)
 
 %pullC3Ddata Get Body Builder point data from C3D file
 %   Prasanna Sritharan, June 2017
@@ -19,7 +19,7 @@ function [point,sflag] = pullBBpoint(c3dpath,c3dfile,amp)
 
         % open C3D file
         try
-            sflag = itf.Open([c3dpath '\' c3dfile],3);
+            sflag = itf.Open(c3dfile,3);
         catch
             sflag = -1;
             disp('ERROR: C3D file could not be opened for processing. Please check if file exists and is not corrupted.');
