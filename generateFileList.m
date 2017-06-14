@@ -1,11 +1,15 @@
-function [flist,fnames,subtri] = generateFileList(c3droot,subjprefix,trialprefix,selectmode)
+function [flist,fnames,subtri] = generateFileList(c3droot,c3dnameformat,selectmode)
 
 %generateFileList Parse file structure and extract files with names matching pattern
 %   Prasanna Sritharan, June 2017
 
-   
+    % string subsections
+    subjprefix = c3dnameformat{1};
+    separator = c3dnameformat{2};
+    trialprefix = c3dnameformat{3};
+
     % generate expression for pattern matching
-    c3dexpr = ['(' subjprefix '\d+' trialprefix '\d+)\.c3d'];
+    c3dexpr = ['(' subjprefix '\d+' separator trialprefix '\d+)\.c3d'];
 
     % parse all subdirectories and get list of all C3D files starting from
     % c3droot that match c3dexpr
@@ -19,7 +23,7 @@ function [flist,fnames,subtri] = generateFileList(c3droot,subjprefix,trialprefix
     fflag = zeros(size(flist));
     tokens = cell(size(flist));
     for f=1:length(flist)
-        [toks,match] = regexp(fstruct(f).name,['.*\\' c3dexpr '$'],'tokens');
+        [toks,match] = regexpi(fstruct(f).name,['.*\\' c3dexpr '$'],'tokens');
         fflag(f) = ~isempty(match);
         if (fflag(f)==1), tokens{f} = toks{1}{1}; end;
     end
@@ -28,7 +32,7 @@ function [flist,fnames,subtri] = generateFileList(c3droot,subjprefix,trialprefix
     ftemp = flist(logical(fflag));
     toktemp = tokens(logical(fflag));
     
-    % further manually cut down list
+    % manually cut down list even more if select mode is manual
     switch selectmode
         
         % keep all files in list
@@ -58,11 +62,11 @@ function [flist,fnames,subtri] = generateFileList(c3droot,subjprefix,trialprefix
     end
     
     % further split tokens into subjects and trials, trim results
-    splitexp = ['(' subjprefix '\d+)(' trialprefix '\d+)'];
+    splitexp = ['(' subjprefix '\d+)' separator '(' trialprefix '\d+)'];
     subtri = cell(size(fnames));
     for t=1:length(fnames)
-       [toks2,~] = regexp(fnames{t},splitexp,'tokens');
-       sbtemp = regexp(toks2{1},'[-_.]*(\w*)[-_.]*','tokens');
+       [toks2,~] = regexpi(fnames{t},splitexp,'tokens');
+       sbtemp = regexpi(toks2{1},'[-_.]*(\w*)[-_.]*','tokens');
        subtri{t} = [sbtemp{1}{1},sbtemp{2}{1}];
     end
     

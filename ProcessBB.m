@@ -1,0 +1,74 @@
+%% RUN BODY BUILDER DATA EXTRACTION
+% Prasanna Sritharan, June 2017
+
+
+
+
+% ------------------------------
+% script settings
+SAMP = 100;     % desired samples
+C3DROOT = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';     % full path of data root folder
+C3DNAMEFORMAT = {'FAILT','_','WALK'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
+SELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
+XLSNAME = 'WalkingData.xlsx';       % output Excel spreadsheet name
+XLSPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing\Baseline\Sample Data';    % full path of required Excel file location
+BBFILENAME = 'WalkingData.mat';
+BBFILEPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing\Baseline\Sample Data';    % full path of required Excel file location
+% ------------------------------
+
+
+
+
+clc; 
+
+disp('C3D BODY BUILDER DATA EXTRACTION');
+disp('Prasanna Sritharan, June 2017');
+disp(' ');
+disp([datestr(now) ': Execution commenced.']);
+disp(' ');
+disp(' ');
+disp('===========================================================');
+disp(' ');
+
+
+
+% get Body Builder metadata
+bbmeta = getBBmeta();
+    
+
+% generate C3D file list
+% (assumes file names of form:
+% [SUBJPREFIX][SUBJCODE][SEPARATOR][TRIALPREFIX][TRIALCODE].c3d)
+disp('Generating list of available C3D files matching file name format...');
+[flist,fnames,subtri] = generateFileList(C3DROOT,C3DNAMEFORMAT,SELECTMODE);
+
+
+% pull raw Body Builder data into a struct and resample
+disp('Extracting Body Builder data from C3D files...');
+for f=1:length(flist)
+    rawdatastruct = pullBBpoint(flist{f},bbmeta,[1 1 1]);
+    bb.(subtri{f}{1}).(subtri{f}{2}) = resampleBBdata(rawdatastruct,SAMP);    
+end
+
+
+% calculate mean and sd per subject from Body Builder struct
+disp('Calculating subject means and standard deviations...');
+subjs = fieldnames(bb);
+for s=1:length(subjs)
+    [bb.(subtri{f}{1}).mean, bb.(subtri{f}{1}).sd] = meanBBsubject(bb.(subtri{f}{1}),bbmeta);
+end
+
+
+% write mean data to Excel spreadsheet from Body Builder struct
+disp('Writing data to Excel spreadsheet...');
+writeBBstructToXLS(bb,bbmeta,XLSNAME,XLSPATH,SAMP);
+
+
+% save Body Builder struct
+saveBBstruct(bb,BBFILENAME,BBFILEPATH);
+
+
+disp(' ');
+disp([datestr(now) ': Execution complete.']);
+disp('-----------------------------------------------------------');
+disp(' ');

@@ -4,6 +4,8 @@ function writeBBstructToXLS(bbstruct,bbmeta,xlsname,xlspath,samp)
 %writeBBstructToXLS write BodyBuilder data to Excel workbook
 %   Prasanna Sritharan, June 2017
     
+    warning('off');
+
     % collate data
     subjs = fieldnames(bbstruct);    
     for b=1:length(bbmeta.BBGROUPS)
