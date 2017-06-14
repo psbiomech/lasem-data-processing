@@ -1,11 +1,8 @@
-function [point,sflag] = pullBBpoint(c3dfile,amp)
+function [point,sflag] = pullBBpoint(c3dfile,bbmeta,amp)
 
 %pullC3Ddata Get Body Builder point data from C3D file
 %   Prasanna Sritharan, June 2017
    
-    % Body Builder data groups
-    BBGROUPS = {'ANGLES','MOMENTS','POWERS'};
-
     try
 
         % add C3D extension if necessary
@@ -43,7 +40,7 @@ function [point,sflag] = pullBBpoint(c3dfile,amp)
         end
         
         % get desired output data groups
-        outgrps = BBGROUPS(logical(amp));
+        outgrps = bbmeta.BBGROUPS(logical(amp));
         
         % get data for all parameters in each desired group and store in struct
         for g=1:length(outgrps)
