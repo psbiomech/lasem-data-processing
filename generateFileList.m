@@ -1,6 +1,6 @@
 function [flist,fnames,subtri] = generateFileList(c3droot,subjprefix,trialprefix,selectmode)
 
-%autogenFileList Parse file structure and extract files with names matching pattern
+%generateFileList Parse file structure and extract files with names matching pattern
 %   Prasanna Sritharan, June 2017
 
    

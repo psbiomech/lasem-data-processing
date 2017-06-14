@@ -2,10 +2,13 @@
 % Prasanna Sritharan, June 2017
 
 
-c3droot = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing\Baseline\Sample Data';
+%c3droot = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing\Baseline\Sample Data';
+c3droot = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
 c3dfile = 'FAILT01_Walk01';
 
 
+
+    
 
 
 % generate C3D file list
@@ -24,5 +27,5 @@ end
 % calculate mean per subject
 subjs = fieldnames(bb);
 for s=1:length(subjs)
-    bb.(subtri{f}{1}).mean = calcMeanData(bb.(subtri{f}{1}));
+    [bb.(subtri{f}{1}).mean, bb.(subtri{f}{1}).sd] = meanBBsubject(bb.(subtri{f}{1}));
 end
