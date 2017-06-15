@@ -7,14 +7,15 @@
 % ------------------------------
 % script settings
 SAMP = 100;     % desired samples
-C3DROOT = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';     % full path of data root folder
+C3DROOT = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';     % full path of data root folder
 C3DNAMEFORMAT = {'FAILT','_','WALK'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
 SELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
-XLSNAME = 'WalkingData.xlsx';       % output Excel spreadsheet name
-XLSPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing\Baseline\Sample Data';    % full path of required Excel file location
-BBFILENAME = 'WalkingData.mat';
-BBFILEPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing\Baseline\Sample Data';    % full path of required Excel file location
+XLSNAME = 'SLDJ.xlsx';       % output Excel spreadsheet name
+XLSPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';    % full path of required Excel file location
+BBFILENAME = 'SLDJ.mat';     % output MAT file name
+BBFILEPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';    % full path of required Excel file location
 % ------------------------------
+
 
 
 
@@ -43,11 +44,12 @@ disp('Generating list of available C3D files matching file name format...');
 [flist,fnames,subtri] = generateFileList(C3DROOT,C3DNAMEFORMAT,SELECTMODE);
 
 
-% pull raw Body Builder data into a struct and resample
+% pull raw Body Builder data into a struct, trim and resample
 disp('Extracting Body Builder data from C3D files...');
 for f=1:length(flist)
-    rawdatastruct = pullBBpoint(flist{f},bbmeta,[1 1 1]);
+    [rawdatastruct,trialfoot,~] = pullBBpoint(flist{f},bbmeta,[1 1 1],'sldj');    
     bb.(subtri{f}{1}).(subtri{f}{2}) = resampleBBdata(rawdatastruct,SAMP);    
+    bb.(subtri{f}{1}).(subtri{f}{2}).trialfoot = trialfoot;    
 end
 
 

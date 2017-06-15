@@ -1,4 +1,4 @@
-function [point,sflag] = pullBBpoint(c3dfile,bbmeta,amp)
+function [point,trialfoot,sflag] = pullBBpoint(c3dfile,bbmeta,amp,actflag)
 
 %pullC3Ddata Get Body Builder point data from C3D file
 %   Prasanna Sritharan, June 2017
@@ -21,21 +21,19 @@ function [point,sflag] = pullBBpoint(c3dfile,bbmeta,amp)
             sflag = -1;
             disp('ERROR: C3D file could not be opened for processing. Please check if file exists and is not corrupted.');
         end
+
         
-        % get first and last video frames
-        vfrange = [itf.GetVideoFrame(0) itf.GetVideoFrame(1)];        
-        
-        % determine data vector length (no. of video frames)
-        nframes = vfrange(2)-vfrange(1)+1;
-        
+        % get time range window
+        [vfrange,nframes,trialfoot] = getC3Dwindow(itf,actflag);
+                
         % get number of video channels used
         idx = itf.GetParameterIndex('POINT','USED');
         nused = itf.GetParameterValue(idx,0);               
         
         % get video channel list
         vlist = cell(1,nused);
+        idx = itf.GetParameterIndex('POINT','LABELS');
         for n=1:nused
-            idx = itf.GetParameterIndex('POINT','LABELS');
             vlist{n} = itf.GetParameterValue(idx,n-1);
         end
         
@@ -49,14 +47,12 @@ function [point,sflag] = pullBBpoint(c3dfile,bbmeta,amp)
             for n=0:nvals-1
                 qname = itf.GetParameterValue(idx,n);
                 vchan = find(strcmp(qname,vlist))-1;
-                point.(outgrps{g}).(qname) = zeros(nframes,3);    % initialise Body Builder output data matrix
                 for x=1:3
                    point.(outgrps{g}).(qname)(:,x) = double(cell2mat(itf.GetPointDataEx(vchan,x-1,vfrange(1),vfrange(2),'1')));
                 end
             end            
         end                   
-        
-        
+
         % close C3D file
         itf.Close();
         
