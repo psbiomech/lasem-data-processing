@@ -36,7 +36,7 @@ function writeBBstructToXLS(bbstruct,bbmeta,xlsname,xlspath,samp)
                                                                                 
 
     % add XLSX extension if necessary
-    if isempty(regexpi(xlsname,'.xlsx')), xlsname = [xlsname '.c3d']; end;    
+    if isempty(regexpi(xlsname,'.xlsx')), xlsname = [xlsname '.xlsx']; end;    
     
     % write Excel spreadsheet
     s = 1;

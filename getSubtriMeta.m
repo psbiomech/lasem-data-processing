@@ -1,4 +1,4 @@
-function meta = getSubtriMeta(subtri,bbmeta,cohmode,affmode,ttmode)
+function meta = getSubtriMeta(flist,subtri,bbmeta,cohmode,affmode,ttmode,writexls,xlsname,xlspath)
 
 
 %getSubtriMeta Build struct of subject and trial metadata
@@ -15,19 +15,25 @@ function meta = getSubtriMeta(subtri,bbmeta,cohmode,affmode,ttmode)
             disp(['------------------------------']);
             meta.(subtri{f}{1}).cohort = labelSubjectCohort(bbmeta,cohmode);
             meta.(subtri{f}{1}).affected = labelAffectedLimb(meta.(subtri{f}{1}).cohort,bbmeta,affmode);
-            
-            % label trial type: symptomatic limb, asymptomatic limb, control
+                        
+            % store file path and label trial type: symptomatic limb, asymptomatic limb, control
             for g=1:length(subtri)
                 if strcmpi(subtri{f}{1},subtri{g}{1})
                     meta.(subtri{g}{1}).(subtri{g}{2}).triallimb = labelTrialLimb(subtri{g}{1},subtri{g}{2},bbmeta,ttmode);
+                    meta.(subtri{f}{1}).(subtri{g}{2}).filepath = flist{g};
                 end                
-            end
-                        
+            end                        
+            
         else
             continue
         end            
     end
     
+    % write to Excel spreadsheet
+    if strcmpi(writexls,'xls')
+        writeSettingsToXLS(meta,xlsname,xlspath);
+    end
+        
 end
 
 
