@@ -4,12 +4,17 @@
 
 
 
-% ------------------------------
+% ------------------------------------------------------------
 % Script Settings
 
 SAMP = 100;     % desired samples
+FILESELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
+
 TASK = 'sldj';   % activity/task/motion type
-SELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
+
+COHORT = 'manual';      % cohort type (affected/control)
+AFFECTED = 'manual';    % affected limb (left/right, or control)
+TRIALLIMB = 'manual';   % trial limb (left/right)
 
 C3DROOT = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';     % full path of data root folder
 C3DNAMEFORMAT = {'FAILT','_','SLDJ'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
@@ -20,7 +25,7 @@ XLSPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';    
 
 BBFILENAME = 'SLDJ.mat';     % output MAT file name
 BBFILEPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';    % full path of required Excel file location
-% ------------------------------
+% ------------------------------------------------------------
 
 
 
@@ -39,7 +44,8 @@ disp(' ');
 
 
 
-% get Body Builder metadata
+% get Body Builder defaults
+disp('Retrieving Body Builder default parameters...');
 bbmeta = getBBmeta();
     
 
@@ -47,7 +53,14 @@ bbmeta = getBBmeta();
 % (assumes file names of form:
 % [SUBJPREFIX][SUBJCODE][SEPARATOR][TRIALPREFIX][TRIALCODE].c3d)
 disp('Generating list of available C3D files matching file name format...');
-[flist,fnames,subtri] = generateFileList(C3DROOT,C3DNAMEFORMAT,SELECTMODE);
+[flist,fnames,subtri] = generateFileList(C3DROOT,C3DNAMEFORMAT,FILESELECTMODE);
+
+
+
+% determine trial type (symptomatic leg, asymptomatic leg, control)
+disp('Generating subject and trial metadata...');
+bb = getSubtriMeta(subtri,bbmeta,COHORT,AFFECTED,TRIALLIMB);
+
 
 
 % pull raw Body Builder data into a struct, trim and resample
@@ -59,6 +72,7 @@ for f=1:length(flist)
 end
 
 
+
 % calculate mean and sd per subject from Body Builder struct
 disp('Calculating subject means and standard deviations...');
 subjs = fieldnames(bb);
@@ -67,16 +81,16 @@ for s=1:length(subjs)
 end
 
 
-% write mean data to Excel spreadsheet from Body Builder struct
-disp('Writing data to Excel spreadsheet...');
-writeBBstructToXLS(bb,bbmeta,XLSNAME,XLSPATH,SAMP);
-
-
-% save Body Builder struct
-saveBBstruct(bb,BBFILENAME,BBFILEPATH);
-
-
-disp(' ');
-disp([datestr(now) ': Execution complete.']);
-disp('-----------------------------------------------------------');
-disp(' ');
+% % write mean data to Excel spreadsheet from Body Builder struct
+% disp('Writing data to Excel spreadsheet...');
+% writeBBstructToXLS(bb,bbmeta,XLSNAME,XLSPATH,SAMP);
+% 
+% 
+% % save Body Builder struct
+% saveBBstruct(bb,BBFILENAME,BBFILEPATH);
+% 
+% 
+% disp(' ');
+% disp([datestr(now) ': Execution complete.']);
+% disp('-----------------------------------------------------------');
+% disp(' ');

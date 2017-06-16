@@ -4,16 +4,16 @@ function bbmeta = getBBmeta()
 %   Prasanna Sritharan, June 2017
 
     bbmeta.BBGROUPS = {'ANGLES','MOMENTS','POWERS'};
-    bbmeta.ANGLES = {'RAnkleAngles','RKneeAngles','RHipAngles','RPelvisAngles','RTrunkAngles','RTrunkLABAngles', ...
-                     'LHipAngles','LKneeAngles','LAnkleAngles','LTrunkAngles','LTrunkLABAngles','LPelvisAngles'};
-    bbmeta.MOMENTS = {'RAnkleMomentFOOT','RAnkleMomentDTIB','RAnkleMomentROT','RKneeMomentPTIB','RKneeMomentFEM','RKneeMomentROT','RHipMomentFEM','RHipMomentPEL','RHipMomentROT', ...
-                      'LAnkleMomentFOOT','LAnkleMomentDTIB','LAnkleMomentROT','LKneeMomentPTIB','LKneeMomentFEM','LKneeMomentROT','LHipMomentFEM','LHipMomentPEL','LHipMomentROT'};
-    bbmeta.POWERS = {'RAnklePower','RHipPower','RKneePower', ...
-                     'LHipPower','LKneePower','LAnklePower'};              
+    bbmeta.ANGLES = {'AnkleAngles','KneeAngles','HipAngles','PelvisAngles','TrunkAngles','TrunkLABAngles'};
+    bbmeta.MOMENTS = {'AnkleMomentFOOT','AnkleMomentDTIB','AnkleMomentROT','KneeMomentPTIB','KneeMomentFEM','KneeMomentROT','HipMomentFEM','HipMomentPEL','HipMomentROT'};
+    bbmeta.POWERS = {'AnklePower','HipPower','KneePower'};
     bbmeta.units.ANGLES = 'deg';
     bbmeta.units.MOMENTS = 'Nm';
     bbmeta.units.POWERS = 'Nms-1';
     bbmeta.dirs = {'X','Y','Z'};
-
+    bbmeta.limbs = {'R','L','C'};
+    bbmeta.cohorts = {'AFF','CON'};
+    bbmeta.conditions = {'SYM','ASYM','CON'};
+    
 end
 
