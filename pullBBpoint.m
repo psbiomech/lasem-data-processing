@@ -24,7 +24,7 @@ function [point,trialfoot,sflag] = pullBBpoint(c3dfile,bbmeta,amp,actflag)
 
         
         % get time range window
-        [vfrange,~,trialfoot] = getC3Dwindow(itf,actflag);
+        %[vfrange,~,trialfoot] = getC3Dwindow(itf,actflag);
                 
         % get number of video channels used
         idx = itf.GetParameterIndex('POINT','USED');

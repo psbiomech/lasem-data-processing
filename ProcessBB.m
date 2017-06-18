@@ -11,6 +11,7 @@ SAMP = 100;     % desired samples
 FILESELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
 
 TASK = 'sldj';   % activity/task/motion type
+AMP = [1 1 1];   % angle, moment, power
 
 C3DNAMEFORMAT = {'FAILT','_','SLDJ'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
 C3DROOT = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
@@ -63,21 +64,19 @@ disp('Generating list of available C3D files matching file name format...');
 [flist,fnames,subtri] = generateFileList(C3DROOT,C3DNAMEFORMAT,FILESELECTMODE);
 
 
-% determine trial type (symptomatic leg, asymptomatic leg, control)
+% add additional information about trial (metadata)
 disp('Generating subject and trial metadata and settings...');
-bb = getSubtriMeta(flist,subtri,bbmeta,COHORT,AFFECTED,TRIALLIMB,WRITEXLS,SETNAME,SETPATH);
+bb = getSubtriMeta(flist,subtri,bbmeta,TASK,COHORT,AFFECTED,TRIALLIMB,WRITEXLS,SETNAME,SETPATH);
 
 
-% % pull raw Body Builder data into a struct, trim and resample
-% disp('Extracting Body Builder data from C3D files...');
-% for f=1:length(flist)
-%     [rawdatastruct,trialfoot,~] = pullBBpoint(flist{f},bbmeta,[1 1 1],TASK);    
-%     bb.(subtri{f}{1}).(subtri{f}{2}) = resampleBBdata(rawdatastruct,SAMP);    
-%     bb.(subtri{f}{1}).(subtri{f}{2}).trialfoot = trialfoot;    
-% end
-% 
-% 
-% 
+% pull raw Body Builder data into a struct, trim and resample
+disp('Extracting Body Builder data from C3D files...');
+bb = extractBBdata(bb,bbmeta,AMP,SAMP);
+
+
+
+
+
 % % calculate mean and sd per subject from Body Builder struct
 % disp('Calculating subject means and standard deviations...');
 % subjs = fieldnames(bb);

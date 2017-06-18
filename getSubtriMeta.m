@@ -1,4 +1,4 @@
-function meta = getSubtriMeta(flist,subtri,bbmeta,cohmode,affmode,ttmode,writexls,xlsname,xlspath)
+function meta = getSubtriMeta(flist,subtri,bbmeta,actflag,cohmode,affmode,ttmode,writexls,xlsname,xlspath)
 
 
 %getSubtriMeta Build struct of subject and trial metadata
