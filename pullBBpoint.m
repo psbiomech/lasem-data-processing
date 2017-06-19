@@ -1,4 +1,4 @@
-function [point,trialfoot,sflag] = pullBBpoint(c3dfile,bbmeta,amp,actflag)
+function [point,trialfoot,sflag] = pullBBpoint(subj,trial,c3dfile,bbmeta,amp,actflag)
 
 %pullC3Ddata Get Body Builder point data from C3D file
 %   Prasanna Sritharan, June 2017
@@ -24,7 +24,7 @@ function [point,trialfoot,sflag] = pullBBpoint(c3dfile,bbmeta,amp,actflag)
 
         
         % get time range window
-        %[vfrange,~,trialfoot] = getC3Dwindow(itf,actflag);
+        [vfrange,~,trialfoot] = getC3Dwindow(itf,actflag,subj,trial);
                 
         % get number of video channels used
         idx = itf.GetParameterIndex('POINT','USED');
@@ -56,8 +56,7 @@ function [point,trialfoot,sflag] = pullBBpoint(c3dfile,bbmeta,amp,actflag)
         % close C3D file
         itf.Close();
         
-    catch exception
-        rethrow(exception)
+    catch
         sflag = -2;
         disp('ERROR: C3D file could not be processed.');
     end

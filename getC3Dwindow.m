@@ -1,4 +1,4 @@
-function [vfrange,nframes,trialfoot] = getC3Dwindow(itf,actflag)
+function [vfrange,nframes,trialfoot] = getC3Dwindow(itf,actflag,subj,trial)
 
 
 %getC3Dwindow Determine time window based on activity type
@@ -39,11 +39,31 @@ function [vfrange,nframes,trialfoot] = getC3Dwindow(itf,actflag)
     econtext = econtext(order);
     elabel = elabel(order);
     
+    % display events
+    disp(' ');
+    disp([subj ' ' trial]);
+    fprintf(1,'SeqNo\tTime\t\tContext\t\tLabel\n');
+    for n=1:eused
+        fprintf(1,'%i\t\t%5.2f\t\t%s\t\t%s\n',n,etime(n),econtext{n},elabel{n});
+    end
+    disp(' ');
     
     % determine window based on activity type
     switch lower(actflag)
         
-        % run (stance):
+        % manual
+        % enter first and last event manually
+        case 'manual'
+            seq1 = input('Enter sequence no. of first event [first in file]: ');
+            seq2 = input('Enter sequence no. of last event [last in file]: ');
+            if (~isenum(seq1))||(~isenum(seq2))||(seq1<=seq2)
+                seq1 = 1;
+                seq2 = eused(end);
+            end
+            trange = [etime(seq1) etime(seq2)];
+            trialfoot = econtext{seq1};
+        
+        % run stance:
         % look for consecutive FS and FO on same foot
         case 'run-stance'
             for n=1:eused-1

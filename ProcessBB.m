@@ -10,7 +10,7 @@
 SAMP = 100;     % desired samples
 FILESELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
 
-TASK = 'sldj';   % activity/task/motion type
+TASK = 'manual';   % activity/task/motion type
 AMP = [1 1 1];   % angle, moment, power
 
 C3DNAMEFORMAT = {'FAILT','_','SLDJ'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
@@ -25,6 +25,7 @@ SETNAME = 'SLDJ_Input'; % settings file name
 SETPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
 %XLSPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';    % full path of required Excel file location
 
+INPUTTYPE = 'xls';      % get settings/meta data from Excel or struct
 
 XLSNAME = 'SLDJ.xlsx';       % output Excel spreadsheet name
 XLSPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
@@ -71,23 +72,17 @@ bb = getSubtriMeta(flist,subtri,bbmeta,TASK,COHORT,AFFECTED,TRIALLIMB,WRITEXLS,S
 
 % pull raw Body Builder data into a struct, trim and resample
 disp('Extracting Body Builder data from C3D files...');
-bb = extractBBdata(bb,bbmeta,AMP,SAMP);
-
-
-
+bb = extractBBdata(INPUTTYPE,SETNAME,bbmeta,AMP,SAMP,TASK,SETPATH);
 
 
 % % calculate mean and sd per subject from Body Builder struct
 % disp('Calculating subject means and standard deviations...');
-% subjs = fieldnames(bb);
-% for s=1:length(subjs)
-%     [bb.(subtri{f}{1}).mean, bb.(subtri{f}{1}).sd] = meanBBsubject(bb.(subtri{f}{1}),bbmeta);
-% end
+% bb = meanBBsubject(bb,bbmeta);
 % 
 % 
 % % write mean data to Excel spreadsheet from Body Builder struct
 % disp('Writing data to Excel spreadsheet...');
-% writeBBstructToXLS(bb,bbmeta,XLSNAME,XLSPATH,SAMP);
+% writeBBstructToXLSMean(bb,bbmeta,XLSNAME,XLSPATH,SAMP);
 % 
 % 
 % % save Body Builder struct

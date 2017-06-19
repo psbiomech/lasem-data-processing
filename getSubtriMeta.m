@@ -26,7 +26,10 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,actflag,cohmode,affmode,ttmode
             
         else
             continue
-        end            
+        end       
+        
+        disp(' ');
+        
     end
     
     % write to Excel spreadsheet
