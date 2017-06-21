@@ -1,4 +1,4 @@
-function [vfrange,nframes,trialfoot] = getC3Dwindow(itf,actflag,subj,trial)
+function [vfrange,nframes] = getC3Dwindow(c3dfile,actflag,subj,trial)
 
 
 %getC3Dwindow Determine time window based on activity type
@@ -10,6 +10,23 @@ function [vfrange,nframes,trialfoot] = getC3Dwindow(itf,actflag,subj,trial)
     LAB.GEN = 'GENERAL';
     CON.R = 'RIGHT';
     CON.L = 'LEFT';
+
+    % add C3D extension if necessary
+    if isempty(regexpi(c3dfile,'.c3d')), c3dfile = [c3dfile '.c3d']; end;
+
+    % initiate C3DServer
+    itf = c3dserver();
+
+    % turn strict parameter checking off
+    itf.SetStrictParameterChecking(0);
+
+    % open C3D file
+    try
+        sflag = itf.Open(c3dfile,3);
+    catch
+        sflag = -1;
+        disp('ERROR: C3D file could not be opened for processing. Please check if file exists and is not corrupted.');
+    end
     
     % get video frequency
     vfreq = itf.GetVideoFrameRate;
@@ -34,6 +51,9 @@ function [vfrange,nframes,trialfoot] = getC3Dwindow(itf,actflag,subj,trial)
        elabel{n} = itf.GetParameterValue(idx3,n-1);
     end
 
+    % close C3D file
+    itf.Close();
+    
     % sort events in ascending time order
     [etime,order] = sort(etime);
     econtext = econtext(order);

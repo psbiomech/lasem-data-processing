@@ -10,7 +10,7 @@
 SAMP = 100;     % desired samples
 FILESELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
 
-TASK = 'manual';   % activity/task/motion type
+TASK = 'sldj';   % activity/task/motion type
 AMP = [1 1 1];   % angle, moment, power
 
 C3DNAMEFORMAT = {'FAILT','_','SLDJ'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
@@ -25,7 +25,8 @@ SETNAME = 'SLDJ_Input'; % settings file name
 SETPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
 %XLSPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';    % full path of required Excel file location
 
-INPUTTYPE = 'xls';      % get settings/meta data from Excel or struct
+INPUTTYPE = 'struct';      % get settings/meta data from Excel or struct
+BBNAME = 'bb';
 
 XLSNAME = 'SLDJ.xlsx';       % output Excel spreadsheet name
 XLSPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
@@ -72,14 +73,14 @@ bb = getSubtriMeta(flist,subtri,bbmeta,TASK,COHORT,AFFECTED,TRIALLIMB,WRITEXLS,S
 
 % pull raw Body Builder data into a struct, trim and resample
 disp('Extracting Body Builder data from C3D files...');
-bb = extractBBdata(INPUTTYPE,SETNAME,bbmeta,AMP,SAMP,TASK,SETPATH);
+bb = extractBBdata(INPUTTYPE,bb,bbmeta,AMP,SAMP,SETPATH);
 
 
-% % calculate mean and sd per subject from Body Builder struct
-% disp('Calculating subject means and standard deviations...');
-% bb = meanBBsubject(bb,bbmeta);
-% 
-% 
+% calculate mean and sd per subject from Body Builder struct
+disp('Calculating subject means and standard deviations...');
+bb = meanBBsubject(bb,bbmeta);
+
+
 % % write mean data to Excel spreadsheet from Body Builder struct
 % disp('Writing data to Excel spreadsheet...');
 % writeBBstructToXLSMean(bb,bbmeta,XLSNAME,XLSPATH,SAMP);
@@ -87,9 +88,9 @@ bb = extractBBdata(INPUTTYPE,SETNAME,bbmeta,AMP,SAMP,TASK,SETPATH);
 % 
 % % save Body Builder struct
 % saveBBstruct(bb,BBFILENAME,BBFILEPATH);
-% 
-% 
-% disp(' ');
-% disp([datestr(now) ': Execution complete.']);
-% disp('-----------------------------------------------------------');
-% disp(' ');
+
+
+disp(' ');
+disp([datestr(now) ': Execution complete.']);
+disp('-----------------------------------------------------------');
+disp(' ');

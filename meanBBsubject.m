@@ -15,17 +15,27 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta)
         for b=1:length(bbmeta.BBGROUPS)
             for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
                 for f=1:2
-                    quantname = [bbmeta.limbs{f} bbmeta.(bbmeta.BBGROUPS{b}){q}];
-                    t = 1;
+                    quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
+                    quantname = [bbmeta.limbs{f} quantlabel];
+                    t1 = 1;
+                    t2 = 1;
                     for n = 1:ntrials
                         try
                             if isempty(find(strcmpi(trials{n},{'cohort','affected'}),1))
-                                alldata.(bbmeta.BBGROUPS{b}).(quantname)(:,:,t) = bbstruct.(subjs{s}).(trials{n}).(bbmeta.BBGROUPS{b}).(quantname);
-                                t = t + 1;
+                                if bbstruct.(subjs{s}).(trials{n}).triallimb==bbmeta.limbs{f}
+                                    if bbstruct.(subjs{s}).triallimb==bbstruct.(subjs{s}).affected
+                                        alldata.(bbmeta.conditions{1}).(bbmeta.BBGROUPS{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).(bbmeta.BBGROUPS{b}).(quantname);
+                                        t1 = t1 + 1;
+                                    else
+                                        alldata.(bbmeta.conditions{2}).(bbmeta.BBGROUPS{b}).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).(bbmeta.BBGROUPS{b}).(quantname);
+                                        t2 = t2 + 1;
+                                    end
+                                end
                             else
                                 continue;
                             end
-                        catch
+                        catch exception
+                            rethrow(exception);
                             disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} ' ' trials{n} '.'])  ;
                         end                           
                     end
@@ -36,11 +46,10 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta)
         % calculate mean and sd
         for b=1:length(bbmeta.BBGROUPS)
             for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
-                for f=1:2
-                    quantname = [bbmeta.limbs{f} bbmeta.(bbmeta.BBGROUPS{b}){q}];
-                    bbstruct.(subjs{s}).mean.(bbmeta.BBGROUPS{b}).(quantname) = mean(alldata.(bbmeta.BBGROUPS{b}).(quantname),3);
-                    bbstruct.(subjs{s}).sd.(bbmeta.BBGROUPS{b}).(quantname) = std(alldata.(bbmeta.BBGROUPS{b}).(quantname),0,3);
-            
+                for c=1:2
+                    quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
+                    bbstruct.(subjs{s}).mean.(quantlabel).(bbmeta.BBGROUPS{b}).(bbmeta.conditions{c}) = mean(alldata.(quantlabel).(bbmeta.BBGROUPS{b}).(bbmeta.conditions{c}),3);
+                    bbstruct.(subjs{s}).sd.(quantlabel).(bbmeta.BBGROUPS{b}).(bbmeta.conditions{c}) = std(alldata.(quantlabel).(bbmeta.BBGROUPS{b}).(bbmeta.conditions{c}),0,3);            
                 end
             end
         end    

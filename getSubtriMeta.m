@@ -24,6 +24,13 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,actflag,cohmode,affmode,ttmode
                 end                
             end                        
             
+            % determine time window to extract in video frames
+            for g=1:length(subtri)
+                if strcmpi(subtri{f}{1},subtri{g}{1})
+                    meta.(subtri{g}{1}).(subtri{g}{2}).vfrange = getC3Dwindow(flist{g},actflag,subtri{g}{1},subtri{g}{2});
+                end                
+            end             
+            
         else
             continue
         end       
