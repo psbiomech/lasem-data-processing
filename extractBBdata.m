@@ -30,7 +30,7 @@ function bbstruct = extractBBdata(inputtype,inp,bbmeta,amp,samp,xlspath)
         for t=1:length(trials)
             if isempty(find(strcmpi(trials{t},{'cohort','affected'}),1))
                 [rawdatastruct,~] = pullBBpoint(bbstruct.(subjs{s}).(trials{t}).filepath,bbstruct.(subjs{s}).(trials{t}).vfrange,bbmeta,amp);    
-                [bbstruct.(subjs{s}).(trials{t})] = resampleBBdata(rawdatastruct,samp);     
+                bbstruct = resampleBBdata(bbstruct,subjs{s},trials{t},rawdatastruct,samp);     
             else
                 continue;
             end

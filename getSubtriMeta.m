@@ -1,4 +1,4 @@
-function meta = getSubtriMeta(flist,subtri,bbmeta,actflag,cohmode,affmode,ttmode,writexls,xlsname,xlspath)
+function meta = getSubtriMeta(flist,subtri,bbmeta,task,cohmode,affmode,tlmode,writexls,xlsname,xlspath)
 
 
 %getSubtriMeta Build struct of subject and trial metadata
@@ -16,20 +16,13 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,actflag,cohmode,affmode,ttmode
             meta.(subtri{f}{1}).cohort = labelSubjectCohort(bbmeta,cohmode);
             meta.(subtri{f}{1}).affected = labelAffectedLimb(meta.(subtri{f}{1}).cohort,bbmeta,affmode);
                         
-            % store file path and label trial type: symptomatic limb, asymptomatic limb, control
+            % store file path, label trial limb and time window
             for g=1:length(subtri)
                 if strcmpi(subtri{f}{1},subtri{g}{1})
-                    meta.(subtri{g}{1}).(subtri{g}{2}).triallimb = labelTrialLimb(subtri{g}{1},subtri{g}{2},bbmeta,ttmode);
+                    [meta.(subtri{g}{1}).(subtri{g}{2}).vfrange,~,meta.(subtri{g}{1}).(subtri{g}{2}).triallimb] = getC3Dwindow(flist{g},task,tlmode,bbmeta,subtri{g}{1},subtri{g}{2});
                     meta.(subtri{f}{1}).(subtri{g}{2}).filepath = flist{g};
                 end                
-            end                        
-            
-            % determine time window to extract in video frames
-            for g=1:length(subtri)
-                if strcmpi(subtri{f}{1},subtri{g}{1})
-                    meta.(subtri{g}{1}).(subtri{g}{2}).vfrange = getC3Dwindow(flist{g},actflag,subtri{g}{1},subtri{g}{2});
-                end                
-            end             
+            end                                        
             
         else
             continue

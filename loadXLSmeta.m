@@ -17,8 +17,8 @@ function    bb = loadXLSmeta(xlsname,xlspath)
             bb.(rawdata{r,1}).affected = rawdata{r,4};
         end
         bb.(rawdata{r,1}).(rawdata{r,2}).triallimb = rawdata{r,5};
-        bb.(rawdata{r,1}).(rawdata{r,2}).vfrange = [rawdata{r,6} rawdata{r,7}];
-        bb.(rawdata{r,1}).(rawdata{r,2}).filepath = rawdata{r,8};
+        bb.(rawdata{r,1}).(rawdata{r,2}).vfrange = [rawdata{r,7} rawdata{r,8}];
+        bb.(rawdata{r,1}).(rawdata{r,2}).filepath = rawdata{r,6};
     end   
 
 end

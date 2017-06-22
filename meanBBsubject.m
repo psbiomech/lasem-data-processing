@@ -22,8 +22,8 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta)
                     for n = 1:ntrials
                         try
                             if isempty(find(strcmpi(trials{n},{'cohort','affected'}),1))
-                                if bbstruct.(subjs{s}).(trials{n}).triallimb==bbmeta.limbs{f}
-                                    if bbstruct.(subjs{s}).triallimb==bbstruct.(subjs{s}).affected
+                                if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
+                                    if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
                                         alldata.(bbmeta.conditions{1}).(bbmeta.BBGROUPS{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).(bbmeta.BBGROUPS{b}).(quantname);
                                         t1 = t1 + 1;
                                     else
@@ -48,8 +48,8 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta)
             for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
                 for c=1:2
                     quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
-                    bbstruct.(subjs{s}).mean.(quantlabel).(bbmeta.BBGROUPS{b}).(bbmeta.conditions{c}) = mean(alldata.(quantlabel).(bbmeta.BBGROUPS{b}).(bbmeta.conditions{c}),3);
-                    bbstruct.(subjs{s}).sd.(quantlabel).(bbmeta.BBGROUPS{b}).(bbmeta.conditions{c}) = std(alldata.(quantlabel).(bbmeta.BBGROUPS{b}).(bbmeta.conditions{c}),0,3);            
+                    bbstruct.(subjs{s}).mean.(bbmeta.conditions{c}).(bbmeta.BBGROUPS{b}).(quantlabel) = mean(alldata.(bbmeta.conditions{c}).(bbmeta.BBGROUPS{b}).(quantlabel),3);
+                    bbstruct.(subjs{s}).sd.(bbmeta.conditions{c}).(bbmeta.BBGROUPS{b}).(quantlabel) = std(alldata.(bbmeta.conditions{c}).(bbmeta.BBGROUPS{b}).(quantlabel),0,3);            
                 end
             end
         end    

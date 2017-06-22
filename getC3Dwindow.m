@@ -1,4 +1,4 @@
-function [vfrange,nframes] = getC3Dwindow(c3dfile,actflag,subj,trial)
+function [vfrange,nframes,triallimb] = getC3Dwindow(c3dfile,task,tlmode,bbmeta,subj,trial)
 
 
 %getC3Dwindow Determine time window based on activity type
@@ -8,8 +8,7 @@ function [vfrange,nframes] = getC3Dwindow(c3dfile,actflag,subj,trial)
     LAB.FS = 'FOOT STRIKE';
     LAB.FO = 'FOOT OFF';
     LAB.GEN = 'GENERAL';
-    CON.R = 'RIGHT';
-    CON.L = 'LEFT';
+
 
     % add C3D extension if necessary
     if isempty(regexpi(c3dfile,'.c3d')), c3dfile = [c3dfile '.c3d']; end;
@@ -69,7 +68,7 @@ function [vfrange,nframes] = getC3Dwindow(c3dfile,actflag,subj,trial)
     disp(' ');
     
     % determine window based on activity type
-    switch lower(actflag)
+    switch lower(task)
         
         % manual
         % enter first and last event manually
@@ -81,7 +80,7 @@ function [vfrange,nframes] = getC3Dwindow(c3dfile,actflag,subj,trial)
                 seq2 = eused(end);
             end
             trange = [etime(seq1) etime(seq2)];
-            trialfoot = econtext{seq1};
+            triallimbguess = lower(econtext{seq1}(1));
         
         % run stance:
         % look for consecutive FS and FO on same foot
@@ -89,7 +88,7 @@ function [vfrange,nframes] = getC3Dwindow(c3dfile,actflag,subj,trial)
             for n=1:eused-1
                if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))
                    trange = [etime(n) etime(n+1)];
-                   trialfoot = econtext{n};
+                   triallimbguess = lower(econtext{n}(1));
                    break;
                end
             end               
@@ -100,21 +99,23 @@ function [vfrange,nframes] = getC3Dwindow(c3dfile,actflag,subj,trial)
             for n=1:eused-1
                if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))
                    trange = [etime(n) etime(n+1)];
-                   trialfoot = econtext{n};
+                   triallimbguess = lower(econtext{n}(1));
                    break;
                end
             end            
-            
-            
+                        
             
     end
-        
+              
     % calculate window video frames
     vfrange = round(((trange*vfreq)+1)-vfirst+1);
     
     % calculate no. of frames
     nframes = vfrange(2)-vfrange(1)+1;
 
+    % determine trial limb
+    triallimb = labelTrialLimb(subj,trial,bbmeta,tlmode,triallimbguess);
+    
 
 end
 
