@@ -38,14 +38,14 @@ function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,amp)
         outgrps = bbmeta.BBGROUPS(logical(amp));
         
         % get data for all parameters in each desired group and store in struct
+        point = struct();
         for g=1:length(outgrps)
-            idx = itf.GetParameterIndex('POINT',outgrps{g});
-            nvals = itf.GetParameterLength(idx);
-            for n=0:nvals-1
+            for n=0:nused-1
                 qname = itf.GetParameterValue(idx,n);
                 vchan = find(strcmp(qname,vlist))-1;
                 for x=1:3
-                   point.(outgrps{g}).(qname)(:,x) = double(cell2mat(itf.GetPointDataEx(vchan,x-1,vfrange(1),vfrange(2),'1')));
+                    qname = outgrps{g};
+                    point.(outgrps{g}).(qname)(:,x) = double(cell2mat(itf.GetPointDataEx(vchan,x-1,vfrange(1),vfrange(2),'1')));
                 end
             end            
         end                   
@@ -53,7 +53,8 @@ function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,amp)
         % close C3D file
         itf.Close();
         
-    catch
+    catch excp
+        rethrow(excp);
         sflag = -2;
         disp('ERROR: C3D file could not be processed.');
     end

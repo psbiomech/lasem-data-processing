@@ -1,4 +1,4 @@
-function [vfrange,nframes,triallimb] = getC3Dwindow(c3dfile,task,tlmode,bbmeta,subj,trial)
+function [vfrange,nvframes,afrange,naframes,triallimb] = getC3Dwindow(c3dfile,task,tlmode,bbmeta,subj,trial)
 
 
 %getC3Dwindow Determine time window based on activity type
@@ -29,10 +29,13 @@ function [vfrange,nframes,triallimb] = getC3Dwindow(c3dfile,task,tlmode,bbmeta,s
     
     % get video frequency
     vfreq = itf.GetVideoFrameRate;
-    
-    % get first frame
+        
+    % get first video frame
     vfirst = itf.GetVideoFrame(0);
        
+    % get analog-to-video ratio
+    avratio = itf.GetAnalogVideoRatio;
+    
     % get number of events
     idx = itf.GetParameterIndex('EVENT','USED');
     eused = itf.GetParameterValue(idx,0);
@@ -107,15 +110,20 @@ function [vfrange,nframes,triallimb] = getC3Dwindow(c3dfile,task,tlmode,bbmeta,s
             
     end
               
-    % calculate window video frames
+    % calculate window for video frames
     vfrange = round(((trange*vfreq)+1)-vfirst+1);
     
-    % calculate no. of frames
-    nframes = vfrange(2)-vfrange(1)+1;
-
+    % calculate window for analog frames
+    afrange = round((vfrange-1)*avratio+1);
+    
+    % calculate no. of video frames
+    nvframes = vfrange(2)-vfrange(1)+1;
+    
+    % calculate no. of analog frames
+    naframes = afrange(2)-afrange(1)+1;
+        
     % determine trial limb
     triallimb = labelTrialLimb(subj,trial,bbmeta,tlmode,triallimbguess);
     
-
 end
 
