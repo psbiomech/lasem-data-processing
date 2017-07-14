@@ -44,7 +44,6 @@ function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,amp)
                 qname = itf.GetParameterValue(idx,n);
                 vchan = find(strcmp(qname,vlist))-1;
                 for x=1:3
-                    qname = outgrps{g};
                     point.(outgrps{g}).(qname)(:,x) = double(cell2mat(itf.GetPointDataEx(vchan,x-1,vfrange(1),vfrange(2),'1')));
                 end
             end            
