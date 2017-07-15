@@ -58,7 +58,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta)
         
         % collate analog data
         for b=1:length(bbmeta.BBANALOGS)
-            for q=1:length(bbmeta.(bbmeta.ANALOGS{b}))
+            for q=1:length(bbmeta.(bbmeta.BBANALOGS{b}))
                 for f=1:2
                     quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
                     quantname = [bbmeta.limbs{f} quantlabel];
