@@ -1,4 +1,4 @@
-function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,amp)
+function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,ampg)
 
 %pullC3Ddata Get Body Builder point data from C3D file
 %   Prasanna Sritharan, June 2017
@@ -35,19 +35,48 @@ function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,amp)
         end
         
         % get desired output data groups
-        outgrps = bbmeta.BBGROUPS(logical(amp));
+        outgrps = bbmeta.BBGROUPS(logical(ampg));
         
         % get data for all parameters in each desired group and store in struct
         point = struct();
         for g=1:length(outgrps)
-            for n=0:nused-1
-                qname = itf.GetParameterValue(idx,n);
-                vchan = find(strcmp(qname,vlist))-1;
-                for x=1:3
-                    point.(outgrps{g}).(qname)(:,x) = double(cell2mat(itf.GetPointDataEx(vchan,x-1,vfrange(1),vfrange(2),'1')));
+            for q=1:length(bbmeta.(outgrps{g}))
+        
+                % determine how to extract based on point data type
+                switch outgrps{g}
+                    
+                    % Body Builder GRF point data
+                    case 'GRFS'                        
+                        fpnums = regexp(vlist,[bbmeta.GRFS.vectors{1} '(\d+)'],'tokens');
+                        fpnums = fpnums(~cellfun('isempty',fpnums)); 
+                        for f = 1:length(fpnums)
+                            fpsuffix = fpnums{f}{1}{1};
+                            cop = [bbmeta.GRFS.vectors{1} fpsuffix];
+                            grf = [bbmeta.GRFS.vectors{2} fpsuffix];
+                            copchan = find(strcmp(cop,vlist))-1;
+                            grfchan = find(strcmp(grf,vlist))-1;
+                            qname = [bbmeta.GRFS.fpprefix num2str(f)];
+                            for x=1:3
+                                copvec = double(cell2mat(itf.GetPointDataEx(copchan,x-1,vfrange(1),vfrange(2),'1')));
+                                grfvec = double(cell2mat(itf.GetPointDataEx(grfchan,x-1,vfrange(1),vfrange(2),'1')));
+                                point.(outgrps{g}).(qname)(:,x) = grfvec - copvec;
+                            end
+                        end
+                            
+                    % all other Body Builder data
+                    otherwise
+                        for f=1:2
+                            qname = [bbmeta.limbs{f} bbmeta.(outgrps{g}){q}];
+                            vchan = find(strcmp(qname,vlist))-1;
+                            for x=1:3
+                                point.(outgrps{g}).(qname)(:,x) = double(cell2mat(itf.GetPointDataEx(vchan,x-1,vfrange(1),vfrange(2),'1')));
+                            end
+                        end
                 end
-            end            
-        end                   
+                
+                
+            end
+        end
 
         % close C3D file
         itf.Close();

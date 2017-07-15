@@ -11,7 +11,7 @@ SAMP = 100;     % desired samples
 FILESELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
 
 TASK = 'sldj';   % activity/task/motion type
-AMP = [1 1 1];   % angle, moment, power
+AMPG = [1 1 1 1];   % angle, moment, power, GRFs
 FM = [1 0];      % GRF, EMG
 
 C3DNAMEFORMAT = {'FAILT','_','SLDJ'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
@@ -74,7 +74,7 @@ bb = getSubtriMeta(flist,subtri,bbmeta,TASK,COHORT,AFFECTED,TLMODE,WRITEXLS,SETN
     
 % pull raw Body Builder data into a struct, trim and resample
 disp('Extracting Body Builder data from C3D files...');
-bb = extractBBdata(INPUTTYPE,bb,bbmeta,AMP,FM,SAMP,SETPATH);
+bb = extractBBdata(INPUTTYPE,bb,bbmeta,AMPG,FM,SAMP,SETPATH);
 
 
 % calculate mean and sd per subject from Body Builder struct

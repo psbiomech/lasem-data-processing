@@ -3,14 +3,16 @@ function bbmeta = getBBmeta()
 %getBBmeta Return a struct containing Body Builder metadata
 %   Prasanna Sritharan, June 2017
 
-    bbmeta.BBGROUPS = {'ANGLES','MOMENTS','POWERS'};
+    bbmeta.BBGROUPS = {'ANGLES','MOMENTS','POWERS','GRFS'};
     bbmeta.ANGLES = {'AnkleAngles','KneeAngles','HipAngles','PelvisAngles','TrunkAngles','TrunkLABAngles'};
     bbmeta.MOMENTS = {'AnkleMomentFOOT','AnkleMomentDTIB','AnkleMomentROT','KneeMomentPTIB','KneeMomentFEM','KneeMomentROT','HipMomentFEM','HipMomentPEL','HipMomentROT'};
     bbmeta.POWERS = {'AnklePower','HipPower','KneePower'};
-    bbmeta.BBANALOGS = {'GRF','EMG'};
-    bbmeta.GRF.string = '%s%s%d';
-    bbmeta.GRF.prefix = {'F','M'};
-    bbmeta.GRF.suffix = {'',''};
+    bbmeta.GRFS.vectors = {'CofP','Vector'};    
+    bbmeta.GRFS.fpprefix = 'FP';    
+    %bbmeta.BBANALOGS = {'GRF','EMG'};
+    %bbmeta.GRF.string = '%s%s%d';
+    %bbmeta.GRF.prefix = {'F','M'};
+    %bbmeta.GRF.suffix = {'',''};
     bbmeta.units.ANGLES = 'deg';
     bbmeta.units.MOMENTS = 'Nm';
     bbmeta.units.POWERS = 'Nms-1';
