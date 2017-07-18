@@ -49,8 +49,10 @@ function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,ampg)
                     case 'GRFS'                        
                         fpnums = regexp(vlist,[bbmeta.GRFS.vectors{1} '(\d+)'],'tokens');
                         fpnums = fpnums(~cellfun('isempty',fpnums)); 
+                        %point.activefp = zeros(length(fpnums));
                         for f = 1:length(fpnums)
                             fpsuffix = fpnums{f}{1}{1};
+                            %point.activefp(f) = fpsuffix;
                             cop = [bbmeta.GRFS.vectors{1} fpsuffix];
                             grf = [bbmeta.GRFS.vectors{2} fpsuffix];
                             copchan = find(strcmp(cop,vlist))-1;
