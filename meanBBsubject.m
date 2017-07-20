@@ -18,32 +18,75 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
         alldata = struct;
         for b=1:length(outgrps)
             for q=1:length(bbmeta.(outgrps{b}))
-                for f=1:2
-                    quantlabel = bbmeta.(outgrps{b}){q};
-                    quantname = [bbmeta.limbs{f} quantlabel];
-                    t1 = 1;
-                    t2 = 1;
-                    for n = 1:ntrials
-                        try
-                            if isempty(find(strcmpi(trials{n},{'cohort','affected'}),1))
-                                if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
-                                    if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
-                                        alldata.(bbmeta.conditions{1}).(outgrps{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).(outgrps{b}).(quantname);
-                                        t1 = t1 + 1;
+                
+                % collate data based on point data type
+                switch outgrps{b}
+                    
+                    % Body Builder GRF point data
+                    case 'GRFS'
+                        fpnums = regexp(vlist,[bbmeta.fpvectors{1} '(\d+)'],'tokens');
+                        fpnums = fpnums(~cellfun('isempty',fpnums)); 
+                        %point.activefp = zeros(length(fpnums));
+                        for f = 1:length(fpnums)                    
+                            quantlabel = [bbmeta.(outgrps{b}){q} num2str(f)];
+                            t1 = 1;
+                            t2 = 1;
+                            for n = 1:ntrials
+                                try
+                                    if isempty(find(strcmpi(trials{n},{'cohort','affected'}),1))
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
+                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                                alldata.(bbmeta.conditions{1}).(outgrps{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).(outgrps{b}).(quantname);
+                                                t1 = t1 + 1;
+                                            else
+                                                alldata.(bbmeta.conditions{2}).(outgrps{b}).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).(outgrps{b}).(quantname);
+                                                t2 = t2 + 1;
+                                            end
+                                        end
                                     else
-                                        alldata.(bbmeta.conditions{2}).(outgrps{b}).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).(outgrps{b}).(quantname);
-                                        t2 = t2 + 1;
+                                        continue;
                                     end
+                                   
+                                catch
                                 end
-                            else
-                                continue;
+                                
                             end
-                        catch exception
-                            rethrow(exception);
-                            disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} ' ' trials{n} '.'])  ;
-                        end                           
-                    end
+                        end
+                            
+                        
+                    % all other Body Builder data
+                    otherwise
+                        for f=1:2
+                            quantlabel = bbmeta.(outgrps{b}){q};
+                            quantname = [bbmeta.limbs{f} quantlabel];
+                            t1 = 1;
+                            t2 = 1;
+                            for n = 1:ntrials
+                                try
+                                    if isempty(find(strcmpi(trials{n},{'cohort','affected'}),1))
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
+                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                                alldata.(bbmeta.conditions{1}).(outgrps{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).(outgrps{b}).(quantname);
+                                                t1 = t1 + 1;
+                                            else
+                                                alldata.(bbmeta.conditions{2}).(outgrps{b}).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).(outgrps{b}).(quantname);
+                                                t2 = t2 + 1;
+                                            end
+                                        end
+                                    else
+                                        continue;
+                                    end
+                                catch exception
+                                    rethrow(exception);
+                                    disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} ' ' trials{n} '.'])  ;
+                                end                           
+                            end
+                        end
+                        
+                        
+                        
                 end
+                
             end
         end
 

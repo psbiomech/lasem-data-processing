@@ -79,7 +79,7 @@ bb = extractBBdata(INPUTTYPE,bb,bbmeta,AMPG,FM,SAMP,SETPATH);
 
 % calculate mean and sd per subject from Body Builder struct
 disp('Calculating subject means and standard deviations...');
-bb = meanBBsubject(bb,bbmeta);
+bb = meanBBsubject(bb,bbmeta,AMPG);
 
 
 % write mean data to Excel spreadsheet from Body Builder struct

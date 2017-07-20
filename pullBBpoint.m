@@ -47,17 +47,17 @@ function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,ampg)
                     
                     % Body Builder GRF point data
                     case 'GRFS'                        
-                        fpnums = regexp(vlist,[bbmeta.GRFS.vectors{1} '(\d+)'],'tokens');
+                        fpnums = regexp(vlist,[bbmeta.fpvectors{1} '(\d+)'],'tokens');
                         fpnums = fpnums(~cellfun('isempty',fpnums)); 
                         %point.activefp = zeros(length(fpnums));
                         for f = 1:length(fpnums)
                             fpsuffix = fpnums{f}{1}{1};
                             %point.activefp(f) = fpsuffix;
-                            cop = [bbmeta.GRFS.vectors{1} fpsuffix];
-                            grf = [bbmeta.GRFS.vectors{2} fpsuffix];
+                            cop = [bbmeta.fpvectors{1} fpsuffix];
+                            grf = [bbmeta.fpvectors{2} fpsuffix];
                             copchan = find(strcmp(cop,vlist))-1;
                             grfchan = find(strcmp(grf,vlist))-1;
-                            qname = [bbmeta.GRFS.fpprefix num2str(f)];
+                            qname = [bbmeta.(outgrps{g}){q} num2str(f)];
                             for x=1:3
                                 copvec = double(cell2mat(itf.GetPointDataEx(copchan,x-1,vfrange(1),vfrange(2),'1')));
                                 grfvec = double(cell2mat(itf.GetPointDataEx(grfchan,x-1,vfrange(1),vfrange(2),'1')));
