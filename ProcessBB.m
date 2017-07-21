@@ -7,6 +7,9 @@
 % ------------------------------------------------------------
 % Script Settings
 
+%FILEROOT = 'C:\Users\Prasanna\Documents\Git Repositories\';
+FILEROOT = 'C:\Users\psritharan\Documents\03 Projects\';
+
 SAMP = 100;     % desired samples
 FILESELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
 
@@ -15,27 +18,23 @@ AMPG = [1 1 1 1];   % angle, moment, power, GRFs
 FM = [1 0];      % GRF, EMG
 
 C3DNAMEFORMAT = {'FAILT','_','SLDJ'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
-C3DROOT = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
-%C3DROOT = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';     % full path of data root folder
+C3DROOT = [FILEROOT 'lasem-data-processing'];     % full path of data root folder
 
 COHORT = 'aff';      % cohort type (affected/control)
 AFFECTED = 'r';    % affected limb (left/right, or control)
 TLMODE = 'auto';   % trial limb (left/right)
 WRITEXLS = 'xls';       % write settings and meta to Excel spreadsheet
 SETNAME = 'SLDJ_Input'; % settings file name
-SETPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
-%SETPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';    % full path of required Excel file location
+SETPATH = [FILEROOT 'lasem-data-processing'];    % full path of required Excel file location
 
 INPUTTYPE = 'struct';      % get settings/meta data from Excel or struct
 BBNAME = 'bb';
 
 XLSPREFIX = 'SLDJ';       % output Excel spreadsheet name
-XLSPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
-%XLSPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';    % full path of required Excel file location
+XLSPATH = [FILEROOT 'lasem-data-processing'];    % full path of required Excel file location
 
 BBFILENAME = 'SLDJ.mat';     % output MAT file name
-BBFILEPATH = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing';
-%BBFILEPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing';    % full path of required MAT file location
+BBFILEPATH = [FILEROOT 'lasem-data-processing'];    % full path of required MAT file location
 % ------------------------------------------------------------
 
 
@@ -77,18 +76,18 @@ disp('Extracting Body Builder data from C3D files...');
 bb = extractBBdata(INPUTTYPE,bb,bbmeta,AMPG,FM,SAMP,SETPATH);
 
 
-% calculate mean and sd per subject from Body Builder struct
-disp('Calculating subject means and standard deviations...');
-bb = meanBBsubject(bb,bbmeta,AMPG);
-
-
-% write mean data to Excel spreadsheet from Body Builder struct
-disp('Writing data to Excel spreadsheet...');
-writeBBstructToXLSMean(bb,bbmeta,XLSPREFIX,XLSPATH,SAMP);
-
-
-% save Body Builder struct
-saveBBstruct(bb,BBFILENAME,BBFILEPATH);
+% % calculate mean and sd per subject from Body Builder struct
+% disp('Calculating subject means and standard deviations...');
+% bb = meanBBsubject(bb,bbmeta,AMPG);
+% 
+% 
+% % write mean data to Excel spreadsheet from Body Builder struct
+% disp('Writing data to Excel spreadsheet...');
+% writeBBstructToXLSMean(bb,bbmeta,XLSPREFIX,XLSPATH,SAMP);
+% 
+% 
+% % save Body Builder struct
+% saveBBstruct(bb,BBFILENAME,BBFILEPATH);
 
 
 disp(' ');

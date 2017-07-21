@@ -8,7 +8,7 @@ function writeSettingsToXLS(bbstruct,xlsname,xlspath)
 
     
     % sheet header
-    xldata(1,:) = {'Subject','Trial','Cohort','Affected','Trial Limb','File Path','First VFrame','Last VFrame'};
+    xldata(1,:) = {'Subject','Trial','Cohort','Affected','Trial Limb','File Path','First VFrame','Last VFrame','FP Sequence'};
         
     % collate data
     x = 2;
@@ -17,7 +17,7 @@ function writeSettingsToXLS(bbstruct,xlsname,xlspath)
         trials = fieldnames(bbstruct.(subjs{s}));
         for t=1:length(trials)
             if isempty(find(strcmpi(trials{t},{'cohort','affected'}),1))
-                xldata(x,:) = {subjs{s}, trials{t}, upper(bbstruct.(subjs{s}).cohort), upper(bbstruct.(subjs{s}).affected), upper(bbstruct.(subjs{s}).(trials{t}).triallimb), bbstruct.(subjs{s}).(trials{t}).filepath, num2str(bbstruct.(subjs{s}).(trials{t}).vfrange(1)), num2str(bbstruct.(subjs{s}).(trials{t}).vfrange(2))};
+                xldata(x,:) = {subjs{s}, trials{t}, upper(bbstruct.(subjs{s}).cohort), upper(bbstruct.(subjs{s}).affected), upper(bbstruct.(subjs{s}).(trials{t}).triallimb), bbstruct.(subjs{s}).(trials{t}).filepath, num2str(bbstruct.(subjs{s}).(trials{t}).vfrange(1)), num2str(bbstruct.(subjs{s}).(trials{t}).vfrange(2)),mat2str(bbstruct.(subjs{s}).(trials{t}).fpsequence)};
                 x = x + 1;
             end
         end

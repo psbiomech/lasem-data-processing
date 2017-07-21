@@ -7,7 +7,7 @@ function bbmeta = getBBmeta()
     bbmeta.ANGLES = {'AnkleAngles','KneeAngles','HipAngles','PelvisAngles','TrunkAngles','TrunkLABAngles'};
     bbmeta.MOMENTS = {'AnkleMomentFOOT','AnkleMomentDTIB','AnkleMomentROT','KneeMomentPTIB','KneeMomentFEM','KneeMomentROT','HipMomentFEM','HipMomentPEL','HipMomentROT'};
     bbmeta.POWERS = {'AnklePower','HipPower','KneePower'};
-    bbmeta.GRFS = {'FP'};    
+    bbmeta.GRFS = {'GRF'};    
     %bbmeta.BBANALOGS = {'GRF','EMG'};
     %bbmeta.GRF.string = '%s%s%d';
     %bbmeta.GRF.prefix = {'F','M'};
@@ -17,7 +17,7 @@ function bbmeta = getBBmeta()
     bbmeta.units.MOMENTS = 'Nm';
     bbmeta.units.POWERS = 'Nms-1';
     bbmeta.dirs = {'X','Y','Z'};
-    bbmeta.limbs = {'R','L','C'};
+    bbmeta.limbs = {'R','L'};
     bbmeta.cohorts = {'AFF','CON'};
     bbmeta.conditions = {'SYM','ASYM','CON'};
     

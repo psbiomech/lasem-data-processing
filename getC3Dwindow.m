@@ -1,4 +1,4 @@
-function [vfrange,nvframes,afrange,naframes,triallimb] = getC3Dwindow(c3dfile,task,tlmode,bbmeta,subj,trial)
+function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3dfile,task,tlmode,bbmeta,subj,trial)
 
 
 %getC3Dwindow Determine time window based on activity type
@@ -53,14 +53,11 @@ function [vfrange,nvframes,afrange,naframes,triallimb] = getC3Dwindow(c3dfile,ta
        elabel{n} = itf.GetParameterValue(idx3,n-1);
     end
 
-    % close C3D file
-    itf.Close();
-    
     % sort events in ascending time order
     [etime,order] = sort(etime);
     econtext = econtext(order);
-    elabel = elabel(order);
-    
+    elabel = elabel(order);         
+            
     % display events
     disp(' ');
     disp([subj ' ' trial]);
@@ -124,6 +121,12 @@ function [vfrange,nvframes,afrange,naframes,triallimb] = getC3Dwindow(c3dfile,ta
         
     % determine trial limb
     triallimb = labelTrialLimb(subj,trial,bbmeta,tlmode,triallimbguess);
+
+    % get force plates used from Body Builder point data (not analog data)
+    fpseq = getFPsequence(itf,bbmeta,task,triallimb);     
     
+    % close C3D file
+    itf.Close();    
+            
 end
 
