@@ -27,7 +27,7 @@ WRITEXLS = 'xls';       % write settings and meta to Excel spreadsheet
 SETNAME = 'SLDJ_Input'; % settings file name
 SETPATH = FILEROOT;    % full path of required Excel file location
 
-INPUTTYPE = 'xls';      % get settings/meta data from Excel or struct
+INPUTTYPE = 'struct';      % get settings/meta data from Excel or struct
 BBNAME = 'bb';
 
 XLSPREFIX = 'SLDJ';       % output Excel spreadsheet name
