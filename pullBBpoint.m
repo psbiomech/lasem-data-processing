@@ -1,4 +1,4 @@
-function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,ampg)
+function [point,sflag] = pullBBpoint(c3dfile,vfrange,fpseq,bbmeta,ampg)
 
 %pullC3Ddata Get Body Builder point data from C3D file
 %   Prasanna Sritharan, June 2017
@@ -46,22 +46,25 @@ function [point,sflag] = pullBBpoint(c3dfile,vfrange,bbmeta,ampg)
                 switch outgrps{g}
                     
                     % Body Builder GRF point data
+                    % merge all individual FP streams for each foot into a single channel
                     case 'GRFS'                        
                         fpnums = regexp(vlist,[bbmeta.fpvectors{1} '(\d+)'],'tokens');
                         fpnums = fpnums(~cellfun('isempty',fpnums)); 
-                        %point.activefp = zeros(length(fpnums));
-                        for f = 1:length(fpnums)
-                            fpsuffix = fpnums{f}{1}{1};
-                            %point.activefp(f) = fpsuffix;
-                            cop = [bbmeta.fpvectors{1} fpsuffix];
-                            grf = [bbmeta.fpvectors{2} fpsuffix];
-                            copchan = find(strcmp(cop,vlist))-1;
-                            grfchan = find(strcmp(grf,vlist))-1;
-                            qname = [bbmeta.(outgrps{g}){q} num2str(f)];
-                            for x=1:3
-                                copvec = double(cell2mat(itf.GetPointDataEx(copchan,x-1,vfrange(1),vfrange(2),'1')));
-                                grfvec = double(cell2mat(itf.GetPointDataEx(grfchan,x-1,vfrange(1),vfrange(2),'1')));
-                                point.(outgrps{g}).(qname)(:,x) = grfvec - copvec;
+                        for f=1:2
+                            qname = [bbmeta.limbs{f} bbmeta.(outgrps{g}){q}];
+                            point.(outgrps{g}).(qname) = zeros(vfrange(2)-vfrange(1)+1,3);
+                            for s=1:size(fpseq,1)
+                                fpsuffix = fpseq(s,f);
+                                if (fpsuffix==0), continue; end;
+                                cop = [bbmeta.fpvectors{1} num2str(fpsuffix)];
+                                grf = [bbmeta.fpvectors{2} num2str(fpsuffix)];
+                                copchan = find(strcmp(cop,vlist))-1;
+                                grfchan = find(strcmp(grf,vlist))-1;                                
+                                for x=1:3
+                                    copvec = double(cell2mat(itf.GetPointDataEx(copchan,x-1,vfrange(1),vfrange(2),'1')));
+                                    grfvec = double(cell2mat(itf.GetPointDataEx(grfchan,x-1,vfrange(1),vfrange(2),'1')));
+                                    point.(outgrps{g}).(qname)(:,x) = point.(outgrps{g}).(qname)(:,x)+(grfvec-copvec);
+                                end
                             end
                         end
                             
