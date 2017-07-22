@@ -2,8 +2,8 @@
 #Prasanna Sritharan, July 2017
 
 #Excel output files
-.xls
-.xlsx
+*.xls
+*.xlsx
 
 #Matlab data files
-.mat
+*.mat
