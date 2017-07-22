@@ -1,7 +1,7 @@
 function fpseq = getFPsequence(itf,bbmeta,task,triallimb)
 
 
-%getFPsequence Determine force plate sequence from C3D data
+%getFPsequence Determine force plate stepping sequence from C3D data
 %   Prasanna Sritharan, July 2017
 
     % get number of video channels used

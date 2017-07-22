@@ -73,7 +73,7 @@ bb = getSubtriMeta(flist,subtri,bbmeta,TASK,COHORT,AFFECTED,TLMODE,WRITEXLS,SETN
     
 % pull raw Body Builder data into a struct, trim and resample
 disp('Extracting Body Builder data from C3D files...');
-bb = extractBBdata(INPUTTYPE,SETNAME,bbmeta,AMPG,FM,SAMP,SETPATH);
+bb = extractBBdata(INPUTTYPE,bb,bbmeta,AMPG,FM,SAMP,SETPATH);
 
 
 % calculate mean and sd per subject from Body Builder struct
