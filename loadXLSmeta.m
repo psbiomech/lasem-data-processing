@@ -18,7 +18,7 @@ function    bb = loadXLSmeta(xlsname,xlspath)
         end
         bb.(rawdata{r,1}).(rawdata{r,2}).triallimb = rawdata{r,5};
         bb.(rawdata{r,1}).(rawdata{r,2}).vfrange = [rawdata{r,6} rawdata{r,7}];
-        bb.(rawdata{r,1}).(rawdata{r,2}).fpsequence = rawdata{r,8};
+        bb.(rawdata{r,1}).(rawdata{r,2}).fpsequence = str2num(rawdata{r,8});
         bb.(rawdata{r,1}).(rawdata{r,2}).filepath = rawdata{r,9};
     end   
 

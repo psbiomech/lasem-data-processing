@@ -16,6 +16,7 @@ function bbmeta = getBBmeta()
     bbmeta.units.ANGLES = 'deg';
     bbmeta.units.MOMENTS = 'Nm';
     bbmeta.units.POWERS = 'Nms-1';
+    bbmeta.units.GRFS = 'N';
     bbmeta.dirs = {'X','Y','Z'};
     bbmeta.limbs = {'R','L'};
     bbmeta.cohorts = {'AFF','CON'};

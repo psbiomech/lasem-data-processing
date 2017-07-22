@@ -54,6 +54,7 @@ function writeBBstructToXLSMean(bbstruct,bbmeta,xlsprefix,xlspath,samp)
     % rename sheets using actxserver
     for f=1:2
         s = 1;
+        xlsname = [xlsprefix '_' bbmeta.conditions{f} '.xlsx'];
         xl = actxserver('Excel.Application'); 
         wb = xl.Workbooks.Open([xlspath '\' xlsname]);
         for b=1:length(bbmeta.BBGROUPS)

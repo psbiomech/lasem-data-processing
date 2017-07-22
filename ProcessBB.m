@@ -81,13 +81,13 @@ disp('Calculating subject means and standard deviations...');
 bb = meanBBsubject(bb,bbmeta,AMPG);
 
 
-% % write mean data to Excel spreadsheet from Body Builder struct
-% disp('Writing data to Excel spreadsheet...');
-% writeBBstructToXLSMean(bb,bbmeta,XLSPREFIX,XLSPATH,SAMP);
-% 
-% 
-% % save Body Builder struct
-% saveBBstruct(bb,BBFILENAME,BBFILEPATH);
+% write mean data to Excel spreadsheet from Body Builder struct
+disp('Writing data to Excel spreadsheet...');
+writeBBstructToXLSMean(bb,bbmeta,XLSPREFIX,XLSPATH,SAMP);
+
+
+% save Body Builder struct
+saveBBstruct(bb,BBFILENAME,BBFILEPATH);
 
 
 disp(' ');
