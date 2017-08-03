@@ -33,6 +33,11 @@ function fpseq = getFPsequence(itf,bbmeta,task,triallimb)
                 fpseq = [0 0];
             end
 
+        % walk stance: 
+        % TBA
+        case 'walk-stance'
+            disp('TBA');
+            
         % run stance: 
         % assume only 1 force plate active, assign to trial foot
         case 'run-stance'

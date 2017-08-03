@@ -81,7 +81,12 @@ function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3df
             end
             trange = [etime(seq1) etime(seq2)];
             triallimbguess = lower(econtext{seq1}(1));
-        
+
+        % walk stance:
+        % look for consecutive FS and FO on same foot, skip contralateral foot events
+        case 'walk-stance'
+            disp('TBA');
+            
         % run stance:
         % look for consecutive FS and FO on same foot
         case 'run-stance'
