@@ -1,6 +1,6 @@
 function writeSettingsToXLS(bbstruct,xlsname,xlspath)
 
-%writeSettingsToXLS Create input spreadsheet from struct
+%writeSettingsToXLS Create input spreadsheet from BB struct
 %   Prasanna Sritharan, June 2017
 
 
