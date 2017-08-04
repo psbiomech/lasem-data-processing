@@ -7,17 +7,17 @@
 % ------------------------------------------------------------
 % Script Settings
 
-FILEROOT = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing\';
-%FILEROOT = 'C:\Users\psritharan\Documents\03 Projects\';
+%FILEROOT = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing\';
+FILEROOT = 'C:\Users\psritharan\Documents\03 Projects\';
 
 SAMP = 100;     % desired samples
 FILESELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
 
-TASK = 'sldj';   % activity/task/motion type
+TASK = 'walk';   % activity/task/motion type
 AMPG = [1 1 1 1];   % angle, moment, power, GRFs
 FM = [1 0];      % GRF, EMG
 
-C3DNAMEFORMAT = {'FAILT','_','SLDJ'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
+C3DNAMEFORMAT = {'FAILT','_','WALK'};   % {[Subject name prefix],[Separator],[Trial name prefix]}
 C3DROOT = FILEROOT;     % full path of data root folder
 
 COHORT = 'aff';      % cohort type (affected/control)
@@ -53,7 +53,6 @@ disp('===========================================================');
 disp(' ');
 
 
-
 % get Body Builder defaults
 disp('Retrieving Body Builder default parameters...');
 bbmeta = getBBmeta();
@@ -71,23 +70,23 @@ disp('Generating subject and trial metadata and settings...');
 bb = getSubtriMeta(flist,subtri,bbmeta,TASK,COHORT,AFFECTED,TLMODE,WRITEXLS,SETNAME,SETPATH);
 
     
-% pull raw Body Builder data into a struct, trim and resample
-disp('Extracting Body Builder data from C3D files...');
-bb = extractBBdata(INPUTTYPE,bb,bbmeta,AMPG,FM,SAMP,SETPATH);
-
-
-% calculate mean and sd per subject from Body Builder struct
-disp('Calculating subject means and standard deviations...');
-bb = meanBBsubject(bb,bbmeta,AMPG);
-
-
-% write mean data to Excel spreadsheet from Body Builder struct
-disp('Writing data to Excel spreadsheet...');
-writeBBstructToXLSMean(bb,bbmeta,XLSPREFIX,XLSPATH,SAMP);
-
-
-% save Body Builder struct
-saveBBstruct(bb,BBFILENAME,BBFILEPATH);
+% % pull raw Body Builder data into a struct, trim and resample
+% disp('Extracting Body Builder data from C3D files...');
+% bb = extractBBdata(INPUTTYPE,bb,bbmeta,AMPG,FM,SAMP,SETPATH);
+% 
+% 
+% % calculate mean and sd per subject from Body Builder struct
+% disp('Calculating subject means and standard deviations...');
+% bb = meanBBsubject(bb,bbmeta,AMPG);
+% 
+% 
+% % write mean data to Excel spreadsheet from Body Builder struct
+% disp('Writing data to Excel spreadsheet...');
+% writeBBstructToXLSMean(bb,bbmeta,XLSPREFIX,XLSPATH,SAMP);
+% 
+% 
+% % save Body Builder struct
+% saveBBstruct(bb,BBFILENAME,BBFILEPATH);
 
 
 disp(' ');

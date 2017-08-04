@@ -20,7 +20,7 @@ function fpseq = getFPsequence(itf,bbmeta,task,triallimb)
     fpnums = fpnums(~cellfun('isempty',fpnums)); 
     nfps = size(fpnums,2);
     fps = zeros(1,nfps);
-    for f=1:nfps, fps(f) = str2num(fpnums{f}{1}{1}); end;
+    for f=1:nfps, fps(f) = str2double(fpnums{f}{1}{1}); end;
     
     % determine sequence based on task
     switch task
@@ -34,7 +34,7 @@ function fpseq = getFPsequence(itf,bbmeta,task,triallimb)
             end
 
         % walk stance: 
-        % TBA
+        % determine force plates active before and after FS event
         case 'walk-stance'
             disp('TBA');
             
@@ -51,6 +51,9 @@ function fpseq = getFPsequence(itf,bbmeta,task,triallimb)
             fpidx = strcmpi(bbmeta.limbs,triallimb);
             fpseq = zeros(1,2);
             fpseq(fpidx) = fps;            
+            
+        otherwise
+            error(['Unknown task code "' task '". Exiting.']);
             
     end
     

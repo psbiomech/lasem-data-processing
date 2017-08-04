@@ -19,7 +19,7 @@ function cohort = labelSubjectCohort(bbmeta,cohmode)
         % all trials are of the same type
         case lower(bbmeta.cohorts)
             cohort = bbmeta.cohorts{find(strcmpi(cohmode,bbmeta.cohorts),1)};
-            disp(['Enter cohort (a/c) [c]: ' lower(cohort(1))]);
+            disp(['Cohort: ' lower(cohort(1))]);
                         
     end
 

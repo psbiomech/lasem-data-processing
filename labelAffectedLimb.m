@@ -23,7 +23,7 @@ function affected = labelAffectedLimb(cohort,bbmeta,affmode)
             % all trials are of the same type
             case lower(bbmeta.limbs)
                 affected = bbmeta.limbs{find(strcmpi(affmode,bbmeta.limbs),1)};
-                disp(['Enter affected limb: (r/l) [r]: ' lower(affected)]);
+                disp(['Affected limb: ' lower(affected)]);
 
         end
 
