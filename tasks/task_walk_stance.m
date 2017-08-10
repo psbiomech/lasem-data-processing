@@ -12,37 +12,41 @@ function tstruct = task_walk_stance(itf,tinfo,bbmeta)
     econtext = tinfo.econtext;
     elabel = tinfo.elabel;
     eframe = tinfo.eframe;
+    vlist = tinfo.vlist;
     fpchan = tinfo.fpchan;
     fps = tinfo.fps;
     LAB = tinfo.LAB;
        
     % find consective CFS, IFO, IFS, and CFO on same leg
+    % (assume all these events are labelled)
     trange = zeros(1,2);
-    for n=1:eused-1
+    triallimbguess = [];
+    for n=1:eused
         if strcmpi(elabel{n},LAB.FS)
-            for m=n:eused-1
-                if (strcmpi(econtext{n},econtext{m}))&&(strcmpi(elabel{m},LAB.FO))
+            m = n + 3;
+            if m<=eused
+                if (strcmpi(econtext{n},econtext{m}))&&(~strcmpi(econtext{n},econtext{n+1}))&&(~strcmpi(econtext{m},econtext{m-1}))&&(strcmpi(elabel{m},LAB.FO))&&(strcmpi(elabel{n+1},LAB.FO))&&(strcmpi(elabel{m-1},LAB.FS))
                     trange = [etime(n) etime(m)];
-                    triallimbguess = lower(econtext{n});
+                    triallimb = lower(econtext{n});
                     break;
                 else
                     continue;
                 end
+            else
+                disp('Cannot compute force plate sequence - insufficient events in C3D file.');
+                break;
             end
-            if ~isempty(find([0 0],1)), break; end;
-        else
-            continue;
         end                
     end
     
     
     % force plate sequence    
     fpseq = zeros(m-n,2);    
+    fpidx = strcmpi(bbmeta.limbs,triallimb(1));    
     switch length(fps)
     
         % only one plate in lab, assume this plate is used for test leg
         case 1
-            fpidx = strcmpi(bbmeta.limbs,triallimb);
             fpseq(:,fpidx) = fps;
 
         % otherwise only one plate can be active during single support, other plates are contralateral leg
@@ -50,20 +54,18 @@ function tstruct = task_walk_stance(itf,tinfo,bbmeta)
         otherwise
             econtra = [n+1 m-1];
             midframe = round(mean(eframe(econtra)));
-            fpmidss = zeros(length(fps));
+            fpmidss = zeros(1,length(fps));
             for f=1:length(fps)
-                fpmidss(f) = itf.GetPointData(fpchan(f),);
+                fpmidss(f) = itf.GetPointData(fpchan(f)-1,2,midframe,'1');
             end
-    
-    
-    
-
-    
-    
-    
-    fpidx = strcmpi(bbmeta.limbs,triallimb);
-    fpseq = zeros(1,2);
-    fpseq(fpidx) = fps;      
+            ifpidx = find(fpmidss);
+            cfpidx = find(fpmidss==0);
+            fpseq(:,fpidx) = fps(ifpidx);
+            for c=cfpidx
+                fpseq(c,~fpidx) = fps(c);
+            end
+            
+    end
     
     % assign output struct variables
     tstruct.triallimb = triallimb;

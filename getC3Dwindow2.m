@@ -1,4 +1,4 @@
-function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3dfile,task,tlmode,bbmeta,subj,trial)
+function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow2(c3dfile,task,tlmode,bbmeta,subj,trial)
 
 
 %getC3Dwindow Determine time window based on activity type
@@ -75,7 +75,7 @@ function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3df
     end    
 
     % get force plate numbers
-    fpnums = regexp(vlist,[bbmeta.fpvectors{1} '(\d+)'],'tokens');
+    fpnums = regexp(vlist,[bbmeta.fpvectors{2} '(\d+)'],'tokens');
     isfp = ~cellfun('isempty',fpnums);
     fpchan = find(isfp);
     fpnums = fpnums(isfp); 
@@ -92,6 +92,7 @@ function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3df
     tinfo.econtext = econtext;
     tinfo.elabel = elabel;
     tinfo.eframe = eframe;
+    tinfo.vlist = vlist;
     tinfo.fpchan = fpchan;
     tinfo.fps = fps;
     tinfo.LAB = LAB;
@@ -108,11 +109,11 @@ function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3df
 
         % walk stance:
         case 'walk-stance'
-            tstruct = task_manual(itf,tinfo,bbmeta);
+            tstruct = task_walk_stance(itf,tinfo,bbmeta);
             
         % run stance:
         case 'run-stance'
-            struct = task_run_stance(itf,tinfo,bbmeta);             
+            tstruct = task_run_stance(itf,tinfo,bbmeta);             
                             
         % single-leg drop and jump: 
         case 'sldj'            
@@ -122,7 +123,13 @@ function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3df
             error(['Unknown task code "' task '". Exiting.']);
             
     end
-              
+
+    
+    % assign info struct variables
+    trange = tstruct.trange;
+    triallimb = tstruct.triallimb;
+    fpseq = tstruct.fpseq;
+    
     % calculate window for video frames
     vfrange = round(((trange*vfreq)+1)-vfirst+1);
     
@@ -133,13 +140,7 @@ function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3df
     nvframes = vfrange(2)-vfrange(1)+1;
     
     % calculate no. of analog frames
-    naframes = afrange(2)-afrange(1)+1;
-        
-    % determine trial limb
-    triallimb = labelTrialLimb(subj,trial,bbmeta,tlmode,triallimbguess);
-
-    % get force plates used from Body Builder point data (not analog data)
-    fpseq = getFPsequence(itf,bbmeta,task,triallimb);     
+    naframes = afrange(2)-afrange(1)+1; 
     
     % close C3D file
     itf.Close();    
