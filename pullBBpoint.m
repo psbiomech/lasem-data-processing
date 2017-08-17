@@ -1,8 +1,14 @@
-function [point,sflag] = pullBBpoint(c3dfile,vfrange,fpseq,bbmeta,ampg)
+function [point,sflag] = pullBBpoint(trialstruct,bbmeta,ampg)
 
 %pullC3Ddata Get Body Builder point data from C3D file
 %   Prasanna Sritharan, June 2017
    
+    % assign trial struct info
+    c3dfile = trialstruct.filepath;
+    vfrange = trialstruct.vfrange;
+    fpseq = trialstruct.fpseq;
+
+
     try
 
         % add C3D extension if necessary
@@ -86,8 +92,7 @@ function [point,sflag] = pullBBpoint(c3dfile,vfrange,fpseq,bbmeta,ampg)
         % close C3D file
         itf.Close();
         
-    catch excp
-        rethrow(excp);
+    catch
         sflag = -2;
         disp('ERROR: C3D file could not be processed.');
     end

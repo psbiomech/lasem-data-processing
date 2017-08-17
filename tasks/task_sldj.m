@@ -16,7 +16,7 @@ function tstruct = task_sldj(itf,tinfo,bbmeta)
     for n=1:eused-1
        if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))
            trange = [etime(n) etime(n+1)];
-           triallimb = lower(econtext{n}(1));
+           triallimb = upper(econtext{n}(1));
            break;
        end
     end 

@@ -27,9 +27,9 @@ function tstruct = task_manual(itf,tinfo,bbmeta)
     tcode = input(['Enter trial limb: ' subj ' ' trial ' (r/l) [r]: '],'s');
     tind = find(strcmpi(tcode,bbmeta.limbs),1);                        
     if isempty(tind)
-        triallimb = bbmeta.limbs{1};
+        triallimb = upper(bbmeta.limbs{1});
     else
-        triallimb = bbmeta.limbs{tind};
+        triallimb = upper(bbmeta.limbs{tind});
     end        
     
     

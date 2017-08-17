@@ -8,7 +8,7 @@
 % Script Settings
 
 %FILEROOT = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing\';
-FILEROOT = 'C:\Users\psritharan\Documents\03 Projects\';
+FILEROOT = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing\';
 
 SAMP = 100;     % desired samples
 FILESELECTMODE = 'auto';        % 'auto': keep all files matching name format, 'manual': manually select which files to keep
@@ -22,7 +22,6 @@ C3DROOT = FILEROOT;     % full path of data root folder
 
 COHORT = 'aff';      % cohort type (affected/control)
 AFFECTED = 'r';    % affected limb (left/right, or control)
-TLMODE = 'auto';   % trial limb (left/right)
 WRITEXLS = 'xls';       % write settings and meta to Excel spreadsheet
 SETNAME = 'SLDJ_Input'; % settings file name
 SETPATH = FILEROOT;    % full path of required Excel file location
@@ -54,20 +53,19 @@ disp(' ');
 
 
 % get Body Builder defaults
-disp('Retrieving Body Builder default parameters...');
+disp('Retrieving Body Builder C3D metadata...');
 bbmeta = getBBmeta();
     
 
 % generate C3D file list
-% (assumes file names of form:
-% [SUBJPREFIX][SUBJCODE][SEPARATOR][TRIALPREFIX][TRIALCODE].c3d)
+% (assumes file names of form: [SUBJPREFIX][SUBJCODE][SEPARATOR][TRIALPREFIX][TRIALCODE].c3d)
 disp('Generating list of available C3D files matching file name format...');
 [flist,fnames,subtri] = generateFileList(C3DROOT,C3DNAMEFORMAT,FILESELECTMODE);
 
 
 % add additional information about trial (metadata)
 disp('Generating subject and trial metadata and settings...');
-bb = getSubtriMeta(flist,subtri,bbmeta,TASK,COHORT,AFFECTED,TLMODE,WRITEXLS,SETNAME,SETPATH);
+bb = getSubtriMeta(flist,subtri,bbmeta,TASK,COHORT,AFFECTED,WRITEXLS,SETNAME,SETPATH);
 
     
 % pull raw Body Builder data into a struct, trim and resample
@@ -75,18 +73,18 @@ disp('Extracting Body Builder data from C3D files...');
 bb = extractBBdata(INPUTTYPE,bb,bbmeta,AMPG,FM,SAMP,SETPATH);
 
 
-% % calculate mean and sd per subject from Body Builder struct
-% disp('Calculating subject means and standard deviations...');
-% bb = meanBBsubject(bb,bbmeta,AMPG);
-% 
-% 
-% % write mean data to Excel spreadsheet from Body Builder struct
-% disp('Writing data to Excel spreadsheet...');
-% writeBBstructToXLSMean(bb,bbmeta,XLSPREFIX,XLSPATH,SAMP);
-% 
-% 
-% % save Body Builder struct
-% saveBBstruct(bb,BBFILENAME,BBFILEPATH);
+% calculate mean and sd per subject from Body Builder struct
+disp('Calculating subject means and standard deviations...');
+bb = meanBBsubject(bb,bbmeta,AMPG);
+
+
+% write mean data to Excel spreadsheet from Body Builder struct
+%disp('Writing data to Excel spreadsheet...');
+%writeBBstructToXLSMean(bb,bbmeta,XLSPREFIX,XLSPATH,SAMP);
+
+
+% save Body Builder struct
+saveBBstruct(bb,BBFILENAME,BBFILEPATH);
 
 
 disp(' ');

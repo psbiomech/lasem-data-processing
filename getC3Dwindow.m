@@ -1,4 +1,4 @@
-function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3dfile,task,tlmode,bbmeta,subj,trial)
+function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
 
 
 %getC3Dwindow Determine time window based on activity type
@@ -47,6 +47,7 @@ function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3df
     etime = zeros(1,eused);
     econtext = cell(1,eused);
     elabel = cell(1,eused);
+    eframe = zeros(1,eused);
     idx = itf.GetParameterIndex('EVENT','TIMES');
     idx2 = itf.GetParameterIndex('EVENT','CONTEXTS');
     idx3 = itf.GetParameterIndex('EVENT','LABELS');
@@ -54,83 +55,80 @@ function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3df
        etime(n) = itf.GetParameterValue(idx,2*n-1);
        econtext{n} = itf.GetParameterValue(idx2,n-1);
        elabel{n} = itf.GetParameterValue(idx3,n-1);
+       eframe(n) = round(vfreq*etime(n)+1);
     end
 
     % sort events in ascending time order
     [etime,order] = sort(etime);
     econtext = econtext(order);
     elabel = elabel(order);         
-            
-    % determine window based on activity type
+
+    % get number of video channels used
+    idx = itf.GetParameterIndex('POINT','USED');
+    nused = itf.GetParameterValue(idx,0);               
+
+    % list all point parameters
+    vlist = cell(1,nused);
+    idx = itf.GetParameterIndex('POINT','LABELS');
+    for n=1:nused
+        vlist{n} = itf.GetParameterValue(idx,n-1);
+    end    
+
+    % get force plate numbers
+    fpnums = regexp(vlist,[bbmeta.fpvectors{2} '(\d+)'],'tokens');
+    isfp = ~cellfun('isempty',fpnums);
+    fpchan = find(isfp);
+    fpnums = fpnums(isfp); 
+    nfps = size(fpnums,2);
+    fps = zeros(1,nfps);
+    for f=1:nfps, fps(f) = str2double(fpnums{f}{1}{1}); end;    
+    
+    
+    % generate info struct for evaluating C3D window
+    tinfo.subj = subj;
+    tinfo.trial = trial;
+    tinfo.eused = eused;
+    tinfo.etime = etime;
+    tinfo.econtext = econtext;
+    tinfo.elabel = elabel;
+    tinfo.eframe = eframe;
+    tinfo.vlist = vlist;
+    tinfo.fpchan = fpchan;
+    tinfo.fps = fps;
+    tinfo.LAB = LAB;
+       
+    
+    
+    % determine window parameters based on activity type
     switch lower(task)
         
-        % manual
-        % enter first and last event manually        
+        % manual      
         case 'manual'
-            disp(' ');
-            disp([subj ' ' trial]);
-            fprintf(1,'SeqNo\tTime\t\tContext\t\tLabel\n');
-            for n=1:eused
-                fprintf(1,'%i\t\t%5.2f\t\t%s\t\t%s\n',n,etime(n),econtext{n},elabel{n});
-            end
-            disp(' ');            
-            seq1 = input('Enter sequence no. of first event [first in file]: ');
-            seq2 = input('Enter sequence no. of last event [last in file]: ');
-            if (~isenum(seq1))||(~isenum(seq2))||(seq1<=seq2)
-                seq1 = 1;
-                seq2 = eused(end);
-            end
-            trange = [etime(seq1) etime(seq2)];
-            triallimbguess = lower(econtext{seq1}(1));
+            tstruct = task_manual(itf,tinfo,bbmeta);
 
         % walk stance:
-        % look for consecutive FS and FO on same foot, assume first FS is the trial limb
         case 'walk-stance'
-            trange = zeros(1,2);
-            for n=1:eused-1
-                if strcmpi(elabel{n},LAB.FS)
-                    for m=n:eused-1
-                        if (strcmpi(econtext{n},econtext{m}))&&(strcmpi(elabel{m},LAB.FO))
-                            trange = [etime(n) etime(m)];
-                            triallimbguess = lower(econtext{n});
-                            break;
-                        else
-                            continue;
-                        end
-                    end
-                    if ~isempty(find([0 0],1)), break; end;                        
-                else
-                    continue;
-                end                
-            end
+            tstruct = task_walk_stance(itf,tinfo,bbmeta);
             
         % run stance:
-        % look for consecutive FS and FO on same foot
         case 'run-stance'
-            for n=1:eused-1
-               if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))
-                   trange = [etime(n) etime(n+1)];
-                   triallimbguess = lower(econtext{n}(1));
-                   break;
-               end
-            end               
+            tstruct = task_run_stance(itf,tinfo,bbmeta);             
                             
         % single-leg drop and jump: 
-        % look for consecutive FS and FO on same foot
         case 'sldj'            
-            for n=1:eused-1
-               if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))
-                   trange = [etime(n) etime(n+1)];
-                   triallimbguess = lower(econtext{n}(1));
-                   break;
-               end
-            end            
+            tstruct = task_sldj(itf,tinfo,bbmeta);
 
         otherwise
             error(['Unknown task code "' task '". Exiting.']);
             
     end
-              
+
+    
+    % assign info struct variables
+    trange = tstruct.trange;
+    triallimb = tstruct.triallimb;
+    fpseq = tstruct.fpseq;
+    
     % calculate window for video frames
     vfrange = round(((trange*vfreq)+1)-vfirst+1);
     
@@ -141,16 +139,20 @@ function [vfrange,nvframes,afrange,naframes,fpseq,triallimb] = getC3Dwindow(c3df
     nvframes = vfrange(2)-vfrange(1)+1;
     
     % calculate no. of analog frames
-    naframes = afrange(2)-afrange(1)+1;
-        
-    % determine trial limb
-    triallimb = labelTrialLimb(subj,trial,bbmeta,tlmode,triallimbguess);
-
-    % get force plates used from Body Builder point data (not analog data)
-    fpseq = getFPsequence(itf,bbmeta,task,triallimb);     
-    
+    naframes = afrange(2)-afrange(1)+1; 
+       
     % close C3D file
     itf.Close();    
-            
+    
+    
+    % generate output struct
+    c3dout.vfrange = vfrange;
+    c3dout.nvframes = nvframes;
+    c3dout.afrange = afrange;
+    c3dout.naframes = naframes;
+    c3dout.trange = trange;
+    c3dout.fpseq = fpseq;
+    c3dout.triallimb = triallimb;
+    
 end
 

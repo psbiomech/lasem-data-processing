@@ -38,8 +38,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
                             else
                                 continue;
                             end
-                        catch exception
-                            rethrow(exception);
+                        catch                            
                             disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} ' ' trials{n} '.'])  ;
                         end                           
                     end
@@ -50,10 +49,12 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
         % calculate mean and sd for point data
         for b=1:length(outgrps)
             for q=1:length(bbmeta.(outgrps{b}))
+                quantlabel = bbmeta.(outgrps{b}){q};
                 for c=1:2
-                    quantlabel = bbmeta.(outgrps{b}){q};
-                    bbstruct.(subjs{s}).mean.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel) = mean(alldata.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel),3);
-                    bbstruct.(subjs{s}).sd.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel) = std(alldata.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel),0,3);            
+                    if isfield(alldata,bbmeta.conditions{c})
+                        bbstruct.(subjs{s}).mean.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel) = mean(alldata.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel),3);
+                        bbstruct.(subjs{s}).sd.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel) = std(alldata.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel),0,3);            
+                    end
                 end
             end
         end            

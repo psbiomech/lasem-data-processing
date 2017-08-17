@@ -15,15 +15,15 @@ function affected = labelAffectedLimb(cohort,bbmeta,affmode)
                 tcode = input(['Enter affected limb: (r/l) [r]: '],'s');
                 tind = find(strcmpi(tcode,bbmeta.limbs),1);                        
                 if isempty(tind)
-                    affected = bbmeta.limbs{1};
+                    affected = upper(bbmeta.limbs{1});
                 else
-                    affected = bbmeta.limbs{tind};
+                    affected = upper(bbmeta.limbs{tind});
                 end
 
             % all trials are of the same type
             case lower(bbmeta.limbs)
                 affected = bbmeta.limbs{find(strcmpi(affmode,bbmeta.limbs),1)};
-                disp(['Affected limb: ' lower(affected)]);
+                disp(['Affected limb: ' upper(affected)]);
 
         end
 

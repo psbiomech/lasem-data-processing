@@ -27,7 +27,7 @@ function tstruct = task_walk_stance(itf,tinfo,bbmeta)
             if m<=eused
                 if (strcmpi(econtext{n},econtext{m}))&&(~strcmpi(econtext{n},econtext{n+1}))&&(~strcmpi(econtext{m},econtext{m-1}))&&(strcmpi(elabel{m},LAB.FO))&&(strcmpi(elabel{n+1},LAB.FO))&&(strcmpi(elabel{m-1},LAB.FS))
                     trange = [etime(n) etime(m)];
-                    triallimb = lower(econtext{n});
+                    triallimb = upper(econtext{n}(1));
                     break;
                 else
                     continue;
@@ -42,7 +42,7 @@ function tstruct = task_walk_stance(itf,tinfo,bbmeta)
     
     % force plate sequence    
     fpseq = zeros(m-n,2);    
-    fpidx = strcmpi(bbmeta.limbs,triallimb(1));    
+    fpidx = strcmpi(bbmeta.limbs,triallimb);    
     switch length(fps)
     
         % only one plate in lab, assume this plate is used for test leg

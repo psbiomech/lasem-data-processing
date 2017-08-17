@@ -11,15 +11,15 @@ function cohort = labelSubjectCohort(bbmeta,cohmode)
             tcode = input(['Enter cohort (a/c) [c]: '],'s');
             tind = find(strncmpi(tcode,bbmeta.cohorts,1),1);                        
             if isempty(tind)
-                cohort = bbmeta.cohorts{2};
+                cohort = upper(bbmeta.cohorts{2});
             else
-                cohort = bbmeta.cohorts{tind};
+                cohort = upper(bbmeta.cohorts{tind});
             end
                         
         % all trials are of the same type
         case lower(bbmeta.cohorts)
             cohort = bbmeta.cohorts{find(strcmpi(cohmode,bbmeta.cohorts),1)};
-            disp(['Cohort: ' lower(cohort(1))]);
+            disp(['Cohort: ' upper(cohort(1))]);
                         
     end
 
