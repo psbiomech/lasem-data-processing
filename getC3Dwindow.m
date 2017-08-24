@@ -154,5 +154,10 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     c3dout.fpseq = fpseq;
     c3dout.triallimb = triallimb;
     
+    % write info to stdout
+    disp(['Trial limb: ' triallimb]);
+    disp(['Time range: ' mat2str(trange,4)]);
+    disp(['Force plate sequence: ' mat2str(fpseq)]);
+    
 end
 

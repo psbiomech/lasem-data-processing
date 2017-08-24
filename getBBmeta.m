@@ -8,6 +8,7 @@ function bbmeta = getBBmeta()
     bbmeta.MOMENTS = {'AnkleMomentFOOT','AnkleMomentDTIB','AnkleMomentROT','KneeMomentPTIB','KneeMomentFEM','KneeMomentROT','HipMomentFEM','HipMomentPEL','HipMomentROT'};
     bbmeta.POWERS = {'AnklePower','HipPower','KneePower'};
     bbmeta.GRFS = {'GRF'};    
+    bbmeta.BBANALYSES = {'WORKANG'};
     %bbmeta.BBANALOGS = {'GRF','EMG'};
     %bbmeta.GRF.string = '%s%s%d';
     %bbmeta.GRF.prefix = {'F','M'};

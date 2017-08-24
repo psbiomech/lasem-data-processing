@@ -1,4 +1,4 @@
-function bbstruct = extractBBdata(inputtype,inp,bbmeta,ampg,fm,samp,xlspath)
+function bbstruct = extractBBdata(inputtype,inp,bbmeta,ampg,samp,xlspath)
 
 
 %extractBBdata Get BB data from C3D file, trim and resample
@@ -27,16 +27,16 @@ function bbstruct = extractBBdata(inputtype,inp,bbmeta,ampg,fm,samp,xlspath)
     subjs = fieldnames(bbstruct);
     for s=1:length(subjs)
         trials = fieldnames(bbstruct.(subjs{s}));
-        for t=1:length(trials)
+        for t=1:length(trials)            
             if isempty(find(strcmpi(trials{t},{'cohort','affected'}),1))
                 [rawdatastruct,~] = pullBBpoint(bbstruct.(subjs{s}).(trials{t}),bbmeta,ampg);    
                 bbstruct = resampleBBdata(bbstruct,subjs{s},trials{t},rawdatastruct,samp);     
+                bbstruct = addTimeVector(bbstruct,subjs{s},trials{t},samp);
             else
                 continue;
             end
         end
-    end   
-        
+    end                   
 
 end
 
