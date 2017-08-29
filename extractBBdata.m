@@ -1,8 +1,15 @@
-function bbstruct = extractBBdata(inputtype,inp,bbmeta,ampg,samp,xlspath)
+function bbstruct = extractBBdata(inp,bbmeta,user)
 
 
 %extractBBdata Get BB data from C3D file, trim and resample
 %   Prasanna Sritharan, June 2017
+    
+    % assign struct fields
+    inputtype = user.INPUTTYPE;
+    ampg = user.AMPG;
+    samp = user.SAMP;
+    xlspath = user.DATAPATH;
+
 
     % check inputs
     if (nargin==5)

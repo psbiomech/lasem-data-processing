@@ -1,7 +1,12 @@
-function [flist,fnames,subtri] = generateFileList(c3droot,c3dnameformat,selectmode)
+function [flist,fnames,subtri] = generateFileList(user)
 
 %generateFileList Parse file structure and extract files with names matching pattern
 %   Prasanna Sritharan, June 2017
+
+    % assign struct fields
+    c3droot = user.DATAPATH;
+    c3dnameformat = {user.SUBJECTPREFIX,user.SEPARATOR,user.TRIALPREFIX};
+    selectmode = user.FILESELECTMODE;
 
     % string subsections
     subjprefix = c3dnameformat{1};

@@ -1,4 +1,4 @@
-function writeBBstructToXLSMean(bbstruct,bbmeta,xlsprefix,xlspath,samp)
+function writeBBstructToXLSMean(bbstruct,bbmeta,user)
 
 
 %writeBBstructToXLS write BodyBuilder data to Excel workbook
@@ -6,6 +6,13 @@ function writeBBstructToXLSMean(bbstruct,bbmeta,xlsprefix,xlspath,samp)
     
     warning('off');
 
+    % assign struct fields
+    xlsprefix = user.TRIALPREFIX;
+    xlspath = user.OUTPUTPATH;
+    samp = user.SAMP;
+    
+    
+    
     % data for write
     DTYPE = {'MEAN','SD'};
     
@@ -68,6 +75,7 @@ function writeBBstructToXLSMean(bbstruct,bbmeta,xlsprefix,xlspath,samp)
                                                                                 
     
     % write Excel spreadsheet
+    mkdir(xlspath);
     for f=1:2
         cond = bbmeta.conditions{f};
         if isfield(xldata,cond)

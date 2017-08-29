@@ -1,8 +1,18 @@
-function meta = getSubtriMeta(flist,subtri,bbmeta,task,cohmode,affmode,writexls,xlsname,xlspath)
+function meta = getSubtriMeta(flist,subtri,bbmeta,user)
 
 
 %getSubtriMeta Build struct of subject and trial metadata
 %   Prasanna Sritharan, June 2017
+
+    
+    % assign struct fields
+    task = user.TASKTYPE;
+    cohmode = user.COHORT;
+    affmode = user.AFFECTED;
+    writexls = user.WRITEXLS;
+    xlsname = [user.TRIALPREFIX '_Input'];
+    xlspath = user.INPUTPATH;   
+
 
     % label affected limb
     disp(' ');
@@ -36,6 +46,7 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,task,cohmode,affmode,writexls,
     end
     
     % write to Excel spreadsheet
+    mkdir(xlspath);
     if strcmpi(writexls,'xls')
         writeSettingsToXLS(meta,xlsname,xlspath);
     end

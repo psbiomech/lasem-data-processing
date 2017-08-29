@@ -13,10 +13,16 @@ function bbstruct = runBBanalyses(bbstruct,bbmeta)
         for t=1:length(trials)            
             if isempty(find(strcmpi(trials{t},{'cohort','affected'}),1))
 
-                % joint angular work (rotational work)
-                bbstruct = analysis_work_angular(bbstruct,bbmeta,subjs{s},trials{t});     
+                % joint rotational work (angular work)
+                bbstruct = analysis_work_rotational(bbstruct,bbmeta,subjs{s},trials{t});     
 
-            
+                % joint rotational impulse
+                bbstruct = analysis_impulse_rotational(bbstruct,bbmeta,subjs{s},trials{t});                
+
+                % GRF impulse
+                bbstruct = analysis_impulse_grf(bbstruct,bbmeta,subjs{s},trials{t});   
+                
+                
             
             else
                 continue;
