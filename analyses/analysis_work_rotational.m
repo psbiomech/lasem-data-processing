@@ -13,7 +13,7 @@ function bbstruct = analysis_work_rotational(bbstruct,bbmeta,subj,trial)
     % midstring
     INMIDSTR = GRPIN(1:end-1);
     OUTMIDSTR = bbmeta.BBANALYSES{1};
-    
+       
     % integral over entire time window
     qnames = fieldnames(bbstruct.(subj).(trial).(GRPIN));        
     for q=1:length(qnames)     

@@ -25,7 +25,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
                     t2 = 1;
                     for n = 1:ntrials
                         try
-                            if isempty(find(strcmpi(trials{n},{'cohort','affected'}),1))
+                            if isempty(find(strcmpi(trials{n},{'cohort','affected','mean','sd'}),1))
                                 if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
                                     if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
                                         alldata.(bbmeta.conditions{1}).(outgrps{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).(outgrps{b}).(quantname);
@@ -46,7 +46,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
             end
         end
 
-        % calculate mean and sd for point data
+        % subject means and sd
         for b=1:length(outgrps)
             for q=1:length(bbmeta.(outgrps{b}))
                 quantlabel = bbmeta.(outgrps{b}){q};
@@ -60,6 +60,9 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
         end            
         
     end
+    
+    
+    
     
 end
 

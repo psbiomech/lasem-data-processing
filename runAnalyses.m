@@ -1,4 +1,4 @@
-function bbstruct = runBBanalyses(bbstruct,bbmeta)
+function bbstruct = runAnalyses(bbstruct,bbmeta,user)
 
 %runBBanalyses Run additional analyses on Body Builder data
 %   Prasanna Sritharan, August 2017
@@ -11,7 +11,7 @@ function bbstruct = runBBanalyses(bbstruct,bbmeta)
     for s=1:length(subjs)
         trials = fieldnames(bbstruct.(subjs{s}));
         for t=1:length(trials)            
-            if isempty(find(strcmpi(trials{t},{'cohort','affected'}),1))
+            if isempty(find(strcmpi(trials{t},{'cohort','affected','mean','sd'}),1))
 
                 % joint rotational work (angular work)
                 bbstruct = analysis_work_rotational(bbstruct,bbmeta,subjs{s},trials{t});     

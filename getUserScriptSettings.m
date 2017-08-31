@@ -1,14 +1,13 @@
-function user = getScriptSettings()
+function user = getUserScriptSettings()
 
 
 %getScriptSettings User settings for script
 %   Prasanna Sritharan, August 2017
 
 
-%user.FILEROOT = 'C:\Users\Prasanna\Documents\Git Repositories\lasem-data-processing\';
-user.DATAPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing\';     % location of source data
-user.INPUTPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing\INPUT';    % location of input XLS file (if used)
-user.OUTPUTPATH = 'C:\Users\psritharan\Documents\03 Projects\lasem-data-processing\OUTPUT';    % location to which all output files are written
+user.DATAPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sample Data\Baseline';     % location of source data
+user.INPUTPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sample Data\INPUT';    % location of input XLS file (if used)
+user.OUTPUTPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sample Data\OUTPUT';    % location to which all output files are written
 user.SAMP = 100;    % desired number of samples
 user.FILESELECTMODE = 'auto';   % 'auto': keep all files matching name format, 'manual': manually select which files to keep
 user.TASKTYPE = 'walk-stance';   % activity/task/motion type code
@@ -20,7 +19,6 @@ user.COHORT = 'aff';    % cohort type (affected/control)
 user.AFFECTED = 'r';    % affected limb (left/right, or control)
 user.WRITEXLS = 'xls';  % write settings and meta to Excel spreadsheet
 user.INPUTTYPE = 'struct';  % get settings/meta data from Excel or struct
-%user.BBNAME = 'bb';
 
 
 
