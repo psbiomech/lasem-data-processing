@@ -23,7 +23,7 @@ function bbstruct = analysis_impulse_rotational(bbstruct,bbmeta,subj,trial)
         for x=1:3
             
             % time vector
-            time = bbstruct.(subj).(trial).TIME';
+            time = bbstruct.(subj).(trial).TIMES.relative';
             
             % net integral
             data = bbstruct.(subj).(trial).(GRPIN).(qnames{q})(:,x);

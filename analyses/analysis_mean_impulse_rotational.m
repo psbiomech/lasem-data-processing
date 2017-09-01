@@ -1,4 +1,4 @@
-function bbstruct = analysis_mean_work_rotational(bbstruct,bbmeta)
+function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
 
 
 %analysis_mean_work_rotational Subject and total means for joint rotational work
@@ -7,11 +7,11 @@ function bbstruct = analysis_mean_work_rotational(bbstruct,bbmeta)
 
      
     % input data group name
-    DATAGRP = upper(bbmeta.BBANALYSES{1});
-    SRCGRP = bbmeta.BBGROUPS{3};
+    DATAGRP = upper(bbmeta.BBANALYSES{2});
+    SRCGRP = bbmeta.BBGROUPS{2};
     
     % midstring
-    DATAMIDSTR = bbmeta.BBANALYSES{1};    
+    DATAMIDSTR = bbmeta.BBANALYSES{2};    
     SRCMIDSTR = SRCGRP(1:end-1);
     
     

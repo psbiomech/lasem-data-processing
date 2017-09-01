@@ -47,5 +47,38 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
         
 
     
+    % relative time: collate means and sds
+    for s=1:length(subjs)    
+        for f=1:2
+            cond = bbmeta.conditions{f};
+            if isfield(bbstruct.(subjs{s}).mean,cond)
+                try
+                    alldata.means.(cond).TIMES.elapsed(s) = bbstruct.(subjs{s}).mean.(cond).TIMES.elapsed;
+                    alldata.sds.(cond).TIMES.elapsed(s) = bbstruct.(subjs{s}).sd.(cond).TIMES.elapsed;
+                catch                            
+                    disp(['ERROR: Unable to process quantity TIME for ' subjs{s} '.'])  ;
+                end
+            end
+        end
+    end    
+    
+    % calculate mean and sd for time
+    % mean: mean of individual subject means
+    % sd: sqrt of sum of squares of individual subject sds
+    for c=1:2
+        cond = bbmeta.conditions{c};
+        if isfield(alldata.means,cond)
+            
+            % total elapsed time
+            bbstruct.MEAN.mean.(cond).TIMES.elapsed = mean(alldata.means.(cond).TIMES.elapsed);
+            bbstruct.MEAN.sd.(cond).TIMES.elapsed = sqrt(sum((alldata.sds.(cond).TIMES.elapsed).^2,3));
+            
+            % construct relative time vector (applies to mean only)
+            bbstruct.MEAN.mean.(cond).TIMES.relative = linspace(0,bbstruct.MEAN.mean.(cond).TIMES.elapsed);
+            bbstruct.MEAN.sd.(cond).TIMES.relative = [];
+            
+        end
+    end
+    
 end
 

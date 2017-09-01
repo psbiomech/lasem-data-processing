@@ -4,6 +4,8 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,user)
 %getSubtriMeta Build struct of subject and trial metadata
 %   Prasanna Sritharan, June 2017
 
+
+    warning('off');
     
     % assign struct fields
     task = user.TASKTYPE;

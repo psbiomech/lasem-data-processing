@@ -16,7 +16,7 @@ disp(' ');
 
 
 
-% ********************
+%% ********************
 % SCRIPT SETTINGS
 
 % get user script settings
@@ -29,7 +29,7 @@ bbmeta = getBBmeta();
 
 
 
-% ********************
+%% ********************
 % EXTRACT & PROCESS BODY BUILDER DATA
 
 disp(' ');
@@ -52,7 +52,7 @@ bb = calcBBmean(bb,bbmeta,user);
 
 
 
-% ********************
+%% ********************
 % ADDITIONAL ANALYSES
 
 disp(' ');
@@ -67,20 +67,22 @@ bb = calcAnalysesMeans(bb,bbmeta,user);
 
 
 
-% ********************
+%% ********************
 % SAVE TO FILE
 
 disp(' ');
 
-% write mean data to Excel spreadsheet from Body Builder struct
-disp('Writing data to Excel spreadsheet...');
-writeBBstructToXLSMean(bb,bbmeta,user);
+% % write mean data to Excel spreadsheet from Body Builder struct
+% disp('Writing data to Excel spreadsheet...');
+% writeBBstructToXLSMean(bb,bbmeta,user);
 
 % save Body Builder struct
 disp('Saving data as Matlab struct...');
 saveBBstruct(bb,user);
 
 
+
+%% ********************
 
 disp(' ');
 disp([datestr(now) ': Execution complete.']);
