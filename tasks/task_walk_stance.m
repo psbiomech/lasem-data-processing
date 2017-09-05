@@ -12,6 +12,7 @@ function tstruct = task_walk_stance(itf,tinfo,bbmeta)
     econtext = tinfo.econtext;
     elabel = tinfo.elabel;
     eframe = tinfo.eframe;
+    ecode = tinfo.ecode;
     vlist = tinfo.vlist;
     fpchan = tinfo.fpchan;
     fps = tinfo.fps;
@@ -28,6 +29,10 @@ function tstruct = task_walk_stance(itf,tinfo,bbmeta)
                 if (strcmpi(econtext{n},econtext{m}))&&(~strcmpi(econtext{n},econtext{n+1}))&&(~strcmpi(econtext{m},econtext{m-1}))&&(strcmpi(elabel{m},LAB.FO))&&(strcmpi(elabel{n+1},LAB.FO))&&(strcmpi(elabel{m-1},LAB.FS))
                     trange = [etime(n) etime(m)];
                     triallimb = upper(econtext{n}(1));
+                    elabels = elabel(n:m);
+                    econtexts = econtext(n:m);
+                    eframes = eframe(n:m);
+                    ecodes = ecode(n:m);
                     break;
                 else
                     continue;
@@ -71,6 +76,10 @@ function tstruct = task_walk_stance(itf,tinfo,bbmeta)
     tstruct.triallimb = triallimb;
     tstruct.trange = trange;
     tstruct.fpseq = fpseq;
-
+    tstruct.elabels = elabels;
+    tstruct.econtexts = econtexts;
+    tstruct.eframes = eframes;
+    tstruct.ecodes = ecodes;
+    
 end
 

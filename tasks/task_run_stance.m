@@ -9,16 +9,21 @@ function tstruct = task_run_stance(itf,tinfo,bbmeta)
     etime = tinfo.etime;
     econtext = tinfo.econtext;
     elabel = tinfo.elabel;
+    eframes = tinfo.eframes;
     fps = tinfo.fps;
     LAB = tinfo.LAB;
        
     % find consective FS and FO on same leg
     for n=1:eused-1
-       if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))
-           trange = [etime(n) etime(n+1)];
-           triallimb = upper(econtext{n}(1));
-           break;
-       end
+        if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))
+            trange = [etime(n) etime(n+1)];
+            triallimb = upper(econtext{n}(1));
+            elabels = elabel(n:m);
+            econtexts = econtext(n:m);
+            eframes = eframe(n:m); 
+            ecodes = ecode(n:m);
+            break;
+        end
     end 
 
     % compute force plate sequence
@@ -30,6 +35,10 @@ function tstruct = task_run_stance(itf,tinfo,bbmeta)
     tstruct.triallimb = triallimb;
     tstruct.trange = trange;
     tstruct.fpseq = fpseq;
+    tstruct.elabels = elabels;
+    tstruct.econtexts = econtexts;
+    tstruct.eframes = eframes;  
+    tstruct.ecodes = ecodes;
 
 end
 

@@ -61,8 +61,18 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     % sort events in ascending time order
     [etime,order] = sort(etime);
     econtext = econtext(order);
-    elabel = elabel(order);         
+    elabel = elabel(order);  
+    eframe = eframe(order);
 
+    % event labels and contexts in short form
+    ecode = {num2cell(cellfun(@(x) upper(x(1)),econtext)); cellfun(@(x) upper([x(1) x(6)]),elabel,'UniformOutput',false)};
+    ecode2 = cell(size(ecode{1}));
+    for e=1:length(ecode{1})
+        ecode2{e} = [ecode{1}{e} ecode{2}{e}];
+    end
+    ecode = ecode2;
+    
+    
     % get number of video channels used
     idx = itf.GetParameterIndex('POINT','USED');
     nused = itf.GetParameterValue(idx,0);               
@@ -92,6 +102,7 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     tinfo.econtext = econtext;
     tinfo.elabel = elabel;
     tinfo.eframe = eframe;
+    tinfo.ecode = ecode;
     tinfo.vlist = vlist;
     tinfo.fpchan = fpchan;
     tinfo.fps = fps;
@@ -128,6 +139,10 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     trange = tstruct.trange;
     triallimb = tstruct.triallimb;
     fpseq = tstruct.fpseq;
+    elabels = tstruct.elabels;
+    econtexts = tstruct.econtexts;
+    eframes = tstruct.eframes;
+    ecodes = tstruct.ecodes;
     
     % calculate window for video frames
     vfrange = round(((trange*vfreq)+1)-vfirst+1);
@@ -153,6 +168,10 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     c3dout.trange = trange;
     c3dout.fpseq = fpseq;
     c3dout.triallimb = triallimb;
+    %c3dout.elabels = elabels;
+    %c3dout.econtexts = econtexts;
+    c3dout.eframes = eframes;
+    c3dout.ecodes = ecodes;
     
     % write info to stdout
     disp(['Trial limb: ' triallimb]);
