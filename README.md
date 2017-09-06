@@ -14,7 +14,7 @@ Files should have a naming convention of the form:
 (SUBJECT PREFIX)(SUBJECT CODE)(SEPARATOR)(TRIAL PREFIX)(TRIAL CODE).c3d
 ```
 
-Prefixes, codes and separator are treated as character strings, so may be of any form. Thus codes may also contain leading zeros.
+Prefixes, codes and separator are treated as character strings, so may be of any form.
 
 For example:
 ```text
