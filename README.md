@@ -14,20 +14,22 @@ Files should have a naming convention of the form:
 (SUBJECT PREFIX)(SUBJECT CODE)(SEPARATOR)(TRIAL PREFIX)(TRIAL CODE).c3d
 ```
 
-Prefixes, codes and separator are treated as strings, so may be text or numeric. Codes may also contain leading zeros.
+Prefixes, codes and separator are treated as character strings, so may be of any form. Thus codes may also contain leading zeros.
 
 For example:
 ```text
 FAILT01_SLDJ03.c3d
 ```
 Where:
-* SUBJECT PREFIX: FAILT
-* SUBJECT CODE: 01
-* SEPARATOR: \_ (underscore)
-* TRIAL PREFIX: SLDJ
-* TRIAL CODE: 03
+* Subject prefix: FAILT
+* Subject code: 01
+* Separator: \_ (underscore)
+* Trial prefix: SLDJ
+* Trial code: 03
 
 ## Outputs
+
+The output is a Matlab struct called *bb* containing all relevant data as described below.
 
 Body Builder data from C3D file:
 1. Angles
