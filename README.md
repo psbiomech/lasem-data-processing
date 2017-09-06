@@ -2,6 +2,8 @@
 
 Extract and process C3D files post-processed in Body Builder.
 
+This project is licensed under the GNU General Public License v3.0 (see License below).
+
 
 ## Inputs
 
@@ -75,7 +77,7 @@ To calculate subject and cohort means and standard deviations for the new analys
 
 **Prasanna Sritharan**  
 La Trobe Sports and Exercise Medicine Research Centre  
-La Trobe University, Victoria, Australia 
+La Trobe University, Victoria, Australia  
 psritharan@ltu.edu.au
 
 ## License
