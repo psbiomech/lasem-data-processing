@@ -55,7 +55,11 @@ Task types analysed:
 
 ## Getting started
 
-Download **lasem-data-processing** package and unzip in a convenient location.
+Go to the **lasem-data-processing** Github project page https://github.com/psbiomech/lasem-data-processing
+
+Click **Clone or download** and select **Download ZIP** package.
+
+Unzip the package in a convenient location.
 
 ## Preparing to run
 
