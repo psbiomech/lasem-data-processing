@@ -55,8 +55,7 @@ Download **lasem-data-processing** package and unzip in a convenient location.
 
 ## Preparing to run
 
-Modify field values in function *getUserScriptSettings()* to customise package for the data to be extracted and processed. 
-
+Modify the field values in function *getUserScriptSettings()* as required for the data to be extracted and processed. 
 
 ## Running the package
 
@@ -71,3 +70,30 @@ To analyse a new type of task, write a new function for that task in the package
 To add a new analysis, write a new function for that analysis in the package subfolder **./analyses** and modify the function *runAnalyses()* to include the new analyses. Inputs and outputs for the new function should match the those of the default package functions, e.g. *analysis_work_rotational()*
 
 To calculate subject and cohort means and standard deviations for the new analysis, write a new function for calculating means and standard deviations in the package subfolder **./analyses** and modify the function *calcAnalysesMeans()* to include the new mean and standard deviation analysis. Inputs and outputs for the new function should match the those of the default package functions, e.g. *analysis_mean_work_rotational()* 
+
+## Authors
+
+**Prasanna Sritharan**  
+La Trobe Sports and Exercise Medicine Research Centre  
+La Trobe University, Victoria, Australia 
+psritharan@ltu.edu.au
+
+## License
+
+This project is licensed under the GNU General Public License v3.0.
+
+	Copyright (C) 2017  Prasanna Sritharan
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
