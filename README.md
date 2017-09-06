@@ -82,7 +82,7 @@ psritharan@ltu.edu.au
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0.
+This project is licensed under the GNU General Public License v3.0. For full license terms, please refer to *LICENSE* file or visit http://www.gnu.org/licenses/.
 
 	Copyright (C) 2017  Prasanna Sritharan
 
