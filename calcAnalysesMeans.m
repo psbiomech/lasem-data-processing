@@ -15,6 +15,12 @@ function bbstruct = calcAnalysesMeans(bbstruct,bbmeta,user)
 
     % GRF impulse
     bbstruct = analysis_mean_impulse_grf(bbstruct,bbmeta);   
-                                            
+
+    % Body Builder data values at events
+    bbstruct = analysis_mean_eventval_angle(bbstruct,bbmeta);
+    bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta);
+    bbstruct = analysis_mean_eventval_power(bbstruct,bbmeta);
+    bbstruct = analysis_mean_eventval_grf(bbstruct,bbmeta);
+    
 end
 

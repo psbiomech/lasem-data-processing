@@ -55,7 +55,7 @@ bb = calcBBmean(bb,bbmeta,user);
 %% ********************
 % ADDITIONAL ANALYSES
 
-    disp(' ');
+disp(' ');
 
 % run additional analyses on Body Builder data
 disp('Running additional analyses on Body Builder data...');

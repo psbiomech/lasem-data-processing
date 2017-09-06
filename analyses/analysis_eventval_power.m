@@ -5,7 +5,7 @@ function bbstruct = analysis_eventval_power(bbstruct,bbmeta,user,subj,trial)
 %   Prasanna Sritharan, August 2017
 
     % input data group name
-    GRPIN = bbmeta.BBGROUPS{1};
+    GRPIN = bbmeta.BBGROUPS{3};
     GRPOUT = upper(bbmeta.BBANALYSES{6});   
 
     % midstring

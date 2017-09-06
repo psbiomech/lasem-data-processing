@@ -1,12 +1,12 @@
-function bbstruct = analysis_mean_eventval_grf(bbstruct,bbmeta)
+function bbstruct = analysis_mean_eventval_power(bbstruct,bbmeta)
 
 
 %analysis_eventval_grf Subject and total means for GRF values at events
 %   Prasanna Sritharan, August 2017
 
     % input data group name
-    DATAGRP = upper(bbmeta.BBANALYSES{7}); 
-    SRCGRP = bbmeta.BBGROUPS{4};      
+    DATAGRP = upper(bbmeta.BBANALYSES{6});
+    SRCGRP = bbmeta.BBGROUPS{3};
 
     
     % ********************

@@ -114,8 +114,8 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     switch lower(task)
         
         % manual      
-        case 'manual'
-            tstruct = task_manual(itf,tinfo,bbmeta);
+        %case 'manual'
+        %    tstruct = task_manual(itf,tinfo,bbmeta);
 
         % walk stance:
         case 'walk-stance'
