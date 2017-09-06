@@ -29,7 +29,7 @@ Where:
 
 ## Outputs
 
-The output is a Matlab struct called *bb* containing all relevant data as described below.
+The output is a Matlab struct called *bb* containing all relevant data as described below. An Excel file is also created containing the time histories of the subject and cohort means of the Body Builder data only.
 
 Body Builder data from C3D file:
 1. Angles
