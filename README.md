@@ -1,3 +1,73 @@
-# Body Builder C3D Data Processing Package
-## La Trobe Sports & Exercise Medicine Research Centre
+# LASEM Body Builder C3D Processing Package
 
+Extract and process C3D files post-processed in Body Builder.
+
+
+## Inputs
+
+C3D files post-processed through Body Builder. Files should be arranged in a single folder or a nested/tree folder structure.
+
+Files should have a naming convention of the form:
+```text
+(SUBJECT PREFIX)(SUBJECT CODE)(SEPARATOR)(TRIAL PREFIX)(TRIAL CODE).c3d
+```
+
+Prefixes, codes and separator are treated as strings, so may be text or numeric. Codes may also contain leading zeros.
+
+For example:
+```text
+FAILT01_SLDJ03.c3d
+```
+Where:
+* SUBJECT PREFIX: FAILT
+* SUBJECT CODE: 01
+* SEPARATOR: \_ (underscore)
+* TRIAL PREFIX: SLDJ
+* TRIAL CODE: 03
+
+## Outputs
+
+Body Builder data from C3D file:
+1. Angles
+2. Moments
+3. Powers
+4. GRFs
+
+Additional analyses:
+1. Joint rotational work (net, positive, negative, 1st half, 2nd half, segments)
+2. Joint rotational impulse (net, positive, negative, 1st half, 2nd half, segments)
+3. Ground impulse (net, positive, negative, 1st half, 2nd half, segments)
+4. Values at events
+
+Processing: 
+1. Raw Body Builder data from individual C3D files
+2. Subject means and stdev
+3. Total cohort means and stdev
+
+Task types analysed:
+1. Walking (stance)
+2. Running (stance)
+3. Single-leg drop and jump
+
+## Getting started
+
+Download **lasem-data-processing** package and unzip in a convenient location.
+
+## Preparing to run
+
+Modify field values in function *getUserScriptSettings()* to customise package for the data to be extracted and processed. 
+
+
+## Running the package
+
+To run the package, execute the script *ProcessBB.m*.
+
+## Adding new tasks
+
+To analyse a new type of task, write a new function for that task in the package subfolder **./tasks** and modify the *select-case* in the function *getC3Dwindow()* to include the new task. Inputs and outputs for the new function should match the those of the default package functions, e.g. *task_walk_stance()*
+
+## Adding new analyses
+
+To add a new analysis, write a new function for that analysis in the package subfolder **./analyses** and modify the function *runAnalyses()* to include the new analyses. Inputs and outputs for the new function should match the those of the default package functions, e.g. *analysis_work_rotational()*
+
+To calculate subject and cohort means and standard deviations for the new analysis, write a new function for calculating means and standard deviations in the package subfolder **./analyses** and modify the function *calcAnalysesMeans()* to include the new mean and standard deviation analysis. Inputs and outputs for the new function should match the those of the default package functions, e.g. *analysis_mean_work_rotational()* 
