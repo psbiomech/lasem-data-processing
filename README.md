@@ -67,13 +67,17 @@ To run the package, execute the script *ProcessBB.m*.
 
 ## Adding new tasks
 
-To analyse a new type of task, write a new function for that task in the package subfolder **./tasks** and modify the *select-case* in the function *getC3Dwindow()* to include the new task. Inputs and outputs for the new function should match the those of the default package functions, e.g. *task_walk_stance()*
+To analyse a new type of task, write a new function for that task in the package subfolder **./tasks** and modify the *select-case* in the function *getC3Dwindow()* to include the new task. Inputs and outputs for the new function should match the those of the default package functions, e.g. *task_walk_stance()*.
+
+If you create a new task function, please consider submitting it for merge into the main project.
 
 ## Adding new analyses
 
 To add a new analysis, write a new function for that analysis in the package subfolder **./analyses** and modify the function *runAnalyses()* to include the new analyses. Inputs and outputs for the new function should match the those of the default package functions, e.g. *analysis_work_rotational()*
 
 To calculate subject and cohort means and standard deviations for the new analysis, write a new function for calculating means and standard deviations in the package subfolder **./analyses** and modify the function *calcAnalysesMeans()* to include the new mean and standard deviation analysis. Inputs and outputs for the new function should match the those of the default package functions, e.g. *analysis_mean_work_rotational()* 
+
+If you create a new analysis function, please consider submitting it for merge into the main project.
 
 ## Authors
 
