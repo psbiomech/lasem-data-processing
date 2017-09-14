@@ -77,9 +77,9 @@ If you create a new task function, please consider submitting it for merging int
 
 ## Adding new analyses
 
-To add a new analysis, write a new function for that analysis in the package subfolder **./analyses** and modify the function *runAnalyses()* to include the new analyses. Inputs and outputs for the new function should match the those of the default package functions, e.g. *analysis_work_rotational()*
+To add a new analysis, write a new function for that analysis in the package subfolder **./analyses** and modify the function *runAnalyses()* to include the new analyses. Inputs and outputs for the new function should match those of the default package functions, e.g. *analysis_work_rotational()*
 
-To calculate subject and cohort means and standard deviations for the new analysis, write a new function for calculating means and standard deviations in the package subfolder **./analyses** and modify the function *calcAnalysesMeans()* to include the new mean and standard deviation analysis. Inputs and outputs for the new function should match the those of the default package functions, e.g. *analysis_mean_work_rotational()* 
+To calculate subject and cohort means and standard deviations for the new analysis, write a new function for calculating means and standard deviations in the package subfolder **./analyses** and modify the function *calcAnalysesMeans()* to include the new mean and standard deviation analysis. Inputs and outputs for the new function should match those of the default package functions, e.g. *analysis_mean_work_rotational()* 
 
 If you create a new analysis function, please consider submitting it for merging into the main project.
 
@@ -96,7 +96,7 @@ This project is licensed under the GNU General Public License v3.0.
 
 For full license terms, please refer to the *LICENSE* file or visit *http://www.gnu.org/licenses/*.
 
-	Copyright (C) 2017  Prasanna Sritharan
+	Copyright (C) 2017 Prasanna Sritharan
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
