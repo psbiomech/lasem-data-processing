@@ -88,9 +88,9 @@ bb = calcAnalysesMeans(bb,bbmeta,user);
 
 disp(' ');
 
-% % write mean data to Excel spreadsheet from Body Builder struct
-% disp('Writing data to Excel spreadsheet...');
-% writeBBstructToXLSMean(bb,bbmeta,user);
+% write mean data to Excel spreadsheet from Body Builder struct
+disp('Writing data to Excel spreadsheet...');
+writeBBstructToXLSMean(bb,bbmeta,user);
 
 % save Body Builder struct
 disp('Saving data as Matlab struct...');

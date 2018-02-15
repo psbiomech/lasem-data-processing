@@ -110,7 +110,8 @@ function [point,sflag] = pullBBpoint(trialstruct,bbmeta,ampg)
         % close C3D file
         itf.Close();
         
-    catch
+    catch excp
+        rethrow(excp);
         sflag = -2;
         disp('ERROR: C3D file could not be processed.');
     end

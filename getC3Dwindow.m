@@ -163,7 +163,8 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     ecodes = tstruct.ecodes;
     
     % calculate window for video frames
-    vfrange = round(((trange*vfreq)+1)-vfirst+1);
+    %vfrange = round(((trange*vfreq)+1)-vfirst+1);
+    vfrange = round((trange*vfreq)+1);
     
     % calculate window for analog frames
     afrange = round((vfrange-1)*avratio+1);
@@ -179,6 +180,7 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     
     
     % generate output struct
+    c3dout.vfirst = vfirst;
     c3dout.vfrange = vfrange;
     c3dout.nvframes = nvframes;
     c3dout.afrange = afrange;
