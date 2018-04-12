@@ -30,7 +30,7 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,user)
     affmode = user.AFFECTED;
     writexls = user.WRITEXLS;
     xlsname = [user.TRIALPREFIX '_Input'];
-    xlspath = user.INPUTPATH;   
+    xlspath = user.XLSMETAPATH;   
 
 
     % label affected limb

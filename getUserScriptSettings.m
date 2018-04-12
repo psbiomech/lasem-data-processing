@@ -22,20 +22,28 @@ function user = getUserScriptSettings()
 % -------------------------------------------------------------------- 
 
 
-user.DATAPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sample Data\Baseline\';     % location of source data
-user.INPUTPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sample Data\INPUT';    % location of input XLS file (if used)
-user.OUTPUTPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sample Data\OUTPUT';    % location to which all output files are written
-user.SAMP = 100;    % desired number of samples
-user.FILESELECTMODE = 'auto';   % 'auto': keep all files matching name format, 'manual': manually select which files to keep
+% folder paths
+user.DATASRCPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sample Data\Baseline\';  % root directory of source C3D files with Body Builder data
+user.SUMMARYPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sample Data\SUMMARY\';   % location to which all output data summary files are written
+user.XLSMETAPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sample Data\XLSMETA\';   % if used, read.write location of XLS file with subject/trial metadata
+
+% data processing settings
+user.SAMP = 100;    % resample data to standardised number of time steps
+user.AMPG = [1 1 1 1];   % what Body Builder data to extract from C3D file: angles, moments, powers, GRFs (1=yes,0=no)
+user.FILESELECTMODE = 'auto';   % 'auto': process C3D files matching file name format, 'manual': manually select which files to process
 user.TASKTYPE = 'walk-stance';   % activity/task/motion type code
-user.AMPG = [1 1 1 1];   % angle, moment, power, GRFs
+user.WRITEXLS = 'xls';  % write subject/trial metadata to Excel spreadsheet in XLSMETAPATH
+user.INPUTTYPE = 'struct';  % get settings/meta data from Excel or struct
+
+% C3D file name parameters
+% (form: [SUBJECTPREFIX][2-digit numeric][SEPARATOR][TRIALPREFIX][2-digit numeric].c3d)
 user.SUBJECTPREFIX = 'FAILT';   % subject code prefix (eg. for subject code FAILT01, the subjectprefix is 'FAILT')
 user.TRIALPREFIX = 'WALK';  % trial code prefix (eg. for trial code WALK01, the trialprefix is 'WALK')
 user.SEPARATOR = '_';   % file name separator between subject code and trial code (eg. for file FAILT01_WALK01.c3d, the separator is '_')
+
+% if used, settings for automatic processing of data
 user.COHORT = 'aff';    % cohort type (affected/control)
 user.AFFECTED = 'r';    % affected limb (left/right, or control)
-user.WRITEXLS = 'xls';  % write settings and meta to Excel spreadsheet
-user.INPUTTYPE = 'struct';  % get settings/meta data from Excel or struct
 
 
 

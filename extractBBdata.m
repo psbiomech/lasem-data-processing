@@ -26,7 +26,7 @@ function bbstruct = extractBBdata(inp,bbmeta,user)
     inputtype = user.INPUTTYPE;
     ampg = user.AMPG;
     samp = user.SAMP;
-    xlspath = user.DATAPATH;
+    xlspath = user.XLSMETAPATH;
 
 
     % check inputs

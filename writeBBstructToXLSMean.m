@@ -26,7 +26,7 @@ function writeBBstructToXLSMean(bbstruct,bbmeta,user)
 
     % assign struct fields
     xlsprefix = user.TRIALPREFIX;
-    xlspath = user.OUTPUTPATH;
+    xlspath = user.SUMMARYPATH;
     samp = user.SAMP;
     
     

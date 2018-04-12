@@ -23,7 +23,7 @@ function saveBBstruct(bb,user)
 
     % assign struct fields
     bbfilename = user.TRIALPREFIX;
-    bbfilepath = user.OUTPUTPATH;
+    bbfilepath = user.SUMMARYPATH;
 
     % add MAT extension if necessary
     if isempty(regexpi(bbfilename,'.mat')), bbfilename = [bbfilename '.mat']; end; 

@@ -22,7 +22,7 @@ function [flist,fnames,subtri] = generateFileList(user)
 
 
     % assign struct fields
-    c3droot = user.DATAPATH;
+    c3droot = user.DATASRCPATH;
     c3dnameformat = {user.SUBJECTPREFIX,user.SEPARATOR,user.TRIALPREFIX};
     selectmode = user.FILESELECTMODE;
 
