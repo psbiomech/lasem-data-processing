@@ -78,30 +78,30 @@ bb = calcBBmean(bb,bbmeta,user);
 %% ********************
 % ADDITIONAL ANALYSES
 
-disp(' ');
-
-% run additional analyses on Body Builder data
-disp('Running additional analyses on Body Builder data...');
-bb = runAnalyses(bb,bbmeta,user);
-
-% calculate mean and sd for additional analyses
-disp('Calculating means and standard deviations for additional analyses...');
-bb = calcAnalysesMeans(bb,bbmeta,user);
+% disp(' ');
+% 
+% % run additional analyses on Body Builder data
+% disp('Running additional analyses on Body Builder data...');
+% bb = runAnalyses(bb,bbmeta,user);
+% 
+% % calculate mean and sd for additional analyses
+% disp('Calculating means and standard deviations for additional analyses...');
+% bb = calcAnalysesMeans(bb,bbmeta,user);
 
 
 
 %% ********************
 % SAVE TO FILE
 
-disp(' ');
-
-% write mean data to Excel spreadsheet from Body Builder struct
-disp('Writing data to Excel spreadsheet...');
-writeBBstructToXLSMean(bb,bbmeta,user);
-
-% save Body Builder struct
-disp('Saving data as Matlab struct...');
-saveBBstruct(bb,user);
+% disp(' ');
+% 
+% % write mean data to Excel spreadsheet from Body Builder struct
+% disp('Writing data to Excel spreadsheet...');
+% writeBBstructToXLSMean(bb,bbmeta,user);
+% 
+% % save Body Builder struct
+% disp('Saving data as Matlab struct...');
+% saveBBstruct(bb,user);
 
 
 

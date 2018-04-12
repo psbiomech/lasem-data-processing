@@ -1,4 +1,4 @@
-function bbstruct = addTimeVector(bbstruct,subj,trial,samp)
+function structin = addTimeVector(structin,p,samp)
 
 %  addTimeVector: Add time vector to trial data
 %   Prasanna Sritharan, August 2017
@@ -21,11 +21,14 @@ function bbstruct = addTimeVector(bbstruct,subj,trial,samp)
 % -------------------------------------------------------------------- 
 
 
-    % absolute time vector    
-    bbstruct.(subj).(trial).TIMES.absolute = linspace(bbstruct.(subj).(trial).trange(1),bbstruct.(subj).(trial).trange(2),samp);
-    
-    % relative time vector
-    bbstruct.(subj).(trial).TIMES.relative = bbstruct.(subj).(trial).TIMES.absolute - bbstruct.(subj).(trial).TIMES.absolute(1);
+    % create time vectors, absolute and relative
+    if p<0
+        structin.data.TIMES.absolute = linspace(structin.trange(1),structin.trange(2),samp);
+        structin.data.TIMES.relative = structin.data.TIMES.absolute-structin.data.TIMES.absolute(1);        
+    else
+        structin.data{p}.TIMES.absolute = linspace(structin.trange{p}(1),structin.trange{p}(2),samp);
+        structin.data{p}.TIMES.relative = structin.data{p}.TIMES.absolute-structin.data{p}.TIMES.absolute(1);
+    end
     
 end
 

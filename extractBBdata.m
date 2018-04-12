@@ -36,15 +36,33 @@ function bbstruct = extractBBdata(bbstruct,bbmeta,user)
     % get Body Builder point data from C3D files
     subjs = fieldnames(bbstruct);
     for s=1:length(subjs)
+        subj = subjs{s};
         trials = fieldnames(bbstruct.(subjs{s}));
-        for t=1:length(trials)            
+        for t=1:length(trials)                        
+            trial = trials{t};
             if isempty(find(strcmpi(trials{t},{'cohort','affected'}),1))
-                [rawdatastruct,~] = pullBBpoint(bbstruct.(subjs{s}).(trials{t}),bbmeta,ampg);    
-                bbstruct = resampleBBdata(bbstruct,subjs{s},trials{t},rawdatastruct,samp);     
-                bbstruct = addTimeVector(bbstruct,subjs{s},trials{t},samp);
+
+                switch bbstruct.(subjs{s}).(trials{t}).analysedlegs
+                    
+                    case 1  % one leg
+                        rawdatastruct = pullBBpoint(bbstruct.(subjs{s}).(trials{t}),bbmeta,ampg);    
+                        bbstruct.(subj).(trial).data = resampleBBdata(rawdatastruct,samp);     
+                        bbstruct.(subj).(trial) = addTimeVector(bbstruct.(subj).(trial),-1,samp);
+            
+                    case 2  % two legs
+                        for p=1:2                           
+                            tempstruct = buildTempStruct(bbstruct.(subjs{s}).(trials{t}),p);
+                            rawdatastruct = pullBBpoint(tempstruct,bbmeta,ampg);
+                            bbstruct.(subj).(trial).data{p} = resampleBBdata(rawdatastruct,samp);  
+                            bbstruct.(subj).(trial) = addTimeVector(bbstruct.(subj).(trial),p,samp);  
+                        end
+                end
+            
             else
                 continue;
             end
+            
+            
         end
     end                   
 

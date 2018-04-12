@@ -66,7 +66,7 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,user,writeflag)
     % write subject info only to XLS
     mkdir(xlspath);
     if strcmpi(writeflag,'writexls')
-        writeXLSSubjInfoForMod(meta,xlssubjinfoname,xlspath);
+        writeXLSSubjInfoForMod(meta,xlsinfoname,xlspath);
     end
         
 end
