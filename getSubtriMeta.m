@@ -66,7 +66,7 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,user)
     
     % write to Excel spreadsheet
     mkdir(xlspath);
-    if strcmpi(writexls,'xls')
+    if strcmpi(writexls,'writexls')
         writeSettingsToXLS(meta,xlsname,xlspath);
     end
         

@@ -61,51 +61,6 @@ bb = getSubtriMeta(flist,subtri,bbmeta,user);
 
 
 %% ********************
-% EXTRACT & PROCESS BODY BUILDER DATA
-
-disp(' ');
-
-% pull raw Body Builder data into a struct, trim and resample
-disp('Extracting Body Builder data from C3D files...');
-bb = extractBBdata(bb,bbmeta,user);
-
-% calculate mean and sd for BB data
-disp('Calculating means and standard deviations for Body Builder data...');
-bb = calcBBmean(bb,bbmeta,user);
-
-
-
-%% ********************
-% ADDITIONAL ANALYSES
-
-disp(' ');
-
-% run additional analyses on Body Builder data
-disp('Running additional analyses on Body Builder data...');
-bb = runAnalyses(bb,bbmeta,user);
-
-% calculate mean and sd for additional analyses
-disp('Calculating means and standard deviations for additional analyses...');
-bb = calcAnalysesMeans(bb,bbmeta,user);
-
-
-
-%% ********************
-% SAVE TO FILE
-
-disp(' ');
-
-% write mean data to Excel spreadsheet from Body Builder struct
-disp('Writing data to Excel spreadsheet...');
-writeBBstructToXLSMean(bb,bbmeta,user);
-
-% save Body Builder struct
-disp('Saving data as Matlab struct...');
-saveBBstruct(bb,user);
-
-
-
-%% ********************
 
 disp(' ');
 disp([datestr(now) ': Execution complete.']);

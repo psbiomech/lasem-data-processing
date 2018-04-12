@@ -56,6 +56,7 @@ function tstruct = task_run_stance(itf,tinfo,bbmeta)
     tstruct.econtexts = econtexts;
     tstruct.eframes = eframes;  
     tstruct.ecodes = ecodes;
+    tstruct.analysedlegs = 1;
 
 end
 

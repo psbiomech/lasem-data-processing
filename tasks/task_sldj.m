@@ -56,6 +56,7 @@ function tstruct = task_sldj(itf,tinfo,bbmeta)
     tstruct.econtexts = econtext;
     tstruct.ecodes = ecode;
     tstruct.eframes = eframe;
+    tstruct.analysedlegs = 1;
 
 end
 

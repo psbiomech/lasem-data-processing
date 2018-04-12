@@ -138,6 +138,10 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
         % walk stance:
         case 'walk-stance'
             tstruct = task_walk_stance(itf,tinfo,bbmeta);
+
+        % walk stance:
+        case 'walk-stance-both'
+            tstruct = task_walk_stance_both(itf,tinfo,bbmeta);            
             
         % run stance:
         case 'run-stance'
@@ -157,23 +161,29 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     trange = tstruct.trange;
     triallimb = tstruct.triallimb;
     fpseq = tstruct.fpseq;
-    elabels = tstruct.elabels;
-    econtexts = tstruct.econtexts;
     eframes = tstruct.eframes;
     ecodes = tstruct.ecodes;
+    analysedlegs = tstruct.analysedlegs;
     
-    % calculate window for video frames
-    %vfrange = round(((trange*vfreq)+1)-vfirst+1);
-    vfrange = round((trange*vfreq)+1);
     
-    % calculate window for analog frames
-    afrange = round((vfrange-1)*avratio+1);
-    
-    % calculate no. of video frames
-    nvframes = vfrange(2)-vfrange(1)+1;
-    
-    % calculate no. of analog frames
-    naframes = afrange(2)-afrange(1)+1; 
+    % if more than one leg analysed, do store results as cells
+    switch analysedlegs
+
+        case 1  % one leg
+            vfrange = round((trange*vfreq)+1); % calculate window for video frames
+            afrange = round((vfrange-1)*avratio+1); % calculate window for analog frames
+            nvframes = vfrange(2)-vfrange(1)+1; % calculate no. of video frames            
+            naframes = afrange(2)-afrange(1)+1; % calculate no. of analog frames
+        
+        case 2  % two legs
+            for p=1:2
+                vfrange{p} = round((trange{p}*vfreq)+1); % calculate window for video frames
+                afrange{p} = round((vfrange{p}-1)*avratio+1); % calculate window for analog frames
+                nvframes{p} = vfrange{p}(2)-vfrange{p}(1)+1; % calculate no. of video frames            
+                naframes{p} = afrange{p}(2)-afrange{p}(1)+1; % calculate no. of analog frames
+            end            
+        
+    end
        
     % close C3D file
     itf.Close();    
@@ -188,15 +198,24 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     c3dout.trange = trange;
     c3dout.fpseq = fpseq;
     c3dout.triallimb = triallimb;
-    %c3dout.elabels = elabels;
-    %c3dout.econtexts = econtexts;
     c3dout.eframes = eframes;
     c3dout.ecodes = ecodes;
+    c3dout.analysedlegs = analysedlegs;
     
     % write info to stdout
-    disp(['Trial limb: ' triallimb]);
-    disp(['Time range: ' mat2str(trange,4)]);
-    disp(['Force plate sequence: ' mat2str(fpseq)]);
-    
+    switch analysedlegs
+        case 1
+            disp(['Trial limb: ' triallimb]);
+            disp(['Time range: ' mat2str(trange,4)]);
+            disp(['Force plate sequence: ' mat2str(fpseq)]);
+        case 2
+            disp(['Trial limb: ' triallimb{1}]);
+            disp(['Time range: ' mat2str(trange{1},4)]);
+            disp(['Force plate sequence: ' mat2str(fpseq{1})]);            
+            disp(' ');
+            disp(['Trial limb: ' triallimb{2}]);
+            disp(['Time range: ' mat2str(trange{2},4)]);
+            disp(['Force plate sequence: ' mat2str(fpseq{2})]);     
+    end
 end
 

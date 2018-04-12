@@ -31,8 +31,8 @@ user.XLSMETAPATH = 'C:\Users\psritharan\Documents\98 Data Repository\Lasem Sampl
 user.SAMP = 100;    % resample data to standardised number of time steps
 user.AMPG = [1 1 1 1];   % what Body Builder data to extract from C3D file: angles, moments, powers, GRFs (1=yes,0=no)
 user.FILESELECTMODE = 'auto';   % 'auto': process C3D files matching file name format, 'manual': manually select which files to process
-user.TASKTYPE = 'walk-stance';   % activity/task/motion type code
-user.WRITEXLS = 'xls';  % write subject/trial metadata to Excel spreadsheet in XLSMETAPATH
+user.TASKTYPE = 'walk-stance-both';   % activity/task/motion type code
+user.WRITEXLS = 'writexls';  % write subject/trial metadata to Excel spreadsheet in XLSMETAPATH
 user.INPUTTYPE = 'struct';  % get settings/meta data from Excel or struct
 
 % C3D file name parameters

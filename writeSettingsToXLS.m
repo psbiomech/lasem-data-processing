@@ -34,8 +34,20 @@ function writeSettingsToXLS(bbstruct,xlsname,xlspath)
         trials = fieldnames(bbstruct.(subjs{s}));
         for t=1:length(trials)
             if isempty(find(strcmpi(trials{t},{'cohort','affected'}),1))
-                xldata(x,:) = {subjs{s}, trials{t}, upper(bbstruct.(subjs{s}).cohort), upper(bbstruct.(subjs{s}).affected), upper(bbstruct.(subjs{s}).(trials{t}).triallimb), num2str(bbstruct.(subjs{s}).(trials{t}).vfrange(1)), num2str(bbstruct.(subjs{s}).(trials{t}).vfrange(2)),mat2str(bbstruct.(subjs{s}).(trials{t}).fpseq), bbstruct.(subjs{s}).(trials{t}).filepath};
-                x = x + 1;
+            
+                % different actions required depending on whether one or two legs were analysed per trial
+                switch bbstruct.(subjs{s}).(trials{t}).analysedlegs                    
+                    
+                    case 1  % one leg
+                        xldata(x,:) = {subjs{s}, trials{t}, upper(bbstruct.(subjs{s}).cohort), upper(bbstruct.(subjs{s}).affected), upper(bbstruct.(subjs{s}).(trials{t}).triallimb), num2str(bbstruct.(subjs{s}).(trials{t}).vfrange(1)), num2str(bbstruct.(subjs{s}).(trials{t}).vfrange(2)),mat2str(bbstruct.(subjs{s}).(trials{t}).fpseq), bbstruct.(subjs{s}).(trials{t}).filepath};
+                        x = x + 1;
+                    
+                    case 2  % two legs
+                        for p=1:2, xldata(x+p-1,:) = {subjs{s}, trials{t}, upper(bbstruct.(subjs{s}).cohort), upper(bbstruct.(subjs{s}).affected), upper(bbstruct.(subjs{s}).(trials{t}).triallimb{p}), num2str(bbstruct.(subjs{s}).(trials{t}).vfrange{p}(1)), num2str(bbstruct.(subjs{s}).(trials{t}).vfrange{p}(2)),mat2str(bbstruct.(subjs{s}).(trials{t}).fpseq{p}), bbstruct.(subjs{s}).(trials{t}).filepath}; end;
+                        x = x + 2;
+                
+                end    
+                
             end
         end
     end
