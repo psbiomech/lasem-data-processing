@@ -1,4 +1,4 @@
-function meta = getSubtriMeta(flist,subtri,bbmeta,user)
+function meta = getSubtriMeta(flist,subtri,bbmeta,user,writeflag)
 
 
 %  getSubtriMeta: Build struct of subject and trial metadata
@@ -28,8 +28,7 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,user)
     task = user.TASKTYPE;
     cohmode = user.COHORT;
     affmode = user.AFFECTED;
-    writexls = user.WRITEXLS;
-    xlsname = [user.TRIALPREFIX '_Input'];
+    xlsinfoname = [user.TRIALPREFIX '_SubjInfoOnly'];
     xlspath = user.XLSMETAPATH;   
 
 
@@ -64,10 +63,10 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,user)
         
     end
     
-    % write to Excel spreadsheet
+    % write subject info only to XLS
     mkdir(xlspath);
-    if strcmpi(writexls,'writexls')
-        writeSettingsToXLS(meta,xlsname,xlspath);
+    if strcmpi(writeflag,'writexls')
+        writeXLSSubjInfoForMod(meta,xlssubjinfoname,xlspath);
     end
         
 end

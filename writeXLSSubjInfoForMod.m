@@ -1,6 +1,6 @@
-function    bbstruct = loadXLSmeta(bbstruct,xlsname,xlspath)
+function writeXLSSubjInfoForMod(bbstruct,xlsname,xlspath)
 
-%  loadXLSmeta: Load settings/meta data into struct
+%  writeXLSSubjInfoForMod: Write subject data for manual modification
 %   Prasanna Sritharan, June 2017
 % 
 % -------------------------------------------------------------------- 
@@ -21,17 +21,28 @@ function    bbstruct = loadXLSmeta(bbstruct,xlsname,xlspath)
 % -------------------------------------------------------------------- 
 
 
-    % add XLSX extension if necessary
-    if isempty(regexpi(xlsname,'.xlsx')), xlsname = [xlsname '.xlsx']; end;  
+    warning('off');
 
-    % load Excel file into struct
-    [~,~,rawdata] = xlsread([xlspath '\' xlsname]);
     
-    % update subject data in struct (assume Excel header row exists)
-    for r=2:size(rawdata,1)
-        bbstruct.(rawdata{r,1}).cohort = rawdata{r,2};
-        bbstruct.(rawdata{r,1}).affected = rawdata{r,3};
-    end   
+    % sheet header
+    xldata(1,:) = {'subj','cohort','affected'};
+        
+    % collate data
+    x = 2;
+    subjs = fieldnames(bbstruct);    
+    for s=1:length(subjs)
+        xldata(x,:) = {subjs{s}, ... 
+                       upper(bbstruct.(subjs{s}).cohort), ...
+                       upper(bbstruct.(subjs{s}).affected)};                                   
+        x = x + 1;                
+    end
+                                                                                
+
+    % add XLSX extension if necessary
+    if isempty(regexpi(xlsname,'.xlsx')), xlsname = [xlsname '.xlsx']; end;    
+    
+    % write Excel spreadsheet
+    xlswrite([xlspath '\' xlsname],xldata);
 
 end
 

@@ -56,7 +56,7 @@ disp('Generating list of available C3D files matching file name format...');
 
 % add additional information about trial (metadata)
 disp('Generating subject and trial metadata and settings...');
-bb = getSubtriMeta(flist,subtri,bbmeta,user);
+bb = getSubtriMeta(flist,subtri,bbmeta,user,'ignore');
 
 
 

@@ -198,8 +198,6 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     c3dout.trange = trange;
     c3dout.fpseq = fpseq;
     c3dout.triallimb = triallimb;
-    c3dout.eframes = eframes;
-    c3dout.ecodes = ecodes;
     c3dout.analysedlegs = analysedlegs;
     
     % write info to stdout

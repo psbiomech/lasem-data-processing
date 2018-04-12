@@ -1,4 +1,4 @@
-function bbstruct = extractBBdata(inp,bbmeta,user)
+function bbstruct = extractBBdata(bbstruct,bbmeta,user)
 
 
 %  extractBBdata: Get BB data from C3D file, trim and resample
@@ -23,31 +23,16 @@ function bbstruct = extractBBdata(inp,bbmeta,user)
 
 
     % assign struct fields
-    inputtype = user.INPUTTYPE;
+    updatemeta = user.UPDATEMETA;
     ampg = user.AMPG;
     samp = user.SAMP;
+    xlsname = [user.TRIALPREFIX '_SubjInfoOnly'];
     xlspath = user.XLSMETAPATH;
-
-
-    % check inputs
-    if (nargin==5)
-        xlspath = [];
-    end
         
 
-    % get settings/meta data, determine action based on input type
-    switch inputtype
-        
-        % as struct
-        case 'struct'
-            bbstruct = inp;
-
-        % as Excel file
-        case 'xls'
-            bbstruct = loadXLSmeta(inp,xlspath);
-
-    end
-
+    % update meta data from XLS if required
+    if strcmpi(updatemeta,'update'), bbstruct = loadXLSmeta(bbstruct,xlsname,xlspath); end;
+            
     % get Body Builder point data from C3D files
     subjs = fieldnames(bbstruct);
     for s=1:length(subjs)

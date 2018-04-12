@@ -32,8 +32,7 @@ user.SAMP = 100;    % resample data to standardised number of time steps
 user.AMPG = [1 1 1 1];   % what Body Builder data to extract from C3D file: angles, moments, powers, GRFs (1=yes,0=no)
 user.FILESELECTMODE = 'auto';   % 'auto': process C3D files matching file name format, 'manual': manually select which files to process
 user.TASKTYPE = 'walk-stance-both';   % activity/task/motion type code
-user.WRITEXLS = 'writexls';  % write subject/trial metadata to Excel spreadsheet in XLSMETAPATH
-user.INPUTTYPE = 'struct';  % get settings/meta data from Excel or struct
+user.UPDATEMETA = 'update';  % update subject cohort and affected limb via XLS
 
 % C3D file name parameters
 % (form: [SUBJECTPREFIX][2-digit numeric][SEPARATOR][TRIALPREFIX][2-digit numeric].c3d)
@@ -41,7 +40,10 @@ user.SUBJECTPREFIX = 'FAILT';   % subject code prefix (eg. for subject code FAIL
 user.TRIALPREFIX = 'WALK';  % trial code prefix (eg. for trial code WALK01, the trialprefix is 'WALK')
 user.SEPARATOR = '_';   % file name separator between subject code and trial code (eg. for file FAILT01_WALK01.c3d, the separator is '_')
 
-% if used, settings for automatic processing of data
+% default settings for automatic processing of data
+% (use this to preset cohort and affected leg to a default value for all
+% subjects, then manually update the info for each individual subject
+% using XLS upload function)
 user.COHORT = 'aff';    % cohort type (affected/control)
 user.AFFECTED = 'r';    % affected limb (left/right, or control)
 
