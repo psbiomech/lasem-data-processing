@@ -49,9 +49,10 @@ Processing:
 3. Total cohort means and stdev
 
 Task types analysed:
-1. Walking (stance)
-2. Running (stance)
-3. Single-leg drop and jump
+1. Walking (one stance phase)
+2. Walking (two stance phases)
+3. Running (stance)
+4. Single-leg drop and jump
 
 ## Getting started
 
@@ -96,7 +97,8 @@ This project is licensed under the GNU General Public License v3.0.
 
 For full license terms, please refer to the *LICENSE* file or visit *http://www.gnu.org/licenses/*.
 
-	Copyright (C) 2017 Prasanna Sritharan
+	Copyright (C) 2018 Prasanna Sritharan
+	Copyright (C) 2018 La Trobe University
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
