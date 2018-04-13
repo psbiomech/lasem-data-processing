@@ -1,11 +1,12 @@
 function user = getUserScriptSettings()
 
 
-%  getUserScriptSettings: User settings for script
-%   Prasanna Sritharan, August 2017
+%getUserScriptSettings: User settings for script
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -32,7 +33,7 @@ user.SAMP = 100;    % resample data to standardised number of time steps
 user.AMPG = [1 1 1 1];   % what Body Builder data to extract from C3D file: angles, moments, powers, GRFs (1=yes,0=no)
 user.FILESELECTMODE = 'auto';   % 'auto': process C3D files matching file name format, 'manual': manually select which files to process
 user.TASKTYPE = 'walk-stance-both';   % activity/task/motion type code
-user.UPDATEMETA = 'update';  % update subject cohort and affected limb via XLS
+user.UPDATEMETA = 'noupdate';  % update subject cohort and affected limb via XLS
 
 % C3D file name parameters
 % (form: [SUBJECTPREFIX][2-digit numeric][SEPARATOR][TRIALPREFIX][2-digit numeric].c3d)

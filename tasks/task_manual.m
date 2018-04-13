@@ -1,10 +1,11 @@
 function tstruct = task_manual(itf,tinfo,bbmeta)
 
-%  task_manual: Manually enter all trial data
-%   Prasanna Sritharan, July 2017
+%task_manual: Manually enter all trial data
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by

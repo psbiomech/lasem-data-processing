@@ -1,10 +1,11 @@
 function saveBBstruct(bb,user)
 
-%  saveBBstruct: Save Body Builder struct to MAT file
-%   Prasanna Sritharan, June 2017
+%saveBBstruct: Save Body Builder struct to MAT file
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by

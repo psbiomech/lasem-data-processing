@@ -1,10 +1,11 @@
 function point = pullBBpoint(trialstruct,bbmeta,ampg)
 
-%  pullC3Ddata: Get Body Builder point data from C3D file
-%   Prasanna Sritharan, June 2017
+%pullBBpoint: Get Body Builder point data from C3D file
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@ function point = pullBBpoint(trialstruct,bbmeta,ampg)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-% -------------------------------------------------------------------- 
+% --------------------------------------------------------------------  
 
 
     % assign trial struct info

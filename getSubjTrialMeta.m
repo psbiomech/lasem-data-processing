@@ -1,11 +1,12 @@
-function meta = getSubtriMeta(flist,subtri,bbmeta,user,writeflag)
+function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
 
 
-%  getSubtriMeta: Build struct of subject and trial metadata
-%   Prasanna Sritharan, June 2017
+%getSubjTrialMeta: Build struct of subject and trial metadata
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -19,7 +20,7 @@ function meta = getSubtriMeta(flist,subtri,bbmeta,user,writeflag)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-% -------------------------------------------------------------------- 
+% --------------------------------------------------------------------  
 
 
     warning('off');

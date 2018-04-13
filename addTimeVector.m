@@ -1,10 +1,11 @@
 function structin = addTimeVector(structin,p,samp)
 
 %  addTimeVector: Add time vector to trial data
-%   Prasanna Sritharan, August 2017
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by

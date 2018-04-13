@@ -1,10 +1,11 @@
 function tstruct = task_walk_stance(itf,tinfo,bbmeta)
 
-%  task_walk_stance Auto generate trial info: walking - stance only
-%   Prasanna Sritharan, July 2017
+%task_walk_stance Auto generate trial info: walking - stance only
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by

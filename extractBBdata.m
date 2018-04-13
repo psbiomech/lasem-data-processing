@@ -1,11 +1,12 @@
 function bbstruct = extractBBdata(bbstruct,bbmeta,user)
 
 
-%  extractBBdata: Get BB data from C3D file, trim and resample
-%   Prasanna Sritharan, June 2017
+%extractBBdata: Get BB data from C3D file, trim and resample
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -40,7 +41,7 @@ function bbstruct = extractBBdata(bbstruct,bbmeta,user)
         trials = fieldnames(bbstruct.(subjs{s}));
         for t=1:length(trials)                        
             trial = trials{t};
-            if isempty(find(strcmpi(trials{t},{'cohort','affected'}),1))
+            if isempty(find(strcmpi(trials{t},bbmeta.SUBJECTFIELDS),1))
 
                 switch bbstruct.(subjs{s}).(trials{t}).analysedlegs
                     

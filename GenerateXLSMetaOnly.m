@@ -1,8 +1,9 @@
 %% RUN BODY BUILDER DATA EXTRACTION
-% Prasanna Sritharan, June 2017
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -56,7 +57,7 @@ disp('Generating list of available C3D files matching file name format...');
 
 % add additional information about trial (metadata)
 disp('Writing subject and trial metadata and settings to XLS...');
-bb = getSubtriMeta(flist,subtri,bbmeta,user,'writexls');
+bb = getSubjTrialMeta(flist,subtri,bbmeta,user,'writexls');
 
 
 

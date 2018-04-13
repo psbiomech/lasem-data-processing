@@ -1,10 +1,11 @@
-function bbswapped = swapLegs(bbstruct,normleg)
+function exportBBdata(bbstruct,bbmeta,user)
 
-%  swapLegs: Normalise data to one leg
-%   Prasanna Sritharan, June 2017
+%exportBBdata: Export Body Builder data to Excel spreadsheets
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -19,8 +20,12 @@ function bbswapped = swapLegs(bbstruct,normleg)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % -------------------------------------------------------------------- 
-    
 
+    % write Body Builder data to Excel spreadsheets
+    writeXLSMeanBBstructGroups(bbstruct,bbmeta,user);
+
+    % write all metadata to Excel spreadsheet
+    writeXLSFullMetaData(bbstruct,user)
 
 
 end

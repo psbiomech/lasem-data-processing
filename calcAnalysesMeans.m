@@ -1,10 +1,11 @@
-function bbstruct = calcAnalysesMeans(bbstruct,bbmeta,user)
+function bbstruct = calcAnalysesMeans(bbstruct,bbmeta)
 
-%  meanBBanalyses: Calculate means for additional analyses on Body Builder data
-%   Prasanna Sritharan, August 2017
+%calcAnalysesMeans: Calculate means for additional analyses on Body Builder data
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by

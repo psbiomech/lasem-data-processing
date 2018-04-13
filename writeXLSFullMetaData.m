@@ -1,10 +1,11 @@
-function writeXLSFullMetaData(bbstruct,xlsname,xlspath)
+function writeXLSFullMetaData(bbstruct,user)
 
-%  writeXLSFullMetaData: Write all available metadata to XLS
-%   Prasanna Sritharan, June 2017
+%writeXLSFullMetaData: Write all available metadata to XLS
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -23,9 +24,14 @@ function writeXLSFullMetaData(bbstruct,xlsname,xlspath)
 
     warning('off');
 
+    % assign struct fields
+    xlsprefix = user.TRIALPREFIX;
+    xlspath = user.XLSMETAPATH;
+    samp = user.SAMP;
+    
     
     % sheet header
-    xldata(1,:) = {'subj','trial','cohort','affected','vfirst','vfrange','nvframes','afrange','naframes','trange','fpseq','triallimb','analysedlegs','filepath'};
+    xldata(1,:) = {'subj','trial','cohort','affected','vfirst','vfrange','nvframes','afrange','naframes','trange','fpseq','triallimb','analysedlegs','ecodes','eframes','filepath'};
         
     % collate data
     x = 2;
@@ -33,7 +39,7 @@ function writeXLSFullMetaData(bbstruct,xlsname,xlspath)
     for s=1:length(subjs)
         trials = fieldnames(bbstruct.(subjs{s}));
         for t=1:length(trials)
-            if isempty(find(strcmpi(trials{t},{'cohort','affected'}),1))
+            if isempty(find(strcmpi(trials{t},{'cohort','affected','mean','sd'}),1))
             
                 % different actions required depending on whether one or two legs were analysed per trial
                 switch bbstruct.(subjs{s}).(trials{t}).analysedlegs                    
@@ -52,6 +58,8 @@ function writeXLSFullMetaData(bbstruct,xlsname,xlspath)
                                        mat2str(bbstruct.(subjs{s}).(trials{t}).fpseq), ...
                                        upper(bbstruct.(subjs{s}).(trials{t}).triallimb), ...
                                        num2str(bbstruct.(subjs{s}).(trials{t}).analysedlegs), ...
+                                       strjoin(bbstruct.(subjs{s}).(trials{t}).ecodes,';'), ...
+                                       mat2str(bbstruct.(subjs{s}).(trials{t}).eframes), ...                                       
                                        bbstruct.(subjs{s}).(trials{t}).filepath};                                   
                         x = x + 1;
                     
@@ -70,6 +78,8 @@ function writeXLSFullMetaData(bbstruct,xlsname,xlspath)
                                                mat2str(bbstruct.(subjs{s}).(trials{t}).fpseq{p}), ...
                                                upper(bbstruct.(subjs{s}).(trials{t}).triallimb{p}), ...
                                                num2str(bbstruct.(subjs{s}).(trials{t}).analysedlegs), ...
+                                               strjoin(bbstruct.(subjs{s}).(trials{t}).ecodes{p},';'), ...
+                                               mat2str(bbstruct.(subjs{s}).(trials{t}).eframes{p}), ...
                                                bbstruct.(subjs{s}).(trials{t}).filepath};                                                       
                         end                                               
                         x = x + 2;
@@ -82,6 +92,7 @@ function writeXLSFullMetaData(bbstruct,xlsname,xlspath)
                                                                                 
 
     % add XLSX extension if necessary
+    xlsname = [xlsprefix '_SubjectTrial_Metadata'];
     if isempty(regexpi(xlsname,'.xlsx')), xlsname = [xlsname '.xlsx']; end;    
     
     % write Excel spreadsheet

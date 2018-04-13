@@ -1,10 +1,11 @@
 function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
 
-%  meanBBsubject: Calculates mean of all trials per subject
-%   Prasanna Sritharan, June 2017
+%meanBBsubject: Calculates mean of all trials per subject
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -44,7 +45,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
                     t2 = 1;
                     for n = 1:ntrials
                         try                                                        
-                            if isempty(find(strcmpi(trials{n},{'cohort','affected','mean','sd'}),1))
+                            if isempty(find(strcmpi(trials{n},bbmeta.SUBJECTFIELDS),1))
                                 
                                 % process depends on how many legs were analysed
                                 switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
@@ -110,10 +111,8 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
             t2 = 1;
             for n = 1:ntrials
                 try
-                    if isempty(find(strcmpi(trials{n},{'cohort','affected','mean','sd'}),1))
-
-                            
-                            
+                    if isempty(find(strcmpi(trials{n},bbmeta.SUBJECTFIELDS),1))
+                                                        
                             % process depends on how many legs were analysed
                             switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
 

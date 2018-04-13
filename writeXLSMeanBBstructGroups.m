@@ -1,11 +1,12 @@
-function writeBBstructToXLSMean(bbstruct,bbmeta,user)
+function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
 
 
-%  writeBBstructToXLS: write BodyBuilder data to Excel workbook
-%   Prasanna Sritharan, June 2017
+%writeXLSMeanBBstructGroups: write BB data to Excel multiple workbooks
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -19,7 +20,7 @@ function writeBBstructToXLSMean(bbstruct,bbmeta,user)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-% -------------------------------------------------------------------- 
+% --------------------------------------------------------------------  
 
 
     warning('off');
@@ -28,7 +29,6 @@ function writeBBstructToXLSMean(bbstruct,bbmeta,user)
     xlsprefix = user.TRIALPREFIX;
     xlspath = user.SUMMARYPATH;
     samp = user.SAMP;
-    
     
     
     % data for write
@@ -94,16 +94,17 @@ function writeBBstructToXLSMean(bbstruct,bbmeta,user)
     
     % write Excel spreadsheet
     mkdir(xlspath);
+    mkdir([xlspath '\XLS\']);
     for f=1:2
         cond = bbmeta.conditions{f};
         if isfield(xldata,cond)
-            s = 1;
-            xlsname = [xlsprefix '_' cond '.xlsx'];
             for b=1:length(bbmeta.BBGROUPS)
+                s = 1;
+                xlsname = [xlsprefix '_' cond '_' bbmeta.BBGROUPS{b} '.xlsx'];                
                 for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
                     quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
                     for c=1:length(bbmeta.dirs)
-                        xlswrite([xlspath '\' xlsname],xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c}),s);
+                        xlswrite([xlspath '\XLS\' xlsname],xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c}),s);
                         s = s + 1;
                     end
                 end
@@ -115,11 +116,11 @@ function writeBBstructToXLSMean(bbstruct,bbmeta,user)
     for f=1:2
         cond = bbmeta.conditions{f};
         if isfield(xldata,cond)        
-            s = 1;
-            xlsname = [xlsprefix '_' cond '.xlsx'];
-            xl = actxserver('Excel.Application'); 
-            wb = xl.Workbooks.Open([xlspath '\' xlsname]);
             for b=1:length(bbmeta.BBGROUPS)
+                s = 1;
+                xlsname = [xlsprefix '_' cond '_' bbmeta.BBGROUPS{b} '.xlsx'];
+                xl = actxserver('Excel.Application'); 
+                wb = xl.Workbooks.Open([xlspath '\XLS\' xlsname]);                
                 for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
                     quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
                     for c=1:length(bbmeta.dirs)
@@ -127,10 +128,10 @@ function writeBBstructToXLSMean(bbstruct,bbmeta,user)
                         s = s + 1;
                     end            
                 end
-            end
-            wb.Save;
-            wb.Close(false);        
-            xl.Quit;    
+                wb.Save;
+                wb.Close(false);        
+                xl.Quit; 
+            end   
         end
     end    
    

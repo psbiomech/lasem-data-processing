@@ -1,10 +1,11 @@
 function bbmeta = getBBmeta()
 
-%  getBBmeta: Return a struct containing Body Builder metadata
-%   Prasanna Sritharan, June 2017
+%getBBmeta: Return a struct containing Body Builder metadata
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -37,6 +38,7 @@ function bbmeta = getBBmeta()
     bbmeta.limbs = {'R','L'};
     bbmeta.cohorts = {'AFF','CON'};
     bbmeta.conditions = {'SYM','ASYM','CON'};
+    bbmeta.SUBJECTFIELDS = {'cohort','affected','mean','sd'};
     
 end
 

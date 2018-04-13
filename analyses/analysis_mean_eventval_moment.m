@@ -1,11 +1,12 @@
 function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
 
 
-%  analysis_eventval_moment: Subject and total means for moment values at events
-%   Prasanna Sritharan, August 2017
+%analysis_eventval_moment: Subject and total means for moment values at events
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -48,18 +49,41 @@ function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
                 t2 = 1;
                 for n = 1:ntrials
                     try
-                        if isempty(find(strcmpi(trials{n},{'cohort','affected','mean','sd'}),1))
-                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
-                                if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
-                                    cond1 = bbmeta.conditions{1};
-                                    alldata.(cond1).(DATAGRP).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname);
-                                    t1 = t1 + 1;
-                                else
-                                    cond2 = bbmeta.conditions{2};
-                                    alldata.(cond2).(DATAGRP).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname);
-                                    t2 = t2 + 1;
-                                end
+                        if isempty(find(strcmpi(trials{n},bbmeta.SUBJECTFIELDS),1))
+                            switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
+                            
+                                case 1  % one leg                            
+                            
+                                    if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                            cond1 = bbmeta.conditions{1};
+                                            alldata.(cond1).(DATAGRP).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname);
+                                            t1 = t1 + 1;
+                                        else
+                                            cond2 = bbmeta.conditions{2};
+                                            alldata.(cond2).(DATAGRP).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname);
+                                            t2 = t2 + 1;
+                                        end
+                                    end
+                                    
+                                case 2  % two legs
+
+                                    for p=1:2
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbmeta.limbs{f})
+                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
+                                                cond1 = bbmeta.conditions{1};
+                                                alldata.(cond1).(DATAGRP).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname);
+                                                t1 = t1 + 1;
+                                            else
+                                                cond2 = bbmeta.conditions{2};
+                                                alldata.(cond2).(DATAGRP).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname);
+                                                t2 = t2 + 1;
+                                            end
+                                        end  
+                                    end
+                                    
                             end
+                            
                         else
                             continue;
                         end

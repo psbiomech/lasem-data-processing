@@ -1,11 +1,12 @@
-function bbstruct = analysis_eventval_power(bbstruct,bbmeta,user,subj,trial)
+function datastruct = analysis_eventval_power(datastruct,bbmeta,user,vfrange,ecodes,eframes)
 
 
-%  analysis_eventval_power: Get power values at events
-%   Prasanna Sritharan, August 2017
+%analysis_eventval_power: Get power values at events
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -19,7 +20,7 @@ function bbstruct = analysis_eventval_power(bbstruct,bbmeta,user,subj,trial)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-% -------------------------------------------------------------------- 
+% --------------------------------------------------------------------  
 
 
     % input data group name
@@ -31,13 +32,13 @@ function bbstruct = analysis_eventval_power(bbstruct,bbmeta,user,subj,trial)
     OUTMIDSTR = bbmeta.BBANALYSES{6};     
 
     % get values
-    qnames = fieldnames(bbstruct.(subj).(trial).(GRPIN));        
-    timemap = linspace(bbstruct.(subj).(trial).vfrange(1),bbstruct.(subj).(trial).vfrange(2),user.SAMP);
+    qnames = fieldnames(datastruct.(GRPIN));        
+    timemap = linspace(vfrange(1),vfrange(2),user.SAMP);
     sampmap = 1:user.SAMP;
     for q=1:length(qnames)
-        for e=1:length(bbstruct.(subj).(trial).ecodes)
-            tstep = round(interp1(timemap,sampmap,bbstruct.(subj).(trial).eframes(e)));
-            bbstruct.(subj).(trial).(GRPOUT).(qnames{q})(e,:) = bbstruct.(subj).(trial).(GRPIN).(qnames{q})(tstep,:);
+        for e=1:length(ecodes)
+            tstep = round(interp1(timemap,sampmap,eframes(e)));
+            datastruct.(GRPOUT).(qnames{q})(e,:) = datastruct.(GRPIN).(qnames{q})(tstep,:);
         end
     end
         

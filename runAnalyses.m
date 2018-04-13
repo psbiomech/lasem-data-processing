@@ -1,10 +1,11 @@
 function bbstruct = runAnalyses(bbstruct,bbmeta,user)
 
-%  runAnalyses: Run additional analyses on Body Builder data
-%   Prasanna Sritharan, August 2017
+%runAnalyses: Run additional analyses on Body Builder data
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -29,24 +30,55 @@ function bbstruct = runAnalyses(bbstruct,bbmeta,user)
     for s=1:length(subjs)
         trials = fieldnames(bbstruct.(subjs{s}));
         for t=1:length(trials)            
-            if isempty(find(strcmpi(trials{t},{'cohort','affected','mean','sd'}),1))
+            if isempty(find(strcmpi(trials{t},bbmeta.SUBJECTFIELDS),1))
 
-                % joint rotational work (angular work)
-                bbstruct = analysis_work_rotational(bbstruct,bbmeta,subjs{s},trials{t});     
+                switch bbstruct.(subjs{s}).(trials{t}).analysedlegs
+                    
+                    case 1  % one leg
+                                                
+                        % parameters
+                        datastruct = bbstruct.(subjs{s}).(trials{t}).data;
+                        vfrange = bbstruct.(subjs{s}).(trials{t}).vfrange;
+                        ecodes = bbstruct.(subjs{s}).(trials{t}).ecodes;
+                        eframes = bbstruct.(subjs{s}).(trials{t}).eframes;
+                        
+                        % analyses
+                        datastruct = analysis_work_rotational(datastruct,bbmeta);     
+                        datastruct = analysis_impulse_rotational(datastruct,bbmeta);                
+                        datastruct = analysis_impulse_grf(datastruct,bbmeta);   
+                        datastruct = analysis_eventval_angle(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                        datastruct = analysis_eventval_moment(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                        datastruct = analysis_eventval_power(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                        datastruct = analysis_eventval_grf(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                
+                        % re-assign to BB struct
+                        bbstruct.(subjs{s}).(trials{t}).data = datastruct;
+                        
+                    case 2  % two legs
+                        
+                        for p=1:2
+                        
+                            % parameters
+                            datastruct = bbstruct.(subjs{s}).(trials{t}).data{p};
+                            vfrange = bbstruct.(subjs{s}).(trials{t}).vfrange{p};
+                            ecodes = bbstruct.(subjs{s}).(trials{t}).ecodes{p};
+                            eframes = bbstruct.(subjs{s}).(trials{t}).eframes{p};
 
-                % joint rotational impulse
-                bbstruct = analysis_impulse_rotational(bbstruct,bbmeta,subjs{s},trials{t});                
+                            % analyses
+                            datastruct = analysis_work_rotational(datastruct,bbmeta);     
+                            datastruct = analysis_impulse_rotational(datastruct,bbmeta);                
+                            datastruct = analysis_impulse_grf(datastruct,bbmeta);   
+                            datastruct = analysis_eventval_angle(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                            datastruct = analysis_eventval_moment(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                            datastruct = analysis_eventval_power(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                            datastruct = analysis_eventval_grf(datastruct,bbmeta,user,vfrange,ecodes,eframes);
 
-                % GRF impulse
-                bbstruct = analysis_impulse_grf(bbstruct,bbmeta,subjs{s},trials{t});   
-                
-                % Body Builder data values at events
-                bbstruct = analysis_eventval_angle(bbstruct,bbmeta,user,subjs{s},trials{t});
-                bbstruct = analysis_eventval_moment(bbstruct,bbmeta,user,subjs{s},trials{t});
-                bbstruct = analysis_eventval_power(bbstruct,bbmeta,user,subjs{s},trials{t});
-                bbstruct = analysis_eventval_grf(bbstruct,bbmeta,user,subjs{s},trials{t});
-                
-                
+                            % re-assign to BB struct
+                            bbstruct.(subjs{s}).(trials{t}).data{p} = datastruct;
+                            
+                        end
+                        
+                end
                 
             else
                 continue;

@@ -1,13 +1,12 @@
-function bbstruct = analysis_impulse_grf(bbstruct,bbmeta,subj,trial)
+function datastruct = analysis_impulse_grf(datastruct,bbmeta)
 
 
-%  analysis_impulse_grf: Impulse of ground force
-%   Prasanna Sritharan, August 2017
-%
-%   Requires GRF in BB structure
+%analysis_impulse_grf: Impulse of ground force
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -21,7 +20,7 @@ function bbstruct = analysis_impulse_grf(bbstruct,bbmeta,subj,trial)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-% -------------------------------------------------------------------- 
+% --------------------------------------------------------------------  
 
 
     % input data group name
@@ -33,33 +32,33 @@ function bbstruct = analysis_impulse_grf(bbstruct,bbmeta,subj,trial)
     OUTMIDSTR = bbmeta.BBANALYSES{3};    
     
     % integral over entire time window
-    qnames = fieldnames(bbstruct.(subj).(trial).(GRPIN));        
+    qnames = fieldnames(datastruct.(GRPIN));        
     for q=1:length(qnames)     
         qpresuf = regexpi(qnames{q},['(\w*)' INMIDSTR '(\w*)'],'tokens');
         qoutname = [qpresuf{1}{1} OUTMIDSTR qpresuf{1}{2}];
-        bbstruct.(subj).(trial).(GRPOUT).(qoutname).net = zeros(1,3);
+        datastruct.(GRPOUT).(qoutname).net = zeros(1,3);
         for x=1:3
             
             % time vector
-            time = bbstruct.(subj).(trial).TIMES.relative';
+            time = datastruct.TIMES.relative';
             
             % net integral
-            data = bbstruct.(subj).(trial).(GRPIN).(qnames{q})(:,x);
-            bbstruct.(subj).(trial).(GRPOUT).(qoutname).net(x) = trapz(time,data);
+            data = datastruct.(GRPIN).(qnames{q})(:,x);
+            datastruct.(GRPOUT).(qoutname).net(x) = trapz(time,data);
                         
             % positive integral
             dpos = data;
             dpos(dpos<0) = 0;
-            bbstruct.(subj).(trial).(GRPOUT).(qoutname).positive(x) = trapz(time,dpos);
+            datastruct.(GRPOUT).(qoutname).positive(x) = trapz(time,dpos);
                         
             % negative integral
             dneg = data;
             dneg(dneg>0) = 0;            
-            bbstruct.(subj).(trial).(GRPOUT).(qoutname).negative(x) = trapz(time,dneg);
+            datastruct.(GRPOUT).(qoutname).negative(x) = trapz(time,dneg);
 
             % first and second half of time window
             tranges = {1:round(length(time)/2),round(length(time)/2):length(time)};
-            bbstruct.(subj).(trial).(GRPOUT).(qoutname).half(:,x) = [trapz(time(tranges{1}),data(tranges{1})) trapz(time(tranges{2}),data(tranges{2}))];            
+            datastruct.(GRPOUT).(qoutname).half(:,x) = [trapz(time(tranges{1}),data(tranges{1})) trapz(time(tranges{2}),data(tranges{2}))];            
             
             % define segments
             posbnds = [find(diff([0 (data>0)'])==1);find(diff([(data>0)' 0])==-1)];            
@@ -97,7 +96,7 @@ function bbstruct = analysis_impulse_grf(bbstruct,bbmeta,subj,trial)
                     segint(s) = trapz(time(trange),data(trange));
                 end
             end
-            bbstruct.(subj).(trial).(GRPOUT).(qoutname).segments.(bbmeta.dirs{x}) = segint;
+            datastruct.(GRPOUT).(qoutname).segments.(bbmeta.dirs{x}) = segint;
             
         end
     end

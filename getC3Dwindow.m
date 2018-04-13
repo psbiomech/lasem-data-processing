@@ -1,11 +1,12 @@
 function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
 
 
-%  getC3Dwindow: Determine time window based on activity type
-%   Prasanna Sritharan, June 2017
+%getC3Dwindow: Determine time window based on activity type
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -199,6 +200,8 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     c3dout.fpseq = fpseq;
     c3dout.triallimb = triallimb;
     c3dout.analysedlegs = analysedlegs;
+    c3dout.ecodes = ecodes;
+    c3dout.eframes = eframes;
     
     % write info to stdout
     switch analysedlegs

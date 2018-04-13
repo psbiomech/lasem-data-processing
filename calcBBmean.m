@@ -1,11 +1,12 @@
 function bbstruct = calcBBmean(bbstruct,bbmeta,user)
 
 
-%  calcMeanBB: Mean and standard deviation of BB data
-%   Prasanna Sritharan, July 2017
+%calcBBmean: Mean and standard deviation of BB data
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by

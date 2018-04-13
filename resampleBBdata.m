@@ -1,10 +1,11 @@
 function resampled = resampleBBdata(rawdata,newsamp)
 
-%  resampleBBdata: Resample Body Builder data extracted from C3D
-%   Prasanna Sritharan, June 2017
+%resampleBBdata: Resample Body Builder data extracted from C3D
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@ function resampled = resampleBBdata(rawdata,newsamp)
 % 
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-% -------------------------------------------------------------------- 
+% --------------------------------------------------------------------  
 
 
     % parse Body Builder data groups

@@ -1,8 +1,9 @@
 %% RUN BODY BUILDER DATA EXTRACTION
-% Prasanna Sritharan, June 2017
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -56,11 +57,7 @@ disp('Generating list of available C3D files matching file name format...');
 
 % add additional information about trial (metadata)
 disp('Generating subject and trial metadata and settings...');
-bb = getSubtriMeta(flist,subtri,bbmeta,user,'ignore');
-
-% save intermediate Body Builder struct
-disp('Saving intermediate data as Matlab struct...');
-saveBBstruct(bb,user);
+bb = getSubjTrialMeta(flist,subtri,bbmeta,user,'ignore');
 
 
 %% ********************
@@ -76,41 +73,33 @@ bb = extractBBdata(bb,bbmeta,user);
 disp('Calculating means and standard deviations for Body Builder data...');
 bb = calcBBmean(bb,bbmeta,user);
 
-% save intermediate Body Builder struct
-disp('Saving intermediate data as Matlab struct...');
-saveBBstruct(bb,user);
-
 
 %% ********************
 % ADDITIONAL ANALYSES
 
-% disp(' ');
-% 
-% % run additional analyses on Body Builder data
-% disp('Running additional analyses on Body Builder data...');
-% bb = runAnalyses(bb,bbmeta,user);
-% 
-% % calculate mean and sd for additional analyses
-% disp('Calculating means and standard deviations for additional analyses...');
-% bb = calcAnalysesMeans(bb,bbmeta,user);
-% 
-% % save intermediate Body Builder struct
-% disp('Saving intermediate data as Matlab struct...');
-% saveBBstruct(bb,user);
+disp(' ');
+
+% run additional analyses on Body Builder data
+disp('Running additional analyses on Body Builder data...');
+bb = runAnalyses(bb,bbmeta,user);
+
+% calculate mean and sd for additional analyses
+disp('Calculating means and standard deviations for additional analyses...');
+bb = calcAnalysesMeans(bb,bbmeta);
 
 
 %% ********************
 % SAVE TO FILE
 
-% disp(' ');
-% 
-% % write mean data to Excel spreadsheet from Body Builder struct
-% disp('Writing all data to Excel spreadsheet...');
-% writeBBstructToXLSMean(bb,bbmeta,user);
-% 
-% % save Body Builder struct
-% disp('Saving complete data set as Matlab struct...');
-% saveBBstruct(bb,user);
+disp(' ');
+
+% export to Excel spreadsheet from Body Builder struct
+disp('Exporting Body Builder data to Excel spreadsheet...');
+exportBBdata(bb,bbmeta,user);
+
+% save Body Builder struct
+disp('Saving complete data set (Body Builder data and additional analyses) as Matlab struct...');
+saveBBstruct(bb,user);
 
 
 

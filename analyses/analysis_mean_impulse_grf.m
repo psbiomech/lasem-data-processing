@@ -1,11 +1,12 @@
 function bbstruct = analysis_mean_impulse_grf(bbstruct,bbmeta)
 
 
-%  analysis_mean_impulse_grf: Subject and total means for ground impulse
-%   Prasanna Sritharan, August 2017
+%analysis_mean_impulse_grf: Subject and total means for ground impulse
+%   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
-%     Copyright (C) 2017 Prasanna Sritharan
+%     Copyright (C) 2018 Prasanna Sritharan
+%     Copyright (C) 2018 La Trobe University
 % 
 %     This program is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
@@ -53,24 +54,56 @@ function bbstruct = analysis_mean_impulse_grf(bbstruct,bbmeta)
                 t2 = 1;
                 for n = 1:ntrials
                     try
-                        if isempty(find(strcmpi(trials{n},{'cohort','affected','mean','sd'}),1))
-                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
-                                if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
-                                    cond1 = bbmeta.conditions{1};
-                                    alldata.(cond1).(DATAGRP).(quantlabel).net(:,t1) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname).net;
-                                    alldata.(cond1).(DATAGRP).(quantlabel).positive(:,t1) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname).positive;
-                                    alldata.(cond1).(DATAGRP).(quantlabel).negative(:,t1) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname).negative;
-                                    alldata.(cond1).(DATAGRP).(quantlabel).half(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname).half;
-                                    t1 = t1 + 1;
-                                else
-                                    cond2 = bbmeta.conditions{2};
-                                    alldata.(cond2).(DATAGRP).(quantlabel).net(:,t2) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname).net;
-                                    alldata.(cond2).(DATAGRP).(quantlabel).positive(:,t2) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname).positive;
-                                    alldata.(cond2).(DATAGRP).(quantlabel).negative(:,t2) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname).negative;
-                                    alldata.(cond2).(DATAGRP).(quantlabel).half(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).(DATAGRP).(quantname).half;
-                                    t2 = t2 + 1;
-                                end
+                        if isempty(find(strcmpi(trials{n},bbmeta.SUBJECTFIELDS),1))
+                            
+                            switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
+                                
+                                case 1  % one leg
+                            
+                                    if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                            cond1 = bbmeta.conditions{1};
+                                            alldata.(cond1).(DATAGRP).(quantlabel).net(:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).net;
+                                            alldata.(cond1).(DATAGRP).(quantlabel).positive(:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).positive;
+                                            alldata.(cond1).(DATAGRP).(quantlabel).negative(:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).negative;
+                                            alldata.(cond1).(DATAGRP).(quantlabel).half(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).half;
+                                            t1 = t1 + 1;
+                                        else
+                                            cond2 = bbmeta.conditions{2};
+                                            alldata.(cond2).(DATAGRP).(quantlabel).net(:,t2) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).net;
+                                            alldata.(cond2).(DATAGRP).(quantlabel).positive(:,t2) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).positive;
+                                            alldata.(cond2).(DATAGRP).(quantlabel).negative(:,t2) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).negative;
+                                            alldata.(cond2).(DATAGRP).(quantlabel).half(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).half;
+                                            t2 = t2 + 1;
+                                        end                            
+                                    end
+                            
+                                case 2  % two legs
+                                    
+                                    for p=1:2
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbmeta.limbs{f})
+                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
+                                                cond1 = bbmeta.conditions{1};
+                                                alldata.(cond1).(DATAGRP).(quantlabel).net(:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).net;
+                                                alldata.(cond1).(DATAGRP).(quantlabel).positive(:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).positive;
+                                                alldata.(cond1).(DATAGRP).(quantlabel).negative(:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).negative;
+                                                alldata.(cond1).(DATAGRP).(quantlabel).half(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).half;
+                                                t1 = t1 + 1;
+                                            else
+                                                cond2 = bbmeta.conditions{2};
+                                                alldata.(cond2).(DATAGRP).(quantlabel).net(:,t2) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).net;
+                                                alldata.(cond2).(DATAGRP).(quantlabel).positive(:,t2) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).positive;
+                                                alldata.(cond2).(DATAGRP).(quantlabel).negative(:,t2) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).negative;
+                                                alldata.(cond2).(DATAGRP).(quantlabel).half(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).half;
+                                                t2 = t2 + 1;
+                                            end                            
+                                        end                                    
+                                    end
+                                    
                             end
+                                    
+                            
+                            
                         else
                             continue;
                         end
