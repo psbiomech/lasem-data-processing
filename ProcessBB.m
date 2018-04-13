@@ -58,6 +58,9 @@ disp('Generating list of available C3D files matching file name format...');
 disp('Generating subject and trial metadata and settings...');
 bb = getSubtriMeta(flist,subtri,bbmeta,user,'ignore');
 
+% save intermediate Body Builder struct
+disp('Saving intermediate data as Matlab struct...');
+saveBBstruct(bb,user);
 
 
 %% ********************
@@ -73,6 +76,9 @@ bb = extractBBdata(bb,bbmeta,user);
 disp('Calculating means and standard deviations for Body Builder data...');
 bb = calcBBmean(bb,bbmeta,user);
 
+% save intermediate Body Builder struct
+disp('Saving intermediate data as Matlab struct...');
+saveBBstruct(bb,user);
 
 
 %% ********************
@@ -87,7 +93,10 @@ bb = calcBBmean(bb,bbmeta,user);
 % % calculate mean and sd for additional analyses
 % disp('Calculating means and standard deviations for additional analyses...');
 % bb = calcAnalysesMeans(bb,bbmeta,user);
-
+% 
+% % save intermediate Body Builder struct
+% disp('Saving intermediate data as Matlab struct...');
+% saveBBstruct(bb,user);
 
 
 %% ********************
@@ -96,11 +105,11 @@ bb = calcBBmean(bb,bbmeta,user);
 % disp(' ');
 % 
 % % write mean data to Excel spreadsheet from Body Builder struct
-% disp('Writing data to Excel spreadsheet...');
+% disp('Writing all data to Excel spreadsheet...');
 % writeBBstructToXLSMean(bb,bbmeta,user);
 % 
 % % save Body Builder struct
-% disp('Saving data as Matlab struct...');
+% disp('Saving complete data set as Matlab struct...');
 % saveBBstruct(bb,user);
 
 

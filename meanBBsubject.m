@@ -43,17 +43,41 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
                     t1 = 1;
                     t2 = 1;
                     for n = 1:ntrials
-                        try
+                        try                                                        
                             if isempty(find(strcmpi(trials{n},{'cohort','affected','mean','sd'}),1))
-                                if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
-                                    if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
-                                        alldata.(bbmeta.conditions{1}).(outgrps{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).(outgrps{b}).(quantname);
-                                        t1 = t1 + 1;
-                                    else
-                                        alldata.(bbmeta.conditions{2}).(outgrps{b}).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).(outgrps{b}).(quantname);
-                                        t2 = t2 + 1;
-                                    end
+                                
+                                % process depends on how many legs were analysed
+                                switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
+                                    
+                                    case 1  % one leg
+                                
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
+                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                                alldata.(bbmeta.conditions{1}).(outgrps{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(outgrps{b}).(quantname);
+                                                t1 = t1 + 1;
+                                            else
+                                                alldata.(bbmeta.conditions{2}).(outgrps{b}).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).data.(outgrps{b}).(quantname);
+                                                t2 = t2 + 1;
+                                            end
+                                        end
+                                
+                                    case 2  % two legs
+
+                                        for p=1:2
+                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbmeta.limbs{f})
+                                                if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
+                                                    alldata.(bbmeta.conditions{1}).(outgrps{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(outgrps{b}).(quantname);
+                                                    t1 = t1 + 1;
+                                                else
+                                                    alldata.(bbmeta.conditions{2}).(outgrps{b}).(quantlabel)(:,:,t2) = bbstruct.(subjs{s}).(trials{n}).data{p}.(outgrps{b}).(quantname);
+                                                    t2 = t2 + 1;
+                                                end
+                                            end
+                                        end
+                                        
                                 end
+                                
+                                
                             else
                                 continue;
                             end
@@ -87,15 +111,40 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
             for n = 1:ntrials
                 try
                     if isempty(find(strcmpi(trials{n},{'cohort','affected','mean','sd'}),1))
-                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
-                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
-                                alldata.(bbmeta.conditions{1}).TIMES.elapsed(t1) = bbstruct.(subjs{s}).(trials{n}).TIMES.relative(end);
-                                t1 = t1 + 1;
-                            else
-                                alldata.(bbmeta.conditions{2}).TIMES.elapsed(t2) = bbstruct.(subjs{s}).(trials{n}).TIMES.relative(end);
-                                t2 = t2 + 1;
+
+                            
+                            
+                            % process depends on how many legs were analysed
+                            switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
+
+                                case 1  % one leg
+                                    
+                                    if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})                                    
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                            alldata.(bbmeta.conditions{1}).TIMES.elapsed(t1) = bbstruct.(subjs{s}).(trials{n}).data.TIMES.relative(end);
+                                            t1 = t1 + 1;
+                                        else
+                                            alldata.(bbmeta.conditions{2}).TIMES.elapsed(t2) = bbstruct.(subjs{s}).(trials{n}).data.TIMES.relative(end);
+                                            t2 = t2 + 1;
+                                        end
+                                    end
+                                
+                                case 2  % two legs
+
+                                    for p=1:2
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbmeta.limbs{f}) 
+                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
+                                                alldata.(bbmeta.conditions{1}).TIMES.elapsed(t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.TIMES.relative(end);
+                                                t1 = t1 + 1;
+                                            else
+                                                alldata.(bbmeta.conditions{2}).TIMES.elapsed(t2) = bbstruct.(subjs{s}).(trials{n}).data{p}.TIMES.relative(end);
+                                                t2 = t2 + 1;
+                                            end
+                                        end
+                                    end
+                                    
                             end
-                        end
+                                                                                        
                     else
                         continue;
                     end

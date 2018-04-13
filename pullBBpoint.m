@@ -87,8 +87,7 @@ function point = pullBBpoint(trialstruct,bbmeta,ampg)
                                 grfchan = find(strcmp(grf,vlist))-1;                                
                                 for x=1:3
                                     copvec = double(cell2mat(itf.GetPointDataEx(copchan,x-1,vfrange(1),vfrange(2),'1')));
-                                    grfvec = double(cell2mat(itf.GetPointDataEx(grfchan,x-1,vfrange(1),vfrange(2),'1')));
-                                    %point.(outgrps{g}).(qname)(:,x) = point.(outgrps{g}).(qname)(:,x)+(grfvec-copvec);
+                                    grfvec = double(cell2mat(itf.GetPointDataEx(grfchan,x-1,vfrange(1),vfrange(2),'1')));                                    
                                     point.(outgrps{g}).(qname)(:,x) = grfvec-copvec;
                                 end
                             end
