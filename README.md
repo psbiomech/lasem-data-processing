@@ -56,7 +56,7 @@ Task types analysed:
 
 ## Getting started
 
-Go to the **lasem-data-processing** Github project page https://github.com/psbiomech/lasem-data-processing
+Go to the **lasem-data-processing** Github project page: https://github.com/psbiomech/lasem-data-processing
 
 Click **Clone or download** and select **Download ZIP** package.
 
