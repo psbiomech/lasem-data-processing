@@ -22,6 +22,8 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % -------------------------------------------------------------------- 
 
+
+    %disp('Analysis: Mean joint rotational impulse');
      
     % input data group name
     DATAGRP = upper(bbmeta.BBANALYSES{2});

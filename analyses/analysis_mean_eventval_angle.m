@@ -23,6 +23,8 @@ function bbstruct = analysis_mean_eventval_angle(bbstruct,bbmeta)
 % -------------------------------------------------------------------- 
 
 
+    %disp('Analysis: Mean values at events - angles');
+
     % input data group name
     DATAGRP = upper(bbmeta.BBANALYSES{4}); 
     SRCGRP = bbmeta.BBGROUPS{1};      

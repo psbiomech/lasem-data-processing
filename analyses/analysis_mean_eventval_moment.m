@@ -23,6 +23,8 @@ function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
 % -------------------------------------------------------------------- 
 
 
+    %disp('Analysis: Mean values at events - moments');
+
     % input data group name
     DATAGRP = upper(bbmeta.BBANALYSES{5});
     SRCGRP = bbmeta.BBGROUPS{2};

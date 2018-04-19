@@ -23,6 +23,8 @@ function datastruct = analysis_work_rotational(datastruct,bbmeta)
 % -------------------------------------------------------------------- 
 
 
+    %disp('Analysis: Joint rotational work');
+
     % input data group name
     GRPIN = bbmeta.BBGROUPS{3};
     GRPOUT = upper(bbmeta.BBANALYSES{1});

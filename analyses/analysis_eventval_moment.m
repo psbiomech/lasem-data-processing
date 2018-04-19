@@ -23,6 +23,8 @@ function datastruct = analysis_eventval_moment(datastruct,bbmeta,user,vfrange,ec
 % --------------------------------------------------------------------  
 
 
+    %disp('Analysis: Values at events - moments');
+
     % input data group name
     GRPIN = bbmeta.BBGROUPS{2};
     GRPOUT = upper(bbmeta.BBANALYSES{5});   

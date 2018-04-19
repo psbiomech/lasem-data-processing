@@ -23,6 +23,8 @@ function bbstruct = analysis_mean_eventval_grf(bbstruct,bbmeta)
 % --------------------------------------------------------------------  
 
 
+    %disp('Analysis: Mean values at events - GRFs');
+
     % input data group name
     DATAGRP = upper(bbmeta.BBANALYSES{7}); 
     SRCGRP = bbmeta.BBGROUPS{4};      

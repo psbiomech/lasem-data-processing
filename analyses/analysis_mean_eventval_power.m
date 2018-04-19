@@ -23,6 +23,8 @@ function bbstruct = analysis_mean_eventval_power(bbstruct,bbmeta)
 % -------------------------------------------------------------------- 
 
 
+    %disp('Analysis: Mean values at events - powers');
+
     % input data group name
     DATAGRP = upper(bbmeta.BBANALYSES{6});
     SRCGRP = bbmeta.BBGROUPS{3};

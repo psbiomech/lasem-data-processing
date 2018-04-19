@@ -23,6 +23,8 @@ function datastruct = analysis_impulse_rotational(datastruct,bbmeta)
 % -------------------------------------------------------------------- 
 
 
+    %disp('Analysis: Joint rotational impulse');
+
     % input data group name
     GRPIN = bbmeta.BBGROUPS{2};
     GRPOUT = upper(bbmeta.BBANALYSES{2});

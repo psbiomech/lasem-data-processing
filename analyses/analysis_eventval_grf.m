@@ -22,6 +22,7 @@ function datastruct = analysis_eventval_grf(datastruct,bbmeta,user,vfrange,ecode
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % -------------------------------------------------------------------- 
 
+    %disp('Analysis: Values at events - GRFs');
 
     % input data group name
     GRPIN = bbmeta.BBGROUPS{4};

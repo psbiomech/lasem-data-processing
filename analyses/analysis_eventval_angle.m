@@ -22,6 +22,7 @@ function datastruct = analysis_eventval_angle(datastruct,bbmeta,user,vfrange,eco
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % -------------------------------------------------------------------- 
 
+    %disp('Analysis: Values at events - angles');
 
     % input data group name
     GRPIN = bbmeta.BBGROUPS{1};

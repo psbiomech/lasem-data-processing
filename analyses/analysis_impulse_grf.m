@@ -23,6 +23,8 @@ function datastruct = analysis_impulse_grf(datastruct,bbmeta)
 % --------------------------------------------------------------------  
 
 
+    %disp('Analysis: GRF impulse');
+
     % input data group name
     GRPIN = bbmeta.BBGROUPS{4};
     GRPOUT = upper(bbmeta.BBANALYSES{3});   

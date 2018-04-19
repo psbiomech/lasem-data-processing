@@ -23,6 +23,8 @@ function bbstruct = analysis_mean_work_rotational(bbstruct,bbmeta)
 % -------------------------------------------------------------------- 
 
      
+    %disp('Analysis: Mean joint rotational work');
+
     % input data group name
     DATAGRP = upper(bbmeta.BBANALYSES{1});
     SRCGRP = bbmeta.BBGROUPS{3};

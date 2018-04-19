@@ -23,6 +23,8 @@ function datastruct = analysis_eventval_power(datastruct,bbmeta,user,vfrange,eco
 % --------------------------------------------------------------------  
 
 
+    %disp('Analysis: Values at events - powers');
+
     % input data group name
     GRPIN = bbmeta.BBGROUPS{3};
     GRPOUT = upper(bbmeta.BBANALYSES{6});   
