@@ -140,9 +140,9 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
         case 'walk-stance'
             tstruct = task_walk_stance(itf,tinfo,bbmeta);
 
-        % walk stance:
-        case 'walk-stance-both'
-            tstruct = task_walk_stance_both(itf,tinfo,bbmeta);            
+        % walk stance LASEM FAI project:
+        case 'walk-stance-failt'
+            tstruct = task_walk_stance_failt(itf,tinfo,bbmeta);            
             
         % run stance:
         case 'run-stance'

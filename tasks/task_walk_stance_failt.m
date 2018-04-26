@@ -1,6 +1,6 @@
-function tstruct = task_walk_stance_both(itf,tinfo,bbmeta)
+function tstruct = task_walk_stance_failt(itf,tinfo,bbmeta)
 
-%task_walk_stance_both Auto generate trial info: walking - 2 stance phases
+%task_walk_stance_failt Auto generate trial info: walking - FAI project
 %   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
@@ -39,7 +39,7 @@ function tstruct = task_walk_stance_both(itf,tinfo,bbmeta)
 
     % 1st stance phase:    
     % find consective IFS, CFS, and IFO on same leg
-    % (assume CFO not labelled due to no FP)
+    % (assume CFO not labelled due to no FP - this is true for FAI project)
     for n=1:eused
         if strcmpi(elabel{n},LAB.FS)
             m = n + 2;
@@ -126,6 +126,20 @@ function tstruct = task_walk_stance_both(itf,tinfo,bbmeta)
         end
     end
     
+    
+    % add dummy CFO event and associated parameters for 3-event 1st stance
+    % (assume CFO occurs the same time period after IFS as CFS occurs prior
+    % to IFO, future versions should include an algorthim to estimate
+    % event times from spatial marker data)
+    oldf = eframes{1};
+    cfof = oldf(1)+round((oldf(3)-oldf(1))*(oldf(3)-oldf(2))/(oldf(3)-oldf(1)));
+    eframes{1} = [oldf(1) cfof oldf(2:3)];
+    fpseqs{1} = [fpseqs{1}(1,:); fpseqs{1}(1,:); fpseqs{1}(2,:)];
+    elabels{1} = elabels{2};
+    econtexts{1} = [econtexts{1}(1) econtexts{1}(2) econtexts{1}(2:3)];
+    ecodes{1} = [ecodes{1}(1), {[ecodes{1}{2}(1) ecodes{1}{3}(2:3)]}, ecodes{1}{2:3}];
+    
+    
     % assign output struct variables
     tstruct.triallimb = triallimbs;
     tstruct.trange = tranges;
@@ -137,4 +151,5 @@ function tstruct = task_walk_stance_both(itf,tinfo,bbmeta)
     tstruct.analysedlegs = 2;
     
 end
+
 
