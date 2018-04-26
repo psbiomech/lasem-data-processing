@@ -50,7 +50,7 @@ Processing:
 
 Task types analysed:
 1. Walking (one stance phase)
-2. Walking (two stance phases)
+2. Walking (two stance phases, LASEM FAI project event coding)
 3. Running (stance)
 4. Single-leg drop and jump
 
