@@ -21,9 +21,13 @@ function exportBBdata(bbstruct,bbmeta,user)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % -------------------------------------------------------------------- 
 
-    % write Body Builder data to Excel spreadsheets
+    % write Body Builder mean data to Excel spreadsheets (subject mean and
+    % total cohort means)
     writeXLSMeanBBstructGroups(bbstruct,bbmeta,user);
 
+    % write Body Builder individual trial data to a spreadsheet
+    writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user);
+    
     % write all metadata to Excel spreadsheet
     writeXLSFullMetaData(bbstruct,user)
 
