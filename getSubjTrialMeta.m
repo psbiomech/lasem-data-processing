@@ -32,7 +32,10 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
     xlsinfoname = [user.TRIALPREFIX '_SubjInfoOnly'];
     xlspath = user.XLSMETAPATH;   
 
-
+    % failed
+    en = 0;
+    errlist = cell(0);
+    
     % label affected limb
     disp(' ');
     meta = struct;
@@ -48,11 +51,20 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
             % store file path, label trial limb and time window
             for g=1:length(subtri)
                 if strcmpi(subtri{f}{1},subtri{g}{1})
+                    
                     disp(' ');
                     disp(['Trial: ' subtri{g}{2}]);
                     disp(['------------------------------']);
-                    meta.(subtri{g}{1}).(subtri{g}{2}) = getC3Dwindow(flist{g},task,bbmeta,subtri{g}{1},subtri{g}{2});
-                    meta.(subtri{f}{1}).(subtri{g}{2}).filepath = flist{g};
+                    
+                    try
+                        meta.(subtri{g}{1}).(subtri{g}{2}) = getC3Dwindow(flist{g},task,bbmeta,subtri{g}{1},subtri{g}{2});
+                        meta.(subtri{f}{1}).(subtri{g}{2}).filepath = flist{g};
+                    catch
+                        en = en + 1;
+                        disp('ERROR: Skipping C3D file.');
+                        errlist{en} = [subtri{g}{1} '_' subtri{g}{2}];                        
+                    end                    
+                    
                 end                
             end                                        
             
@@ -69,6 +81,17 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
     if strcmpi(writeflag,'writexls')
         writeXLSSubjInfoForMod(meta,xlsinfoname,xlspath);
     end
+    
+    % write errors if any
+    if en>0
+        fid = fopen([xlspath '\metadata_failed_' datestr(now,'yyyymmdd_HHMMSS') '.txt'],'at');
+        for e=1:en
+            fprintf(fid,'%s\n',errlist{e}); 
+        end;
+        fclose(fid);
+        fprintf(1,'\n\nERRORS: There are %d files that failed metadata processing.\n\n',en);
+    end
+        
         
 end
 
