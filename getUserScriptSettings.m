@@ -33,7 +33,7 @@ user.SAMP = 100;    % resample data to standardised number of time steps
 user.AMPG = [1 1 1 1];   % what Body Builder data to extract from C3D file: angles, moments, powers, GRFs (1=yes,0=no)
 user.FILESELECTMODE = 'auto';   % 'auto': process C3D files matching file name format, 'manual': manually select which files to process
 user.TASKTYPE = 'sldj';   % activity/task/motion type code
-user.UPDATEMETA = 'noupdate';  % update subject cohort and affected limb via XLS (update/noupdate)
+user.UPDATEMETA = 'update';  % update subject cohort and affected limb via XLS (update/noupdate)
 
 % C3D file name parameters
 % (form: [SUBJECTPREFIX][2-digit numeric][SEPARATOR][TRIALPREFIX][2-digit numeric].c3d)
