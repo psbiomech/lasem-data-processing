@@ -1,7 +1,7 @@
-function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
+function writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user)
 
 
-%writeXLSMeanBBstructGroups: write BB data to Excel multiple workbooks
+%writeXLSAllTrialsBBstructGroups: write individual trial data to XLS
 %   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
@@ -42,6 +42,7 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
 
                 % sheet header row (means)
                 xldata.(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(1,:) = ['Subject', ...
+                                                                                  'Trial', ...
                                                                                   'TrialLimb', ...
                                                                                   'Affected', ...
                                                                                   cellfun(@(z)num2str(z,'%i'),num2cell(1:samp),'UniformOutput',false)];                                       
@@ -56,25 +57,40 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
                         trials = fieldnames(bbstruct.(subj));
                         for t=1:length(trials)                        
                             trial = trials{t};
-                            for z=1:2
-                                if isempty(find(strcmpi(trials{t},bbmeta.SUBJECTFIELDS),1))
+                            if isempty(find(strcmpi(trials{t},bbmeta.SUBJECTFIELDS),1))
+                                analysedlegs = bbstruct.(subj).(trial).analysedlegs;
+                                for z=1:analysedlegs
 
                                     % trial limbs
-                                    tlimb = bbstruct.(subj).(trial).triallimb{z};
+                                    if analysedlegs==1
+                                        tlimb = bbstruct.(subj).(trial).triallimb;                                      
+                                    else
+                                        tlimb = bbstruct.(subj).(trial).triallimb{z};
+                                    end
                                     tlabel = [tlimb quantlabel];
 
                                     % get data
-                                    xldata.(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = [subj, ...
-                                                                                                      tlimb, ...
-                                                                                                      affected, ...
-                                                                                                      cellfun(@(z)num2str(z,'%12.8f'),num2cell(bbstruct.(subj).(trial).data{z}.(bbmeta.BBGROUPS{b}).(tlabel)(:,c))','UniformOutput',false)];                        
+                                    if analysedlegs==1
+                                        xldata.(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = [subj, ...
+                                                                                                          trial, ...
+                                                                                                          tlimb, ...
+                                                                                                          affected, ...
+                                                                                                          cellfun(@(y)num2str(y,'%12.8f'),num2cell(bbstruct.(subj).(trial).data.(bbmeta.BBGROUPS{b}).(tlabel)(:,c))','UniformOutput',false)];                        
+                                    else
+                                        xldata.(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = [subj, ...
+                                                                                                          trial, ...
+                                                                                                          tlimb, ...
+                                                                                                          affected, ...
+                                                                                                          cellfun(@(y)num2str(y,'%12.8f'),num2cell(bbstruct.(subj).(trial).data{z}.(bbmeta.BBGROUPS{b}).(tlabel)(:,c))','UniformOutput',false)];                                                                
+                                    end
 
                                     % increment row
                                     r = r + 1;
 
-                                else
-                                    continue;
                                 end
+
+                            else
+                                continue;
                             end
                         end
                     end       
