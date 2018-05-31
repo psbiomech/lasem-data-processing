@@ -47,7 +47,7 @@ function tstruct = task_sldj(itf,tinfo,bbmeta)
     % compute force plate sequence
     fpidx = strcmpi(bbmeta.limbs,triallimb);
     fpseq = zeros(1,2);
-    fpseq(fpidx) = fps;      
+    fpseq(fpidx) = fps(1);  % assume first FP is the stance leg FP
     
     % assign output struct variables
     tstruct.triallimb = triallimb;
