@@ -51,16 +51,18 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
                     % get means
                     r = 2;
                     for s=1:length(subjs)
-                        if isfield(bbstruct.(subjs{s}).mean,cond)
+                        if isfield(bbstruct.(subjs{s}),'mean')
+                            if isfield(bbstruct.(subjs{s}).mean,cond)
 
-                            % get data
-                            xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = ['Mean', ...
-                                                                                                     subjs{s}, ...
-                                                                                                     cellfun(@(z)num2str(z,'%12.8f'),num2cell(bbstruct.(subjs{s}).mean.(cond).(bbmeta.BBGROUPS{b}).(quantlabel)(:,c))','UniformOutput',false)];                        
+                                % get data
+                                xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = ['Mean', ...
+                                                                                                         subjs{s}, ...
+                                                                                                         cellfun(@(z)num2str(z,'%12.8f'),num2cell(bbstruct.(subjs{s}).mean.(cond).(bbmeta.BBGROUPS{b}).(quantlabel)(:,c))','UniformOutput',false)];                        
 
-                            % increment row
-                            r = r + 1;
+                                % increment row
+                                r = r + 1;
 
+                            end
                         end
                     end                    
                     
@@ -73,16 +75,18 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
                     % get sds
                     r = r + 1;
                     for s=1:length(subjs)
-                        if isfield(bbstruct.(subjs{s}).sd,cond)
+                        if isfield(bbstruct.(subjs{s}),'mean')
+                            if isfield(bbstruct.(subjs{s}).sd,cond)
 
-                            % get data
-                            xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = ['Stdev', ...
-                                                                                                     subjs{s}, ...
-                                                                                                     cellfun(@(z)num2str(z,'%12.8f'),num2cell(bbstruct.(subjs{s}).sd.(cond).(bbmeta.BBGROUPS{b}).(quantlabel)(:,c))','UniformOutput',false)];                        
+                                % get data
+                                xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = ['Stdev', ...
+                                                                                                         subjs{s}, ...
+                                                                                                         cellfun(@(z)num2str(z,'%12.8f'),num2cell(bbstruct.(subjs{s}).sd.(cond).(bbmeta.BBGROUPS{b}).(quantlabel)(:,c))','UniformOutput',false)];                        
 
-                            % increment row
-                            r = r + 1;
+                                % increment row
+                                r = r + 1;
 
+                            end
                         end
                     end
                     

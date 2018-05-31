@@ -155,54 +155,56 @@ function bbstruct = analysis_mean_impulse_grf(bbstruct,bbmeta)
             qoutname = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}];
             for c=1:2
                 cond = bbmeta.conditions{c};  
-                if isfield(bbstruct.(subjs{s}).mean,cond)
-                    for x=1:3
+                if isfield(bbstruct.(subjs{s}),'mean')
+                    if isfield(bbstruct.(subjs{s}).mean,cond)
+                        for x=1:3
 
-                        % time vector
-                        time = bbstruct.(subjs{s}).mean.(cond).TIMES.relative';
+                            % time vector
+                            time = bbstruct.(subjs{s}).mean.(cond).TIMES.relative';
 
-                        % net integral (source data)
-                        data = bbstruct.(subjs{s}).mean.(cond).(SRCGRP).(quantlabel)(:,x);
+                            % net integral (source data)
+                            data = bbstruct.(subjs{s}).mean.(cond).(SRCGRP).(quantlabel)(:,x);
 
-                        % define segments
-                        posbnds = [find(diff([0 (data>0)'])==1);find(diff([(data>0)' 0])==-1)];            
-                        negbnds = [find(diff([0 (data<0)'])==1);find(diff([(data<0)' 0])==-1)];
-                        possign = ones(1,size(posbnds,2));
-                        negsign = -ones(1,size(negbnds,2));
-                        bounds = zeros(2,size(posbnds,2)+size(negbnds,2));
-                        ssign = zeros(1,size(posbnds,2)+size(negbnds,2));
-                        p = 1;
-                        n = 1;
-                        for b=1:2:size(bounds,2)
-                            if (p>size(posbnds,2))
-                                bounds(:,b:end) = negbnds(:,n:end);
-                                ssign(:,b:end) = negsign(n:end);
-                                break;
-                            elseif (n>size(negbnds,2))
-                                bounds(:,b:end) = posbnds(:,p:end);
-                                ssign(:,b:end) = possign(p:end);
-                                break;
-                            else
-                                bounds(:,b:b+1) = [posbnds(:,p), negbnds(:,n)];
-                                ssign(b:b+1) = [possign(p), negsign(n)];
+                            % define segments
+                            posbnds = [find(diff([0 (data>0)'])==1);find(diff([(data>0)' 0])==-1)];            
+                            negbnds = [find(diff([0 (data<0)'])==1);find(diff([(data<0)' 0])==-1)];
+                            possign = ones(1,size(posbnds,2));
+                            negsign = -ones(1,size(negbnds,2));
+                            bounds = zeros(2,size(posbnds,2)+size(negbnds,2));
+                            ssign = zeros(1,size(posbnds,2)+size(negbnds,2));
+                            p = 1;
+                            n = 1;
+                            for b=1:2:size(bounds,2)
+                                if (p>size(posbnds,2))
+                                    bounds(:,b:end) = negbnds(:,n:end);
+                                    ssign(:,b:end) = negsign(n:end);
+                                    break;
+                                elseif (n>size(negbnds,2))
+                                    bounds(:,b:end) = posbnds(:,p:end);
+                                    ssign(:,b:end) = possign(p:end);
+                                    break;
+                                else
+                                    bounds(:,b:b+1) = [posbnds(:,p), negbnds(:,n)];
+                                    ssign(b:b+1) = [possign(p), negsign(n)];
+                                end
+                                p = p + 1;
+                                n = n + 1;
+                            end       
+
+                            % segment integral
+                            segint = zeros(1,size(bounds,2));
+                            for ss=1:size(segint,2)
+                                trange = [bounds(1,ss):bounds(2,ss)];
+                                if (length(trange)==1)
+                                    segint(ss) = 0;
+                                else
+                                    segint(ss) = trapz(time(trange),data(trange));
+                                end
                             end
-                            p = p + 1;
-                            n = n + 1;
-                        end       
+                            bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(qoutname).segments.(bbmeta.dirs{x}) = segint;
+                            bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(qoutname).segments.(bbmeta.dirs{x}) = [];
 
-                        % segment integral
-                        segint = zeros(1,size(bounds,2));
-                        for ss=1:size(segint,2)
-                            trange = [bounds(1,ss):bounds(2,ss)];
-                            if (length(trange)==1)
-                                segint(ss) = 0;
-                            else
-                                segint(ss) = trapz(time(trange),data(trange));
-                            end
                         end
-                        bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(qoutname).segments.(bbmeta.dirs{x}) = segint;
-                        bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(qoutname).segments.(bbmeta.dirs{x}) = [];
-
                     end
                 end
             end
@@ -230,28 +232,30 @@ function bbstruct = analysis_mean_impulse_grf(bbstruct,bbmeta)
                 quantlabel = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}]; 
                 for f=1:2
                     cond = bbmeta.conditions{f};
-                    if isfield(bbstruct.(subjs{s}).mean,cond)
-                        try
+                    if isfield(bbstruct.(subjs{s}),'mean')
+                        if isfield(bbstruct.(subjs{s}).mean,cond)
+                            try
 
-                            % net
-                            alldata.means.(cond).(DATAGRP).(quantlabel).net(:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).net;
-                            alldata.sds.(cond).(DATAGRP).(quantlabel).net(:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).net;
+                                % net
+                                alldata.means.(cond).(DATAGRP).(quantlabel).net(:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).net;
+                                alldata.sds.(cond).(DATAGRP).(quantlabel).net(:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).net;
 
-                            % positive
-                            alldata.means.(cond).(DATAGRP).(quantlabel).positive(:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).positive;
-                            alldata.sds.(cond).(DATAGRP).(quantlabel).positive(:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).positive;
+                                % positive
+                                alldata.means.(cond).(DATAGRP).(quantlabel).positive(:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).positive;
+                                alldata.sds.(cond).(DATAGRP).(quantlabel).positive(:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).positive;
 
-                            % negative
-                            alldata.means.(cond).(DATAGRP).(quantlabel).negative(:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).negative;
-                            alldata.sds.(cond).(DATAGRP).(quantlabel).negative(:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).negative;                        
+                                % negative
+                                alldata.means.(cond).(DATAGRP).(quantlabel).negative(:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).negative;
+                                alldata.sds.(cond).(DATAGRP).(quantlabel).negative(:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).negative;                        
 
-                            % half
-                            alldata.means.(cond).(DATAGRP).(quantlabel).half(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).half;
-                            alldata.sds.(cond).(DATAGRP).(quantlabel).half(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).half;                                  
+                                % half
+                                alldata.means.(cond).(DATAGRP).(quantlabel).half(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).half;
+                                alldata.sds.(cond).(DATAGRP).(quantlabel).half(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).half;                                  
 
-                        catch excp
-                            rethrow(excp);
-                            disp(['ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s} '.'])  ;
+                            catch excp
+                                rethrow(excp);
+                                disp(['ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s} '.'])  ;
+                            end
                         end
                     end
                 end

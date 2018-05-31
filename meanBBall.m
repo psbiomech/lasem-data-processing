@@ -34,12 +34,14 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
                 quantlabel = bbmeta.(outgrps{b}){q};
                 for f=1:2
                     cond = bbmeta.conditions{f};
-                    if isfield(bbstruct.(subjs{s}).mean,cond)
-                        try
-                            alldata.means.(cond).(outgrps{b}).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(outgrps{b}).(quantlabel);
-                            alldata.sds.(cond).(outgrps{b}).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(outgrps{b}).(quantlabel);
-                        catch                            
-                            disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} '.'])  ;
+                    if isfield(bbstruct.(subjs{s}),'mean')
+                        if isfield(bbstruct.(subjs{s}).mean,cond)
+                            try
+                                alldata.means.(cond).(outgrps{b}).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(outgrps{b}).(quantlabel);
+                                alldata.sds.(cond).(outgrps{b}).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(outgrps{b}).(quantlabel);
+                            catch                            
+                                disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} '.'])  ;
+                            end
                         end
                     end
                 end
@@ -70,12 +72,14 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
     for s=1:length(subjs)    
         for f=1:2
             cond = bbmeta.conditions{f};
-            if isfield(bbstruct.(subjs{s}).mean,cond)
-                try
-                    alldata.means.(cond).TIMES.elapsed(s) = bbstruct.(subjs{s}).mean.(cond).TIMES.elapsed;
-                    alldata.sds.(cond).TIMES.elapsed(s) = bbstruct.(subjs{s}).sd.(cond).TIMES.elapsed;
-                catch                            
-                    disp(['ERROR: Unable to process quantity TIME for ' subjs{s} '.'])  ;
+            if isfield(bbstruct.(subjs{s}),'mean')
+                if isfield(bbstruct.(subjs{s}).mean,cond)
+                    try
+                        alldata.means.(cond).TIMES.elapsed(s) = bbstruct.(subjs{s}).mean.(cond).TIMES.elapsed;
+                        alldata.sds.(cond).TIMES.elapsed(s) = bbstruct.(subjs{s}).sd.(cond).TIMES.elapsed;
+                    catch                            
+                        disp(['ERROR: Unable to process quantity TIME for ' subjs{s} '.'])  ;
+                    end
                 end
             end
         end

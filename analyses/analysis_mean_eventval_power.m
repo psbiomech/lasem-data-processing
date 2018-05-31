@@ -125,12 +125,14 @@ function bbstruct = analysis_mean_eventval_power(bbstruct,bbmeta)
                 quantlabel = bbmeta.(SRCGRP){q}; 
                 for f=1:2
                     cond = bbmeta.conditions{f};
-                    if isfield(bbstruct.(subjs{s}).mean,cond)
-                        try                            
-                            alldata.means.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel);
-                            alldata.sds.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel);
-                        catch
-                            disp(['ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s} '.'])  ;
+                    if isfield(bbstruct.(subjs{s}),'mean')
+                        if isfield(bbstruct.(subjs{s}).mean,cond)
+                            try                            
+                                alldata.means.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel);
+                                alldata.sds.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel);
+                            catch
+                                disp(['ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s} '.'])  ;
+                            end
                         end
                     end
                 end
