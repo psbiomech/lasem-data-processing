@@ -29,10 +29,7 @@ function writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user)
     xlsprefix = user.TRIALPREFIX;
     xlspath = user.SUMMARYPATH;
     samp = user.SAMP;
-    
-    
-    % data for write
-    DTYPE = {'MEAN','SD'};
+
     
     % collate data
     for b=1:length(bbmeta.BBGROUPS)
@@ -104,40 +101,35 @@ function writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user)
     % write Excel spreadsheet
     mkdir(xlspath);
     mkdir([xlspath '\XLS\']);
-    for f=1:2
-        for b=1:length(bbmeta.BBGROUPS)
-            s = 1;
-            xlsname = [xlsprefix '_ALLTRIALS_' bbmeta.BBGROUPS{b} '.xlsx'];                
-            for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
-                quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
-                for c=1:length(bbmeta.dirs)
-                    xlswrite([xlspath '\XLS\' xlsname],xldata.(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c}),s);
-                    s = s + 1;
-                end
+    for b=1:length(bbmeta.BBGROUPS)
+        s = 1;
+        xlsname = [xlsprefix '_ALLTRIALS_' bbmeta.BBGROUPS{b} '.xlsx'];                
+        for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
+            quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
+            for c=1:length(bbmeta.dirs)
+                xlswrite([xlspath '\XLS\' xlsname],xldata.(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c}),s);
+                s = s + 1;
             end
         end
     end
     
     % rename sheets using actxserver
-    for f=1:2    
-        for b=1:length(bbmeta.BBGROUPS)
-            s = 1;
-            xlsname = [xlsprefix '_ALLTRIALS_' bbmeta.BBGROUPS{b} '.xlsx'];
-            xl = actxserver('Excel.Application'); 
-            wb = xl.Workbooks.Open([xlspath '\XLS\' xlsname]);                
-            for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
-                quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
-                for c=1:length(bbmeta.dirs)
-                    wb.Worksheets.Item(s).Name = [quantlabel '_' bbmeta.dirs{c} '_' bbmeta.units.(bbmeta.BBGROUPS{b})];
-                    s = s + 1;
-                end            
-            end
-            wb.Save;
-            wb.Close(false);        
-            xl.Quit; 
-        end   
-    end    
-   
+    for b=1:length(bbmeta.BBGROUPS)
+        s = 1;
+        xlsname = [xlsprefix '_ALLTRIALS_' bbmeta.BBGROUPS{b} '.xlsx'];
+        xl = actxserver('Excel.Application'); 
+        wb = xl.Workbooks.Open([xlspath '\XLS\' xlsname]);                
+        for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
+            quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
+            for c=1:length(bbmeta.dirs)
+                wb.Worksheets.Item(s).Name = [quantlabel '_' bbmeta.dirs{c} '_' bbmeta.units.(bbmeta.BBGROUPS{b})];
+                s = s + 1;
+            end            
+        end
+        wb.Save;
+        wb.Close(false);        
+        xl.Quit; 
+    end       
     
     
 end

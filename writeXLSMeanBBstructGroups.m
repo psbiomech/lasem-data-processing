@@ -29,10 +29,7 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
     xlsprefix = user.TRIALPREFIX;
     xlspath = user.SUMMARYPATH;
     samp = user.SAMP;
-    
-    
-    % data for write
-    DTYPE = {'MEAN','SD'};
+
     
     % collate data
     subjs = fieldnames(bbstruct);    

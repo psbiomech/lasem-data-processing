@@ -94,7 +94,7 @@ bb = calcAnalysesMeans(bb,bbmeta);
 disp(' ');
 
 % export to Excel spreadsheet from Body Builder struct
-disp('Exporting Body Builder data to Excel spreadsheet...');
+disp('Exporting Body Builder and analyses data to Excel spreadsheet...');
 exportBBdata(bb,bbmeta,user);
 
 % save Body Builder struct
