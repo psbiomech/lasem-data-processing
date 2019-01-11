@@ -27,20 +27,24 @@ function bbmeta = getBBmeta()
     bbmeta.MOMENTS = {'AnkleMomentFOOT','AnkleMomentDTIB','AnkleMomentROT','KneeMomentPTIB','KneeMomentFEM','KneeMomentROT','HipMomentFEM','HipMomentPEL','HipMomentROT'};
     bbmeta.POWERS = {'AnklePower','HipPower','KneePower'};
     bbmeta.GRFS = {'GRF'};
-    bbmeta.TIMES = {'absolute','relative'};
-    bbmeta.BBANALYSES = {'RotWork','RotImpulse','GRFImpulse','AngleEventVals','MomentEventVals','PowerEventVals','GRFEventVals'};
-    bbmeta.ROTIMPULSE = {'AnkleRotImpulseFOOT','AnkleRotImpulseDTIB','AnkleRotImpulseROT','KneeRotImpulsePTIB','KneeRotImpulseFEM','KneeRotImpulseROT','HipRotImpulseFEM','HipRotImpulsePEL','HipRotImpulseROT'};
+    bbmeta.TIMES = {'absolute','relative'};   
     bbmeta.fpvectors = {'CofP','Vector'};    
     bbmeta.units.ANGLES = 'deg';
     bbmeta.units.MOMENTS = 'Nm';
     bbmeta.units.POWERS = 'Nms-1';
     bbmeta.units.GRFS = 'N';
-    bbmeta.units.ROTIMPULSE = 'Nms';
     bbmeta.dirs = {'X','Y','Z'};
     bbmeta.limbs = {'R','L'};
     bbmeta.cohorts = {'AFF','CON'};
     bbmeta.conditions = {'SYM','ASYM','CON'};
     bbmeta.SUBJECTFIELDS = {'cohort','affected','mean','sd'};
+    
+    % analyses
+    bbmeta.BBANALYSES = {'RotWork','RotImpulse','GRFImpulse','AngleEventVals','MomentEventVals','PowerEventVals','GRFEventVals'};
+    bbmeta.ROTIMPULSE = {'AnkleRotImpulseFOOT','AnkleRotImpulseDTIB','AnkleRotImpulseROT','KneeRotImpulsePTIB','KneeRotImpulseFEM','KneeRotImpulseROT','HipRotImpulseFEM','HipRotImpulsePEL','HipRotImpulseROT'}; 
+    bbmeta.ROTWORK = {'AnkleRotWork','HipRotWork','KneeRotWork'};
+    bbmeta.units.ROTIMPULSE = 'Nms';
+    bbmeta.units.ROTWORK = 'Nm';
     
 end
 

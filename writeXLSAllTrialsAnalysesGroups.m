@@ -36,8 +36,10 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
     for b=1:length(bbmeta.BBANALYSES)
         bbanalysis = upper(bbmeta.BBANALYSES{b});
         
-        % skip if not RotImpulse
-        if ~strcmpi(bbanalysis,'ROTIMPULSE'), continue; end;        
+        % skip if not RotImpulse or RotWork
+        % (note: only RotImpulse and RotWork required at this time, will
+        % add others as required)
+        if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end;        
         
         for q=1:length(bbmeta.(bbanalysis))
             quantlabel = bbmeta.(bbanalysis){q};
@@ -140,7 +142,7 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
 
                                 % half
                                 for c=1:3
-                                    dval = [substrct.(bbanalysis).(tlabel).half(c), NaN(1,dcols-1)];
+                                    dval = [substrct.(bbanalysis).(tlabel).half(:,c)', NaN(1,dcols-2)];
                                     dcellvec(r,:) = [subjs{s},trials{t},tlimb,affected,'half',bbmeta.dirs{c},num2cell(dval)];
                                     r = r + 1;
                                 end                              
@@ -148,6 +150,7 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
                                 % segments
                                 for c=1:3
                                     dval = substrct.(bbanalysis).(tlabel).segments.(bbmeta.dirs{c});
+                                    if isempty(dval), dval = 0; end;
                                     dlen = length(dval);
                                     dval = [dval, NaN(1,dcols-dlen)];
                                     dcellvec(r,:) = [subjs{s},trials{t},tlimb,affected,'segments',bbmeta.dirs{c},num2cell(dval)];
@@ -175,7 +178,7 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
     mkdir([xlspath '\XLS\']);
     for b=1:length(bbmeta.BBANALYSES)
         bbanalysis = upper(bbmeta.BBANALYSES{b});
-        if ~strcmpi(bbanalysis,'ROTIMPULSE'), continue; end; 
+        if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end;       % skip if not RotImpulse or RotWork
         s = 1;
         xlsname = [xlsprefix '_ALLTRIALS_' bbanalysis '.xlsx'];                
         for q=1:length(bbmeta.(bbanalysis))
@@ -188,7 +191,7 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
     % rename sheets using actxserver
     for b=1:length(bbmeta.BBANALYSES)
         bbanalysis = upper(bbmeta.BBANALYSES{b});
-        if ~strcmpi(bbanalysis,'ROTIMPULSE'), continue; end;                   
+        if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end;       % skip if not RotImpulse or RotWork          
         s = 1;
         xlsname = [xlsprefix '_ALLTRIALS_' bbanalysis '.xlsx'];
         xl = actxserver('Excel.Application'); 

@@ -42,8 +42,11 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
     for b=1:length(bbmeta.BBANALYSES)        
         bbanalysis = upper(bbmeta.BBANALYSES{b});
         
-        % skip if not RotImpulse
-        if ~strcmpi(bbanalysis,'ROTIMPULSE'), continue; end;
+        % skip if not RotImpulse or RotWork
+        % (note: only RotImpulse and RotWork required at this time, will
+        % add others as required)
+        if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end;            
+        
                                
         % extract data
         for f=1:2            
@@ -111,6 +114,7 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
                                 % segments
                                 for c=1:3
                                     dval = bbstruct.(subjs{s}).(sdtype).(cond).(bbanalysis).(quantlabel).segments.(bbmeta.dirs{c});
+                                    if isempty(dval), dval = 0; end;
                                     dlen = length(dval);
                                     dval = [dval, NaN(1,dcols-dlen)];
                                     dcellvec(r,:) = [sdname,subjs{s},'segments',bbmeta.dirs{c},num2cell(dval)];
@@ -140,7 +144,7 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
         if isfield(xldata,cond)
             for b=1:length(bbmeta.BBANALYSES)        
                 bbanalysis = upper(bbmeta.BBANALYSES{b});
-                if ~strcmpi(bbanalysis,'ROTIMPULSE'), continue; end;                
+                if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end;       % skip if not RotImpulse or RotWork                        
                 s = 1;
                 xlsname = [xlsprefix '_' cond '_' bbanalysis '.xlsx'];                
                 for q=1:length(bbmeta.(bbanalysis))
@@ -159,7 +163,7 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
         if isfield(xldata,cond)        
             for b=1:length(bbmeta.BBANALYSES)
                 bbanalysis = upper(bbmeta.BBANALYSES{b});
-                if ~strcmpi(bbanalysis,'ROTIMPULSE'), continue; end;                   
+                if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end;       % skip if not RotImpulse or RotWork                           
                 s = 1;
                 xlsname = [xlsprefix '_' cond '_' bbanalysis '.xlsx'];
                 xl = actxserver('Excel.Application'); 
