@@ -105,36 +105,15 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
                 for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
                     quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
                     for c=1:length(bbmeta.dirs)
-                        xlswrite([xlspath '\XLS\' xlsname],xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c}),s);
-                        s = s + 1;
+                        sheetname = [quantlabel '_' bbmeta.dirs{c} '_' bbmeta.units.(bbmeta.BBGROUPS{b})];
+                        writecell(xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c}),[xlspath '\XLS\' xlsname],'FileType','spreadsheet','Sheet',sheetname);                        
+                        s = s + 1; 
                     end
                 end
             end
         end
     end
-    
-    % rename sheets using actxserver
-    for f=1:2
-        cond = bbmeta.conditions{f};
-        if isfield(xldata,cond)        
-            for b=1:length(bbmeta.BBGROUPS)
-                s = 1;
-                xlsname = [xlsprefix '_' cond '_' bbmeta.BBGROUPS{b} '.xlsx'];
-                xl = actxserver('Excel.Application'); 
-                wb = xl.Workbooks.Open([xlspath '\XLS\' xlsname]);                
-                for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
-                    quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
-                    for c=1:length(bbmeta.dirs)
-                        wb.Worksheets.Item(s).Name = [quantlabel '_' bbmeta.dirs{c} '_' bbmeta.units.(bbmeta.BBGROUPS{b})];
-                        s = s + 1;
-                    end            
-                end
-                wb.Save;
-                wb.Close(false);        
-                xl.Quit; 
-            end   
-        end
-    end    
+       
    
     
     

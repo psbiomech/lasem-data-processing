@@ -39,7 +39,6 @@ function tstruct = task_walk_stance(itf,tinfo,bbmeta)
     % find consective CFS, IFO, IFS, and CFO on same leg
     % (assume all these events are labelled)
     trange = zeros(1,2);
-    triallimbguess = [];
     for n=1:eused
         if strcmpi(elabel{n},LAB.FS)
             m = n + 3;

@@ -90,13 +90,11 @@ function writeXLSFullMetaData(bbstruct,user)
         end
     end
                                                                                 
-
-    % add XLSX extension if necessary
-    xlsname = [xlsprefix '_SubjectTrial_Metadata'];
-    if isempty(regexpi(xlsname,'.xlsx')), xlsname = [xlsname '.xlsx']; end;    
-    
+  
     % write Excel spreadsheet
-    xlswrite([xlspath '\' xlsname],xldata);
+    xlsname = [xlsprefix '_SubjectTrial_Metadata.xlsx']; 
+    writecell(xldata,[xlspath '\' xlsname],'FileType','spreadsheet');        
+    
 
 end
 

@@ -27,7 +27,8 @@ function tstruct = task_run_stance(itf,tinfo,bbmeta)
     etime = tinfo.etime;
     econtext = tinfo.econtext;
     elabel = tinfo.elabel;
-    eframes = tinfo.eframes;
+    eframe = tinfo.eframe;
+    ecode = tinfo.ecode;
     fps = tinfo.fps;
     LAB = tinfo.LAB;
        
@@ -36,10 +37,10 @@ function tstruct = task_run_stance(itf,tinfo,bbmeta)
         if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))
             trange = [etime(n) etime(n+1)];
             triallimb = upper(econtext{n}(1));
-            elabels = elabel(n:m);
-            econtexts = econtext(n:m);
-            eframes = eframe(n:m); 
-            ecodes = ecode(n:m);
+            elabels = elabel(n:n+1);
+            econtexts = econtext(n:n+1);
+            eframes = eframe(n:n+1); 
+            ecodes = ecode(n:n+1);
             break;
         end
     end 

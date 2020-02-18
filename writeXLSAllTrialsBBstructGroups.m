@@ -107,29 +107,12 @@ function writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user)
         for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
             quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
             for c=1:length(bbmeta.dirs)
-                xlswrite([xlspath '\XLS\' xlsname],xldata.(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c}),s);
+                sheetname = [quantlabel '_' bbmeta.dirs{c} '_' bbmeta.units.(bbmeta.BBGROUPS{b})];
+                writecell(xldata.(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c}),[xlspath '\XLS\' xlsname],'FileType','spreadsheet','Sheet',sheetname);                 
                 s = s + 1;
             end
         end
     end
-    
-    % rename sheets using actxserver
-    for b=1:length(bbmeta.BBGROUPS)
-        s = 1;
-        xlsname = [xlsprefix '_ALLTRIALS_' bbmeta.BBGROUPS{b} '.xlsx'];
-        xl = actxserver('Excel.Application'); 
-        wb = xl.Workbooks.Open([xlspath '\XLS\' xlsname]);                
-        for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
-            quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
-            for c=1:length(bbmeta.dirs)
-                wb.Worksheets.Item(s).Name = [quantlabel '_' bbmeta.dirs{c} '_' bbmeta.units.(bbmeta.BBGROUPS{b})];
-                s = s + 1;
-            end            
-        end
-        wb.Save;
-        wb.Close(false);        
-        xl.Quit; 
-    end       
     
     
 end

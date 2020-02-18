@@ -178,35 +178,18 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
     mkdir([xlspath '\XLS\']);
     for b=1:length(bbmeta.BBANALYSES)
         bbanalysis = upper(bbmeta.BBANALYSES{b});
-        if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end;       % skip if not RotImpulse or RotWork
+        if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end       % skip if not RotImpulse or RotWork
         s = 1;
         xlsname = [xlsprefix '_ALLTRIALS_' bbanalysis '.xlsx'];                
         for q=1:length(bbmeta.(bbanalysis))
             quantlabel = bbmeta.(bbanalysis){q};
-            xlswrite([xlspath '\XLS\' xlsname],xldata.(bbanalysis).(quantlabel),s);
+            sheetname = [quantlabel '_' bbmeta.units.(bbanalysis)];
+            writecell(xldata.(bbanalysis).(quantlabel),[xlspath '\XLS\' xlsname],'FileType','spreadsheet','Sheet',sheetname);                        
             s = s + 1;
         end
     end
     
-    % rename sheets using actxserver
-    for b=1:length(bbmeta.BBANALYSES)
-        bbanalysis = upper(bbmeta.BBANALYSES{b});
-        if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end;       % skip if not RotImpulse or RotWork          
-        s = 1;
-        xlsname = [xlsprefix '_ALLTRIALS_' bbanalysis '.xlsx'];
-        xl = actxserver('Excel.Application'); 
-        wb = xl.Workbooks.Open([xlspath '\XLS\' xlsname]);                
-        for q=1:length(bbmeta.(bbanalysis))
-            quantlabel = bbmeta.(bbanalysis){q};
-            wb.Worksheets.Item(s).Name = [quantlabel '_' bbmeta.units.(bbanalysis)];
-            s = s + 1;
-        end
-        wb.Save;
-        wb.Close(false);        
-        xl.Quit; 
-    end   
-    
-    
+
 end
 
 
