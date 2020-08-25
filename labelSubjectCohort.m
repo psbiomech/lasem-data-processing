@@ -1,4 +1,4 @@
-function cohort = labelSubjectCohort(bbmeta,cohmode)
+function cohort = labelSubjectCohort(bbmeta,cohmode,fpath,user)
 
 
 %labelSubjectCohort: Label cohort affected or control
@@ -38,6 +38,13 @@ function cohort = labelSubjectCohort(bbmeta,cohmode)
         case lower(bbmeta.cohorts)
             cohort = bbmeta.cohorts{find(strcmpi(cohmode,bbmeta.cohorts),1)};
             disp(['Cohort: ' upper(cohort(1))]);
+            
+        % determine from database folder structure
+        case 'auto'
+            fnexp = ['.+(' user.COHORTSUBFOLDERS{1} '|' user.COHORTSUBFOLDERS{2} ').+'];
+            cohtok = regexpi(fpath,fnexp,'tokens');
+            cohort = bbmeta.cohorts{strcmp(user.COHORTSUBFOLDERS,cohtok{1}{1})};  
+            
                         
     end
 

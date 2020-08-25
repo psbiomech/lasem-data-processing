@@ -1,5 +1,7 @@
 %% RUN BODY BUILDER DATA EXTRACTION
 %   Prasanna Sritharan, April 2018
+%
+% Last updated: August 2020
 % 
 % -------------------------------------------------------------------- 
 %     Copyright (C) 2018 Prasanna Sritharan

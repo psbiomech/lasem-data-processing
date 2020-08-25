@@ -46,7 +46,7 @@ function tstruct = task_run_stance(itf,tinfo,bbmeta)
     end 
 
     % compute force plate sequence
-    fpidx = strcmpi(bbmeta.limbs,triallimb);
+    fpidx = strcmpi(bbmeta.limbs(1:2),triallimb);
     fpseq = zeros(1,2);
     fpseq(fpidx) = fps;      
     

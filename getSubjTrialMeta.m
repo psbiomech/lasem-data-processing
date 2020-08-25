@@ -30,7 +30,7 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
     cohmode = user.COHORT;
     affmode = user.AFFECTED;
     xlsinfoname = [user.TRIALPREFIX '_SubjInfoOnly'];
-    xlspath = user.XLSMETAPATH;   
+    xlspath = user.XLSMETAPATH;  
 
     % failed
     en = 0;
@@ -45,10 +45,10 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
             % subject cohort and affected limb
             disp(['Subject: ' subtri{f}{1}]);
             disp(['==============================']);
-            meta.(subtri{f}{1}).cohort = labelSubjectCohort(bbmeta,cohmode);
+            meta.(subtri{f}{1}).cohort = labelSubjectCohort(bbmeta,cohmode,flist{f},user);
             meta.(subtri{f}{1}).affected = labelAffectedLimb(meta.(subtri{f}{1}).cohort,bbmeta,affmode);
                         
-            % store file path, label trial limb and time window
+            % store file path, label trial limb and time window            
             for g=1:length(subtri)
                 if strcmpi(subtri{f}{1},subtri{g}{1})
                     
@@ -59,11 +59,12 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
                     try
                         meta.(subtri{g}{1}).(subtri{g}{2}) = getC3Dwindow(flist{g},task,bbmeta,subtri{g}{1},subtri{g}{2});
                         meta.(subtri{f}{1}).(subtri{g}{2}).filepath = flist{g};
+                        meta.(subtri{f}{1}).(subtri{g}{2}).ignore = 0;
                     catch err
-                        rethrow(err);
                         en = en + 1;
                         disp('ERROR: Skipping C3D file.');
-                        errlist{en} = [subtri{g}{1} '_' subtri{g}{2}];                        
+                        errlist{en} = [subtri{g}{1} '_' subtri{g}{2}]; 
+                        meta.(subtri{f}{1}).(subtri{g}{2}).ignore = 1;
                     end                    
                     
                 end                
@@ -88,7 +89,7 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
         fid = fopen([xlspath '\metadata_failed_' datestr(now,'yyyymmdd_HHMMSS') '.txt'],'at');
         for e=1:en
             fprintf(fid,'%s\n',errlist{e}); 
-        end;
+        end
         fclose(fid);
         fprintf(1,'\n\nERRORS: There are %d files that failed metadata processing.\n\n',en);
     end

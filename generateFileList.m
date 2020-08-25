@@ -24,16 +24,17 @@ function [flist,fnames,subtri] = generateFileList(user)
 
     % assign struct fields
     c3droot = user.DATASRCPATH;
-    c3dnameformat = {user.SUBJECTPREFIX,user.SEPARATOR,user.TRIALPREFIX};
+    c3dnameformat = {user.SUBJECTPREFIX,user.CTRLPREFIX,user.SEPARATOR,user.TRIALPREFIX};
     selectmode = user.FILESELECTMODE;
 
     % string subsections
     subjprefix = c3dnameformat{1};
-    separator = c3dnameformat{2};
-    trialprefix = c3dnameformat{3};
+    ctrlprefix = c3dnameformat{2};
+    separator = c3dnameformat{3};
+    trialprefix = c3dnameformat{4};
 
     % generate expression for pattern matching
-    c3dexpr = ['(' subjprefix '\d+' separator trialprefix '\d+)\.c3d'];
+    c3dexpr = ['(' subjprefix '(?:' ctrlprefix ')?\d+' separator trialprefix '\d+)\.c3d'];
 
     % parse all subdirectories and get list of all C3D files starting from
     % c3droot that match c3dexpr
@@ -49,7 +50,7 @@ function [flist,fnames,subtri] = generateFileList(user)
     for f=1:length(flist)
         [toks,match] = regexpi(fstruct(f).name,['.*\\' c3dexpr '$'],'tokens');
         fflag(f) = ~isempty(match);
-        if (fflag(f)==1), tokens{f} = toks{1}{1}; end;
+        if (fflag(f)==1), tokens{f} = toks{1}{1}; end
     end
     
     % cut down list to only files of interest
@@ -86,7 +87,7 @@ function [flist,fnames,subtri] = generateFileList(user)
     end
     
     % further split tokens into subjects and trials, trim results
-    splitexp = ['(' subjprefix '\d+)' separator '(' trialprefix '\d+)'];
+    splitexp = ['(' subjprefix '(?:' ctrlprefix ')?\d+)' separator '(' trialprefix '\d+)'];
     subtri = cell(size(fnames));
     for t=1:length(fnames)
        [toks2,~] = regexpi(fnames{t},splitexp,'tokens');

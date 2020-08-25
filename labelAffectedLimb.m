@@ -22,9 +22,13 @@ function affected = labelAffectedLimb(cohort,bbmeta,affmode)
 % -------------------------------------------------------------------- 
 
 
-    % return limb type as control if cohort is control
+    % set affected limb, or control
     if strcmpi(cohort,bbmeta.cohorts{2})
+        
+        % set as control if cohort is control
         affected = bbmeta.limbs{3};
+        disp(['Affected limb: ' upper(affected)]);
+        
     else
         switch affmode
             
@@ -39,9 +43,14 @@ function affected = labelAffectedLimb(cohort,bbmeta,affmode)
                 end
 
             % all trials are of the same type
-            case lower(bbmeta.limbs)
+            case lower(bbmeta.limbs(1:2))
                 affected = bbmeta.limbs{find(strcmpi(affmode,bbmeta.limbs),1)};
                 disp(['Affected limb: ' upper(affected)]);
+                
+            % do not set, indicate that this will be set manually later
+            case 'z'
+                affected = affmode;
+                disp(['Affected limb: ' upper(affected) ', not set at this time']);                
 
         end
 

@@ -31,18 +31,33 @@ function bbstruct = extractBBdata(bbstruct,bbmeta,user)
     xlspath = user.XLSMETAPATH;
         
 
-    % update meta data from XLS if required
+    % update meta data from XLS if required, e.g. affected limb
     if strcmpi(updatemeta,'update'), bbstruct = loadXLSmeta(bbstruct,xlsname,xlspath); end;
             
-    % get Body Builder point data from C3D files
+    % pull Body Builder point data from C3D files
     subjs = fieldnames(bbstruct);
     for s=1:length(subjs)
+        
         subj = subjs{s};
         trials = fieldnames(bbstruct.(subjs{s}));
-        for t=1:length(trials)                        
-            trial = trials{t};
+        
+        disp(' ');
+        disp(['Subject: ' subjs{s}]);
+        disp(['==============================']);        
+        
+        for t=1:length(trials)                                    
+            trial = trials{t};           
             if isempty(find(strcmpi(trials{t},bbmeta.SUBJECTFIELDS),1))
 
+                % skip ignored trials
+                if bbstruct.(subjs{s}).(trials{t}).ignore==1
+                    disp(['--Ignoring trial: ' trials{t}]); 
+                    continue
+                end
+                
+                disp(['Loading trial data: ' trials{t}]);                
+                
+                % pull data
                 switch bbstruct.(subjs{s}).(trials{t}).analysedlegs
                     
                     case 1  % one leg
@@ -67,5 +82,7 @@ function bbstruct = extractBBdata(bbstruct,bbmeta,user)
         end
     end                   
 
+    disp(' ');
+    
 end
 
