@@ -26,15 +26,14 @@ function user = getUserScriptSettings()
 % folder paths
 user.DATASRCPATH = 'C:\Users\psrit\Documents\data\FORCe Running\';  % root directory of source C3D files with Body Builder data
 user.SUMMARYPATH = 'C:\Users\psrit\Documents\data\FORCe Running\SUMMARY\';   % location to which all output data summary files are written
-user.XLSMETAPATH = 'C:\Users\psrit\Documents\data\FORCe Running\XLSMETA\';   % if used, read.write location of XLS file with subject/trial metadata
+user.XLSMETAPATH = 'C:\Users\psrit\Documents\data\FORCe Running\';   % if used, read.write location of XLS file with subject/trial metadata
 
 % data processing settings
 user.SAMP = 101;    % resample data to standardised number of time steps
 user.AMPG = [1 1 1 1];   % what Body Builder data to extract from C3D file: angles, moments, powers, GRFs (1=yes,0=no)
 user.FILESELECTMODE = 'auto';   % 'auto': process C3D files matching file name format, 'manual': manually select which files to process
 user.TASKTYPE = 'run-stance-predefined-limb';   % activity/task/motion type code
-user.UPDATEMETA = 'noupdate';  % update subject cohort and/or affected limb via XLS (update/noupdate/update-affected/update-cohort)
-user.COHORTSUBFOLDERS = {'Symptomatics','Control'};     % format: test group name, control group name, set to empty [] if not used
+user.COHORTSUBFOLDERS = {'Symptomatics','Control'};     % format: {test folder name, control folder name}, set to empty [] if not used
 
 % C3D file name parameters
 % (form: [SUBJECTPREFIX][CTRLPREFIX][2-digit numeric][SEPARATOR][TRIALPREFIX][2-digit numeric].c3d)
@@ -44,9 +43,14 @@ user.TRIALPREFIX = 'Run';  % trial code prefix (eg. for trial code WALK01, the t
 user.SEPARATOR = '_';   % file name separator between subject code and trial code (eg. for file FAILT01_WALK01.c3d, the separator is '_')
 
 % default settings for automatic processing of data
-user.COHORT = 'auto';    % cohort type (aff/con/auto/manual), auto will set cohort based on cohort subfolder
-user.AFFECTED = 'z';    % affected limb (l/r/c/z), z indicates that the affected leg is not set, and will need to be done later via file upload
+user.COHORT = 'auto';    % cohort type (aff/con/auto/manual/upload), auto will set cohort based on cohort subfolder
+user.AFFECTED = 'Z';    % affected limb (L/R/C/Z), z indicates that the affected leg is not set, and will need to be done later via file upload
 
+% updating metadata via file upload
+user.UPDATEMETAFROMFILE = 'update';  % update subject metadata from XLS file (update/noupdate)
+user.WRITEMETATOFILE = 'write';    % write subject metadata to XLS file (write/nowrite)
+user.XLSMETAUPLOADFILE = 'force_running_subject_metadata.xlsx';
+user.XLSMETAWRITEFILE = 'force_running_subject_metadata_updated.xlsx';
 
 
 end

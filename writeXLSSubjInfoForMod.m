@@ -2,6 +2,8 @@ function writeXLSSubjInfoForMod(bbstruct,xlsname,xlspath)
 
 %writeXLSSubjInfoForMod: Write subject data for manual modification
 %   Prasanna Sritharan, April 2018
+%
+% Last updated: August 2020
 % 
 % -------------------------------------------------------------------- 
 %     Copyright (C) 2018 Prasanna Sritharan
@@ -22,28 +24,26 @@ function writeXLSSubjInfoForMod(bbstruct,xlsname,xlspath)
 % -------------------------------------------------------------------- 
 
 
-    warning('off');
-
-    
-    % sheet header
-    xldata(1,:) = {'subj','cohort','affected'};
-        
+    % create table
+    metaout = table('Size',[0 5],'VariableTypes',{'string','string','double','double','string'},'VariableNames',{'Subject','Cohort','Mass','Height','Affected'});
+              
     % collate data
-    x = 2;
     subjs = fieldnames(bbstruct);    
     for s=1:length(subjs)
-        xldata(x,:) = {subjs{s}, ... 
-                       upper(bbstruct.(subjs{s}).cohort), ...
-                       upper(bbstruct.(subjs{s}).affected)};                                   
-        x = x + 1;                
+        datarow = {subjs{s}, ... 
+                   upper(bbstruct.(subjs{s}).cohort), ...
+                   bbstruct.(subjs{s}).mass, ...
+                   bbstruct.(subjs{s}).height, ...
+                   upper(bbstruct.(subjs{s}).affected)};                                   
+        metaout = [metaout; datarow];
     end
                                                                                 
 
     % add XLSX extension if necessary
-    if isempty(regexpi(xlsname,'.xlsx')), xlsname = [xlsname '.xlsx']; end;    
+    if isempty(regexpi(xlsname,'.xlsx')), xlsname = [xlsname '.xlsx']; end  
     
     % write Excel spreadsheet
-    xlswrite([xlspath '\' xlsname],xldata);
+    writetable(metaout,fullfile(xlspath,xlsname));
 
 end
 

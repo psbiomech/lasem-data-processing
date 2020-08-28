@@ -24,15 +24,10 @@ function bbstruct = extractBBdata(bbstruct,bbmeta,user)
 
 
     % assign struct fields
-    updatemeta = user.UPDATEMETA;
     ampg = user.AMPG;
     samp = user.SAMP;
-    xlsname = [user.TRIALPREFIX '_SubjInfoOnly'];
-    xlspath = user.XLSMETAPATH;
+    structpath = user.DATASRCPATH;
         
-
-    % update meta data from XLS if required, e.g. affected limb
-    if strcmpi(updatemeta,'update'), bbstruct = loadXLSmeta(bbstruct,xlsname,xlspath); end;
             
     % pull Body Builder point data from C3D files
     subjs = fieldnames(bbstruct);
@@ -82,6 +77,10 @@ function bbstruct = extractBBdata(bbstruct,bbmeta,user)
         end
     end                   
 
+    
+    % save struct
+    save(fullfile(structpath,'bb.mat'),'-struct','bbstruct');    
+    
     disp(' ');
     
 end

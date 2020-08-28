@@ -30,7 +30,7 @@ function affected = labelAffectedLimb(cohort,bbmeta,affmode)
         disp(['Affected limb: ' upper(affected)]);
         
     else
-        switch affmode
+        switch lower(affmode)
             
             % manual user input of trial type (default: control)
             case 'manual'

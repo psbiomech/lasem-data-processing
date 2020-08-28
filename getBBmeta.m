@@ -37,7 +37,7 @@ function bbmeta = getBBmeta()
     bbmeta.limbs = {'R','L','C'};
     bbmeta.cohorts = {'AFF','CON'};
     bbmeta.conditions = {'SYM','ASYM','CON'};
-    bbmeta.SUBJECTFIELDS = {'cohort','affected','mean','sd'};
+    bbmeta.SUBJECTFIELDS = {'cohort','affected','mass','height','mean','sd'};
     
     % analyses
     bbmeta.BBANALYSES = {'RotWork','RotImpulse','GRFImpulse','AngleEventVals','MomentEventVals','PowerEventVals','GRFEventVals'};

@@ -26,11 +26,15 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
     warning('off');
     
     % assign struct fields
+    structpath = user.DATASRCPATH;
     task = user.TASKTYPE;
     cohmode = user.COHORT;
     affmode = user.AFFECTED;
-    xlsinfoname = [user.TRIALPREFIX '_SubjInfoOnly'];
-    xlspath = user.XLSMETAPATH;  
+    xlspath = user.XLSMETAPATH; 
+    updatemeta = user.UPDATEMETAFROMFILE;
+    writemeta = user.WRITEMETATOFILE;
+    xlsuploadfile = user.XLSMETAUPLOADFILE;
+    xlswritefile = user.XLSMETAWRITEFILE;
 
     % failed
     en = 0;
@@ -78,10 +82,18 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
         
     end
     
-    % write subject info only to XLS
-    mkdir(xlspath);
-    if strcmpi(writeflag,'writexls')
-        writeXLSSubjInfoForMod(meta,xlsinfoname,xlspath);
+
+    % update subject metadata from XLS
+    if strcmpi(updatemeta,'update')
+        disp('Updating subject metadata from Excel spreadsheet...');
+        meta = loadXLSmeta(meta,xlsuploadfile,xlspath);
+    end    
+    
+    % write subject metadata only to XLS
+    if strcmpi(writemeta,'write')
+        disp('Writing subject metadata to Excel spreadsheet...');
+        if ~exist(xlspath,'dir'), mkdir(xlspath); end
+        writeXLSSubjInfoForMod(meta,xlswritefile,xlspath);
     end
     
     % write errors if any
@@ -93,7 +105,11 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
         fclose(fid);
         fprintf(1,'\n\nERRORS: There are %d files that failed metadata processing.\n\n',en);
     end
-        
+       
+    
+    % save struct
+    disp('Saving metadata struct...');
+    save(fullfile(structpath,'bb.mat'),'-struct','meta');
         
 end
 
