@@ -126,7 +126,7 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     tinfo.fpchan = fpchan;
     tinfo.fps = fps;
     tinfo.LAB = LAB;
-       
+    tinfo.c3dfile = c3dfile;   
     
     
     % determine window parameters based on activity type
@@ -145,9 +145,20 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
             tstruct = task_walk_stance_failt(itf,tinfo,bbmeta);            
             
         % run stance:
+        % (note, this code is lazy, and assumes (1) that the first stance
+        % phase in the trial, i.e. first FS-FO pair on the same limb, is
+        % the stance phase of interest; and (2) that only one force plate
+        % is active throughout the trial)
         case 'run-stance'
             tstruct = task_run_stance(itf,tinfo,bbmeta);             
-                            
+
+        % run stance, with stance limb predefined based on subfolder:
+        % (same lazy code as run-stance, but originally written to process
+        % Mark Scholes' running data, using subfolder name (Left/Right) to 
+        % predefine the stance limb, rather than make assumptions)
+        case 'run-stance-predefined-limb'
+            tstruct = task_run_stance_predefined_limb(itf,tinfo,bbmeta);               
+            
         % single-leg drop and jump: 
         case 'sldj'            
             tstruct = task_sldj(itf,tinfo,bbmeta);
