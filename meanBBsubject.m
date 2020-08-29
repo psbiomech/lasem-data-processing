@@ -25,11 +25,21 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
     % get desired output data groups
     outgrps = bbmeta.BBGROUPS(logical(ampg));        
 
+    % delete group MEAN field if it already exists
+    if isfield(bbstruct,'MEAN'), bbstruct = rmfield(bbstruct,'MEAN'); end    
     
     % collate point data
     subjs = fieldnames(bbstruct);
-    for s=1:length(subjs)
     
+    for s=1:length(subjs)            
+ 
+        
+        % delete subject mean and sd fields if they already exist
+        if isfield(bbstruct.(subjs{s}),'mean')
+            bbstruct.(subjs{s}) = rmfield(bbstruct.(subjs{s}),'mean'); 
+            bbstruct.(subjs{s}) = rmfield(bbstruct.(subjs{s}),'sd'); 
+        end         
+        
         % get list of trials
         trials = fieldnames(bbstruct.(subjs{s}));
         ntrials = length(trials);
@@ -37,23 +47,34 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
         % get point data
         alldata = struct;
         for b=1:length(outgrps)
-            for q=1:length(bbmeta.(outgrps{b}))
+            for q=1:length(bbmeta.(outgrps{b}))                                                
                 for f=1:2
                     quantlabel = bbmeta.(outgrps{b}){q};
                     quantname = [bbmeta.limbs{f} quantlabel];
                     t1 = 1;
                     t2 = 1;
+                    t3 = 1;
                     for n = 1:ntrials
-                        try                                                        
-                            if isempty(find(strcmpi(trials{n},bbmeta.SUBJECTFIELDS),1))
+                        try                                       
+                            
+                            if isempty(find(strcmpi(trials{n},bbmeta.SUBJECTFIELDS),1))                                 
+                                
+                                % skip ignored trials
+                                if bbstruct.(subjs{s}).(trials{n}).ignore==1
+                                    disp(['--Ignoring variable: ' outgrps{b} ' ' quantname ' for foot ' bbmeta.limbs{f} ' and trial ' subjs{s} '_' trials{n}]); 
+                                    continue
+                                end                                
                                 
                                 % process depends on how many legs were analysed
                                 switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
                                     
                                     case 1  % one leg
                                 
-                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
-                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})                                                                                       
+                                            if strcmpi(bbstruct.(subjs{s}).affected,'C')
+                                                alldata.(bbmeta.conditions{3}).(outgrps{b}).(quantlabel)(:,:,t3) = bbstruct.(subjs{s}).(trials{n}).data.(outgrps{b}).(quantname);
+                                                t3 = t3 + 1;                                            
+                                            elseif strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
                                                 alldata.(bbmeta.conditions{1}).(outgrps{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(outgrps{b}).(quantname);
                                                 t1 = t1 + 1;
                                             else
@@ -65,8 +86,11 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
                                     case 2  % two legs
 
                                         for p=1:2
-                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbmeta.limbs{f})
-                                                if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
+                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbmeta.limbs{f})                                                                                                
+                                                if strcmpi(bbstruct.(subjs{s}).affected,'C')
+                                                    alldata.(bbmeta.conditions{3}).(outgrps{b}).(quantlabel)(:,:,t3) = bbstruct.(subjs{s}).(trials{n}).data{p}.(outgrps{b}).(quantname);
+                                                    t3 = t3 + 1;                                                
+                                                elseif strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
                                                     alldata.(bbmeta.conditions{1}).(outgrps{b}).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(outgrps{b}).(quantname);
                                                     t1 = t1 + 1;
                                                 else
@@ -83,7 +107,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
                                 continue;
                             end
                         catch                            
-                            disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} ' ' trials{n} '.'])  ;
+                            disp(['--Error processing: ' outgrps{b} ' ' quantname ' for foot ' bbmeta.limbs{f} ' and trial ' subjs{s} ' ' trials{n}]); 
                         end                           
                     end
                 end                                        
@@ -94,7 +118,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
         for b=1:length(outgrps)
             for q=1:length(bbmeta.(outgrps{b}))
                 quantlabel = bbmeta.(outgrps{b}){q};
-                for c=1:2
+                for c=1:3
                     if isfield(alldata,bbmeta.conditions{c})
                         bbstruct.(subjs{s}).mean.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel) = mean(alldata.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel),3);
                         bbstruct.(subjs{s}).sd.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel) = std(alldata.(bbmeta.conditions{c}).(outgrps{b}).(quantlabel),0,3);            
@@ -109,17 +133,29 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
         for f=1:2
             t1 = 1;
             t2 = 1;
+            t3 = 1;
             for n = 1:ntrials
                 try
                     if isempty(find(strcmpi(trials{n},bbmeta.SUBJECTFIELDS),1))
-                                                        
+
+                            % skip ignored trials
+                            if bbstruct.(subjs{s}).(trials{n}).ignore==1
+                                disp(['--Ignoring variable: TIMES for foot ' bbmeta.limbs{f} ' and trial ' subjs{s} '_' trials{n}]); 
+                                continue
+                            end                         
+                        
+                        
                             % process depends on how many legs were analysed
                             switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
 
                                 case 1  % one leg
                                     
                                     if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})                                    
-                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                        
+                                        if strcmpi(bbstruct.(subjs{s}).affected,'C')
+                                            alldata.(bbmeta.conditions{3}).TIMES.elapsed(t3) = bbstruct.(subjs{s}).(trials{n}).data.TIMES.relative(end);
+                                            t3 = t3 + 1;                                        
+                                        elseif strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
                                             alldata.(bbmeta.conditions{1}).TIMES.elapsed(t1) = bbstruct.(subjs{s}).(trials{n}).data.TIMES.relative(end);
                                             t1 = t1 + 1;
                                         else
@@ -132,7 +168,10 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
 
                                     for p=1:2
                                         if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbmeta.limbs{f}) 
-                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
+                                            if strcmpi(bbstruct.(subjs{s}).affected,'C')
+                                                alldata.(bbmeta.conditions{1}).TIMES.elapsed(t3) = bbstruct.(subjs{s}).(trials{n}).data{p}.TIMES.relative(end);
+                                                t3 = t3 + 1;                                            
+                                            elseif strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
                                                 alldata.(bbmeta.conditions{1}).TIMES.elapsed(t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.TIMES.relative(end);
                                                 t1 = t1 + 1;
                                             else
@@ -148,13 +187,13 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
                         continue;
                     end
                 catch                            
-                    disp(['ERROR: Unable to process quantity TIMES for ' subjs{s} ' ' trials{n} '.'])  ;
+                    disp(['--Error processing: TIMES for foot ' bbmeta.limbs{f} ' and trial ' subjs{s} ' ' trials{n}]); 
                 end                           
             end
         end
         
         % subject means and sd for time
-        for c=1:2
+        for c=1:3
             if isfield(alldata,bbmeta.conditions{c})
                 
                 % total elapsed time

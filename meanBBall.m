@@ -25,6 +25,9 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
     % get desired output data groups
     outgrps = bbmeta.BBGROUPS(logical(ampg));        
 
+    % delete group MEAN field if it already exists
+    if isfield(bbstruct,'MEAN'), rmfield(bbstruct,'MEAN'); end      
+    
     % collate individual means and sds
     subjs = fieldnames(bbstruct);
     alldata = struct;
@@ -32,7 +35,7 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
         for b=1:length(outgrps)
             for q=1:length(bbmeta.(outgrps{b}))
                 quantlabel = bbmeta.(outgrps{b}){q};
-                for f=1:2
+                for f=1:3
                     cond = bbmeta.conditions{f};
                     if isfield(bbstruct.(subjs{s}),'mean')
                         if isfield(bbstruct.(subjs{s}).mean,cond)
@@ -40,7 +43,7 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
                                 alldata.means.(cond).(outgrps{b}).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(outgrps{b}).(quantlabel);
                                 alldata.sds.(cond).(outgrps{b}).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(outgrps{b}).(quantlabel);
                             catch                            
-                                disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} '.'])  ;
+                                disp(['--Error processing: ' outgrps{b} ' ' quantname ' for foot ' bbmeta.limbs{f} ' and subject ' subjs{s}]); 
                             end
                         end
                     end
@@ -56,7 +59,7 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
     for b=1:length(outgrps)
         for q=1:length(bbmeta.(outgrps{b}))
             quantlabel = bbmeta.(outgrps{b}){q};
-            for c=1:2
+            for c=1:3
                 cond = bbmeta.conditions{c};
                 if isfield(alldata.means,cond)
                     bbstruct.MEAN.mean.(cond).(outgrps{b}).(quantlabel) = mean(alldata.means.(cond).(outgrps{b}).(quantlabel),3);
@@ -70,7 +73,8 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
     
     % relative time: collate means and sds
     for s=1:length(subjs)    
-        for f=1:2
+        if strcmp(subjs{s},'MEAN'), continue; end           
+        for f=1:3
             cond = bbmeta.conditions{f};
             if isfield(bbstruct.(subjs{s}),'mean')
                 if isfield(bbstruct.(subjs{s}).mean,cond)
@@ -78,7 +82,7 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
                         alldata.means.(cond).TIMES.elapsed(s) = bbstruct.(subjs{s}).mean.(cond).TIMES.elapsed;
                         alldata.sds.(cond).TIMES.elapsed(s) = bbstruct.(subjs{s}).sd.(cond).TIMES.elapsed;
                     catch                            
-                        disp(['ERROR: Unable to process quantity TIME for ' subjs{s} '.'])  ;
+                        disp(['--Error processing: TIMES for foot ' bbmeta.limbs{f} ' and subject ' subjs{s}]); 
                     end
                 end
             end
@@ -88,7 +92,7 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
     % calculate mean and sd for time
     % mean: mean of individual subject means
     % sd: sqrt of sum of squares of individual subject sds
-    for c=1:2
+    for c=1:3
         cond = bbmeta.conditions{c};
         if isfield(alldata.means,cond)
             

@@ -24,6 +24,9 @@ function bbstruct = runAnalyses(bbstruct,bbmeta,user)
 
     % add search path for tasks
     addpath('./analyses/'); 
+    
+    % user parameters
+    structpath = user.DATASRCPATH;
 
     % get Body Builder point data from C3D files
     subjs = fieldnames(bbstruct);
@@ -31,7 +34,14 @@ function bbstruct = runAnalyses(bbstruct,bbmeta,user)
         trials = fieldnames(bbstruct.(subjs{s}));
         for t=1:length(trials)            
             if isempty(find(strcmpi(trials{t},bbmeta.SUBJECTFIELDS),1))
-
+                
+                % skip ignored trials
+                if bbstruct.(subjs{s}).(trials{t}).ignore==1
+                    disp(['--Ignoring trial: ' subjs{s} '_' trials{t}]); 
+                    continue
+                end                 
+                
+                disp(['Running analysis for: ' subjs{s} ' ' trials{t}]);
                 switch bbstruct.(subjs{s}).(trials{t}).analysedlegs
                     
                     case 1  % one leg
@@ -86,6 +96,10 @@ function bbstruct = runAnalyses(bbstruct,bbmeta,user)
         end
     end   
 
-
+    % save struct
+    save(fullfile(structpath,'bb.mat'),'-struct','bbstruct');    
+    
+    disp(' ');
+        
 end
 
