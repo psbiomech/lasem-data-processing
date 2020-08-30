@@ -49,7 +49,7 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
         
                                
         % extract data
-        for f=1:2            
+        for f=1:3            
             cond = bbmeta.conditions{f};            
             for q=1:length(bbmeta.(bbanalysis))
                 quantlabel = bbmeta.(bbanalysis){q};                       
@@ -119,15 +119,14 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
                                     dval = [dval, NaN(1,dcols-dlen)];
                                     dcellvec(r,:) = [sdname,subjs{s},'segments',bbmeta.dirs{c},num2cell(dval)];
                                     r = r + 1;
-                                end                                   
-
+                                end     
+                                
+                                % append table to sheet
+                                xldata.(cond).(bbanalysis).(quantlabel)(x:x+14,:) = dcellvec;
+                                x = x + 15;
 
                             end
                         end
-
-                        % append table to sheet
-                        xldata.(cond).(bbanalysis).(quantlabel)(x:x+14,:) = dcellvec;
-                        x = x + 15;
 
                     end                                              
                 end
@@ -139,7 +138,7 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
     % write Excel spreadsheet
     mkdir(xlspath);
     mkdir([xlspath '\XLS\']);
-    for f=1:2
+    for f=1:3
         cond = bbmeta.conditions{f};
         if isfield(xldata,cond)
             for b=1:length(bbmeta.BBANALYSES)        

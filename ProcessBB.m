@@ -87,7 +87,7 @@ bb = runAnalyses(bb,bbmeta,user);
 
 % calculate mean and sd for additional analyses
 disp('Calculating means and standard deviations for additional analyses...');
-bb = calcAnalysesMeans(bb,bbmeta);
+bb = calcAnalysesMeans(bb,bbmeta,user);
 
 
 %% ********************

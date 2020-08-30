@@ -1,4 +1,4 @@
-function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
+function bbstruct = meanBBall(bbstruct,bbmeta,ampg,samp)
 
 %meanBBall: Calculates mean of all trials for all subjects
 %   Prasanna Sritharan, April 2018
@@ -101,7 +101,7 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg)
             bbstruct.MEAN.sd.(cond).TIMES.elapsed = sqrt(sum((alldata.sds.(cond).TIMES.elapsed).^2,3));
             
             % construct relative time vector (applies to mean only)
-            bbstruct.MEAN.mean.(cond).TIMES.relative = linspace(0,bbstruct.MEAN.mean.(cond).TIMES.elapsed);
+            bbstruct.MEAN.mean.(cond).TIMES.relative = linspace(0,bbstruct.MEAN.mean.(cond).TIMES.elapsed,samp);
             bbstruct.MEAN.sd.(cond).TIMES.relative = [];
             
         end

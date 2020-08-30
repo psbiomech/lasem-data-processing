@@ -24,9 +24,10 @@ function user = getUserScriptSettings()
 
 
 % folder paths
-user.DATASRCPATH = 'C:\Users\psrit\Documents\data\FORCe Running\';  % root directory of source C3D files with Body Builder data
-user.SUMMARYPATH = 'C:\Users\psrit\Documents\data\FORCe Running\SUMMARY\';   % location to which all output data summary files are written
-user.XLSMETAPATH = 'C:\Users\psrit\Documents\data\FORCe Running\';   % if used, read.write location of XLS file with subject/trial metadata
+user.DATASRCPATH = 'C:\Users\psrit\Documents\data\Force Running\';  % root directory of source C3D files with Body Builder data
+user.SUMMARYPATH = 'C:\Users\psrit\Documents\data\Force Running\zz_SUMMARY\';   % location to which all output data summary files are written
+user.XLSMETAPATH = 'C:\Users\psrit\Documents\data\Force Running\zz_META\';   % if used, write location of XLS file with subject/trial metadata
+user.ERRORPATH = 'C:\Users\psrit\Documents\data\Force Running\zz_ERROR\';      % write location of error output logs
 
 % data processing settings
 user.SAMP = 101;    % resample data to standardised number of time steps

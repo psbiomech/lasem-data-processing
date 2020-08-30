@@ -24,21 +24,31 @@ function exportBBdata(bbstruct,bbmeta,user)
 
 
     % write Body Builder mean data to Excel spreadsheets
+    disp(' ');
+    disp('Writing group means and stdevs for Body Builder data... (this may take some time)');
     writeXLSMeanBBstructGroups(bbstruct,bbmeta,user);
     
     % write analysis mean data to spreadsheets
+    disp(' ');
+    disp('Writing group means and stdevs for analyses data...');
     writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user);
 
 
     % write Body Builder individual trial data to spreadsheets
+    disp(' ');
+    disp('Writing individual Body Builder data for individual trials... (this may take some time)');
     writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user);    
     
     % write analysis individual trial data to spreadsheets
+    disp(' ');
+    disp('Writing individual analyses data for individual trials...');
     writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user);
     
     
     % write all metadata to Excel spreadsheet
-    writeXLSFullMetaData(bbstruct,user)
+    disp(' ');
+    disp('Writing full subject and trial metadata...');    
+    writeXLSFullMetaData(bbstruct,bbmeta,user)
 
 
 end

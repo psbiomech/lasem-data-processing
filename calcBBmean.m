@@ -26,16 +26,17 @@ function bbstruct = calcBBmean(bbstruct,bbmeta,user)
     % assign struct fields
     structpath = user.DATASRCPATH;
     ampg = user.AMPG;
+    samp = user.SAMP;
 
     % calculate subject means
     disp(' ');
     disp('Calculating subject means...');
-    bbwithsubjmean = meanBBsubject(bbstruct,bbmeta,ampg);
+    bbwithsubjmean = meanBBsubject(bbstruct,bbmeta,ampg,samp);
     
     % calculate total means (requires subject means already calculated)
     disp(' ');
-    disp('Calculating group means');
-    bbstruct = meanBBall(bbwithsubjmean,bbmeta,ampg);
+    disp('Calculating group means...');
+    bbstruct = meanBBall(bbwithsubjmean,bbmeta,ampg,samp);
 
     % save struct
     save(fullfile(structpath,'bb.mat'),'-struct','bbstruct');    

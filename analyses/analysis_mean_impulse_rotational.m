@@ -54,16 +54,30 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
                 quantname = [bbmeta.limbs{f} quantlabel];
                 t1 = 1;
                 t2 = 1;
+                t3 = 1;
                 for n = 1:ntrials
                     try
                         if isempty(find(strcmpi(trials{n},bbmeta.SUBJECTFIELDS),1))
+
+                            % skip ignored trials
+                            if bbstruct.(subjs{s}).(trials{n}).ignore==1
+                                disp(['--Ignoring variable: ' SRCGRP ' ' quantname ' for foot ' bbmeta.limbs{f} ' and trial ' subjs{s} '_' trials{n}]); 
+                                continue
+                            end                             
                             
                             switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
                             
                                 case 1  % one leg
                                     
                                     if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
-                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                        if strcmpi(bbstruct.(subjs{s}).affected,'C')
+                                            cond3 = bbmeta.conditions{3};
+                                            alldata.(cond3).(DATAGRP).(quantlabel).net(:,t3) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).net;
+                                            alldata.(cond3).(DATAGRP).(quantlabel).positive(:,t3) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).positive;
+                                            alldata.(cond3).(DATAGRP).(quantlabel).negative(:,t3) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).negative;
+                                            alldata.(cond3).(DATAGRP).(quantlabel).half(:,:,t3) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).half;
+                                            t3 = t3 + 1;                                            
+                                        elseif strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
                                             cond1 = bbmeta.conditions{1};
                                             alldata.(cond1).(DATAGRP).(quantlabel).net(:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).net;
                                             alldata.(cond1).(DATAGRP).(quantlabel).positive(:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname).positive;
@@ -84,7 +98,14 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
 
                                     for p=1:2
                                         if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbmeta.limbs{f})
-                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
+                                            if strcmpi(bbstruct.(subjs{s}).affected,'C')
+                                                cond3 = bbmeta.conditions{3};
+                                                alldata.(cond3).(DATAGRP).(quantlabel).net(:,t3) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).net;
+                                                alldata.(cond3).(DATAGRP).(quantlabel).positive(:,t3) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).positive;
+                                                alldata.(cond3).(DATAGRP).(quantlabel).negative(:,t3) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).negative;
+                                                alldata.(cond3).(DATAGRP).(quantlabel).half(:,:,t3) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).half;
+                                                t3 = t3 + 1;                                                
+                                            elseif strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
                                                 cond1 = bbmeta.conditions{1};
                                                 alldata.(cond1).(DATAGRP).(quantlabel).net(:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).net;
                                                 alldata.(cond1).(DATAGRP).(quantlabel).positive(:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname).positive;
@@ -110,7 +131,7 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
                             continue;
                         end
                     catch                            
-                        disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} ' ' trials{n} '.'])  ;
+                        disp(['--Error processing: ' SRCGRP ' ' quantname ' for foot ' bbmeta.limbs{f} ' and trial ' subjs{s} ' ' trials{n}]);
                     end                           
                 end
             end                                        
@@ -120,7 +141,7 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
         for q=1:length(bbmeta.(SRCGRP))
             qpresuf = regexpi(bbmeta.(SRCGRP){q},['(\w*)' SRCMIDSTR '(\w*)'],'tokens');
             quantlabel = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}];                               
-            for c=1:2
+            for c=1:3
                 cond = bbmeta.conditions{c};
                 if isfield(alldata,bbmeta.conditions{c})
                     
@@ -153,7 +174,7 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
             quantlabel = bbmeta.(SRCGRP){q};  
             qpresuf = regexpi(bbmeta.(SRCGRP){q},['(\w*)' SRCMIDSTR '(\w*)'],'tokens');
             qoutname = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}];
-            for c=1:2
+            for c=1:3
                 cond = bbmeta.conditions{c};  
                 if isfield(bbstruct.(subjs{s}),'mean')
                     if isfield(bbstruct.(subjs{s}).mean,cond)
@@ -230,7 +251,7 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
             for q=1:length(bbmeta.(SRCGRP))
                 qpresuf = regexpi(bbmeta.(SRCGRP){q},['(\w*)' SRCMIDSTR '(\w*)'],'tokens');
                 quantlabel = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}]; 
-                for f=1:2
+                for f=1:3
                     cond = bbmeta.conditions{f};
                     if isfield(bbstruct.(subjs{s}),'mean')
                         if isfield(bbstruct.(subjs{s}).mean,cond)
@@ -252,9 +273,8 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
                                 alldata.means.(cond).(DATAGRP).(quantlabel).half(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).half;
                                 alldata.sds.(cond).(DATAGRP).(quantlabel).half(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).half;                                  
 
-                            catch excp
-                                rethrow(excp);
-                                disp(['ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s} '.'])  ;
+                            catch
+                                disp(['--ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s}]);
                             end
                         end
                     end        
@@ -271,7 +291,7 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
     for q=1:length(bbmeta.(SRCGRP))
         qpresuf = regexpi(bbmeta.(SRCGRP){q},['(\w*)' SRCMIDSTR '(\w*)'],'tokens');
         quantlabel = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}];   
-        for c=1:2
+        for c=1:3
             cond = bbmeta.conditions{c};
             if isfield(alldata.means,cond)
                 
@@ -304,7 +324,7 @@ function bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta)
         quantlabel = bbmeta.(SRCGRP){q};  
         qpresuf = regexpi(bbmeta.(SRCGRP){q},['(\w*)' SRCMIDSTR '(\w*)'],'tokens');
         qoutname = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}];
-        for c=1:2
+        for c=1:3
             cond = bbmeta.conditions{c};  
             if isfield(bbstruct.MEAN.mean,cond)
                 for x=1:3

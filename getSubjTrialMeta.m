@@ -27,10 +27,11 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
     
     % assign struct fields
     structpath = user.DATASRCPATH;
+    errorpath = user.ERRORPATH;
+    metapath = user.XLSMETAPATH; 
     task = user.TASKTYPE;
     cohmode = user.COHORT;
     affmode = user.AFFECTED;
-    xlspath = user.XLSMETAPATH; 
     updatemeta = user.UPDATEMETAFROMFILE;
     writemeta = user.WRITEMETATOFILE;
     xlsuploadfile = user.XLSMETAUPLOADFILE;
@@ -81,24 +82,24 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
         disp(' ');
         
     end
-    
 
-    % update subject metadata from XLS
+    % update subject metadata from XLS file in root directory
     if strcmpi(updatemeta,'update')
         disp('Updating subject metadata from Excel spreadsheet...');
-        meta = loadXLSmeta(meta,xlsuploadfile,xlspath);
+        meta = loadXLSmeta(meta,xlsuploadfile,structpath);
     end    
     
-    % write subject metadata only to XLS
+    % write subject metadata only to XLS file in META directory
     if strcmpi(writemeta,'write')
         disp('Writing subject metadata to Excel spreadsheet...');
-        if ~exist(xlspath,'dir'), mkdir(xlspath); end
-        writeXLSSubjInfoForMod(meta,xlswritefile,xlspath);
+        if ~exist(metapath,'dir'), mkdir(metapath); end
+        writeXLSSubjInfoForMod(meta,xlswritefile,metapath);
     end
     
     % write errors if any
     if en>0
-        fid = fopen([xlspath '\metadata_failed_' datestr(now,'yyyymmdd_HHMMSS') '.txt'],'at');
+        if ~exist(errorpath,'dir'), mkdir(errorpath); end
+        fid = fopen([errorpath '\metadata_failed_' datestr(now,'yyyymmdd_HHMMSS') '.txt'],'at');
         for e=1:en
             fprintf(fid,'%s\n',errlist{e}); 
         end

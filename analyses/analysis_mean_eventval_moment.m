@@ -49,15 +49,27 @@ function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
                 quantname = [bbmeta.limbs{f} quantlabel];
                 t1 = 1;
                 t2 = 1;
+                t3 = 1;
                 for n = 1:ntrials
                     try
                         if isempty(find(strcmpi(trials{n},bbmeta.SUBJECTFIELDS),1))
+                            
+                             % skip ignored trials
+                            if bbstruct.(subjs{s}).(trials{n}).ignore==1
+                                disp(['--Ignoring variable: ' SRCGRP '@events ' quantname ' for foot ' bbmeta.limbs{f} ' and trial ' subjs{s} '_' trials{n}]); 
+                                continue
+                            end                           
+                            
                             switch bbstruct.(subjs{s}).(trials{n}).analysedlegs
                             
                                 case 1  % one leg                            
                             
                                     if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbmeta.limbs{f})
-                                        if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
+                                        if strcmpi(bbstruct.(subjs{s}).affected,'C')
+                                            cond3 = bbmeta.conditions{3};
+                                            alldata.(cond3).(DATAGRP).(quantlabel)(:,:,t3) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname);
+                                            t3 = t3 + 1;                                            
+                                        elseif strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb,bbstruct.(subjs{s}).affected)
                                             cond1 = bbmeta.conditions{1};
                                             alldata.(cond1).(DATAGRP).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data.(DATAGRP).(quantname);
                                             t1 = t1 + 1;
@@ -72,7 +84,11 @@ function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
 
                                     for p=1:2
                                         if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbmeta.limbs{f})
-                                            if strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
+                                            if strcmpi(bbstruct.(subjs{s}).affected,'C')
+                                                cond3 = bbmeta.conditions{3};
+                                                alldata.(cond3).(DATAGRP).(quantlabel)(:,:,t3) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname);
+                                                t3 = t3 + 1;                                              
+                                            elseif strcmpi(bbstruct.(subjs{s}).(trials{n}).triallimb{p},bbstruct.(subjs{s}).affected)
                                                 cond1 = bbmeta.conditions{1};
                                                 alldata.(cond1).(DATAGRP).(quantlabel)(:,:,t1) = bbstruct.(subjs{s}).(trials{n}).data{p}.(DATAGRP).(quantname);
                                                 t1 = t1 + 1;
@@ -90,7 +106,7 @@ function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
                             continue;
                         end
                     catch                            
-                        disp(['ERROR: Unable to process quantity ' quantname ' for ' subjs{s} ' ' trials{n} '.'])  ;
+                        disp(['--Error processing: ' SRCGRP '@events ' quantname ' for foot ' bbmeta.limbs{f} ' and trial ' subjs{s} ' ' trials{n}]);
                     end                           
                 end
             end                                        
@@ -99,7 +115,7 @@ function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
         % calculate mean and sd for point data
         for q=1:length(bbmeta.(SRCGRP))
             quantlabel = bbmeta.(SRCGRP){q};                
-            for c=1:2
+            for c=1:3
                 cond = bbmeta.conditions{c};
                 if isfield(alldata,bbmeta.conditions{c})
                     bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel) = mean(alldata.(cond).(DATAGRP).(quantlabel),3);
@@ -122,7 +138,7 @@ function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
         if isempty(find(strcmpi(subjs{s},{'MEAN'}),1))
             for q=1:length(bbmeta.(SRCGRP))
                 quantlabel = bbmeta.(SRCGRP){q}; 
-                for f=1:2
+                for f=1:3
                     cond = bbmeta.conditions{f};
                     if isfield(bbstruct.(subjs{s}),'mean')
                         if isfield(bbstruct.(subjs{s}).mean,cond)
@@ -130,7 +146,7 @@ function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
                                 alldata.means.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel);
                                 alldata.sds.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel);
                             catch
-                                disp(['ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s} '.'])  ;
+                                disp(['--ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s}]);
                             end
                         end
                     end
@@ -146,7 +162,7 @@ function bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta)
     % sd: sqrt of sum of squares of individual subject sds
     for q=1:length(bbmeta.(SRCGRP))
         quantlabel = bbmeta.(SRCGRP){q}; 
-        for c=1:2
+        for c=1:3
             cond = bbmeta.conditions{c};
             if isfield(alldata.means,cond)
                 bbstruct.MEAN.mean.(cond).(DATAGRP).(quantlabel) = mean(alldata.means.(cond).(DATAGRP).(quantlabel),3);

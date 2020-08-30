@@ -1,4 +1,4 @@
-function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
+function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg,samp)
 
 %meanBBsubject: Calculates mean of all trials per subject
 %   Prasanna Sritharan, April 2018
@@ -201,7 +201,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg)
                 bbstruct.(subjs{s}).sd.(bbmeta.conditions{c}).TIMES.elapsed = std(alldata.(bbmeta.conditions{c}).TIMES.elapsed);
                 
                 % construct relative time vector (applies to mean only)
-                bbstruct.(subjs{s}).mean.(bbmeta.conditions{c}).TIMES.relative = linspace(0,bbstruct.(subjs{s}).mean.(bbmeta.conditions{c}).TIMES.elapsed);
+                bbstruct.(subjs{s}).mean.(bbmeta.conditions{c}).TIMES.relative = linspace(0,bbstruct.(subjs{s}).mean.(bbmeta.conditions{c}).TIMES.elapsed,samp);
                 bbstruct.(subjs{s}).sd.(bbmeta.conditions{c}).TIMES.relative = [];
                 
             end

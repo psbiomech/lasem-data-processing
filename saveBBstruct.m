@@ -23,15 +23,19 @@ function saveBBstruct(bb,user)
 
 
     % assign struct fields
-    bbfilename = user.TRIALPREFIX;
+    subjprefix = user.SUBJECTPREFIX;
+    trialprefix = user.TRIALPREFIX;
     bbfilepath = user.SUMMARYPATH;
 
     % add MAT extension if necessary
-    if isempty(regexpi(bbfilename,'.mat')), bbfilename = [bbfilename '.mat']; end; 
+    bbfilename = upper([subjprefix '_' trialprefix]);
+    if isempty(regexpi(bbfilename,'.mat')), bbfilename = [bbfilename '.mat']; end
 
     % save Body Builder struct
+    % not: this duplicates bb.mat in root folder, but with a custom file
+    % name to distinguish studies
     mkdir(bbfilepath);
-    save([bbfilepath '\' bbfilename],'bb');
+    save(fullfile(bbfilepath,bbfilename),'-struct','bb');
     
 end
 

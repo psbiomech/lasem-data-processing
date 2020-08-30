@@ -55,6 +55,13 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
                         for t=1:length(trials)                        
                             trial = trials{t};
                             if isempty(find(strcmpi(trials{t},bbmeta.SUBJECTFIELDS),1))
+                                
+                                % skip ignored trials
+                                if bbstruct.(subjs{s}).(trials{t}).ignore==1
+                                    disp(['--Ignoring trial: ' subjs{s} '_' trials{t}]); 
+                                    continue
+                                end 
+                                
                                 analysedlegs = bbstruct.(subj).(trial).analysedlegs;
                                 for z=1:analysedlegs
 
@@ -96,6 +103,13 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
                     for t=1:length(trials)                        
                         trial = trials{t};
                         if isempty(find(strcmpi(trials{t},bbmeta.SUBJECTFIELDS),1))
+                            
+                            % skip ignored trials
+                            if bbstruct.(subjs{s}).(trials{t}).ignore==1
+                                disp(['--Ignoring trial: ' subjs{s} '_' trials{t}]); 
+                                continue
+                            end  
+                                
                             analysedlegs = bbstruct.(subj).(trial).analysedlegs;
                             for z=1:analysedlegs
 

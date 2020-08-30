@@ -42,7 +42,7 @@ function writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user)
                                                                                   'Trial', ...
                                                                                   'TrialLimb', ...
                                                                                   'Affected', ...
-                                                                                  cellfun(@(z)num2str(z,'%i'),num2cell(1:samp),'UniformOutput',false)];                                       
+                                                                                  num2cell(1:samp)];                                       
 
                 % get trial data
                 r = 2;
@@ -55,6 +55,13 @@ function writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user)
                         for t=1:length(trials)                        
                             trial = trials{t};
                             if isempty(find(strcmpi(trials{t},bbmeta.SUBJECTFIELDS),1))
+                                
+                                % skip ignored trials
+                                if bbstruct.(subjs{s}).(trials{t}).ignore==1
+                                    disp(['--Ignoring trial: ' subjs{s} '_' trials{t}]); 
+                                    continue
+                                end                                
+                                
                                 analysedlegs = bbstruct.(subj).(trial).analysedlegs;
                                 for z=1:analysedlegs
 
@@ -72,13 +79,13 @@ function writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user)
                                                                                                           trial, ...
                                                                                                           tlimb, ...
                                                                                                           affected, ...
-                                                                                                          cellfun(@(y)num2str(y,'%12.8f'),num2cell(bbstruct.(subj).(trial).data.(bbmeta.BBGROUPS{b}).(tlabel)(:,c))','UniformOutput',false)];                        
+                                                                                                          num2cell(bbstruct.(subj).(trial).data.(bbmeta.BBGROUPS{b}).(tlabel)(:,c))'];                        
                                     else
                                         xldata.(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = [subj, ...
                                                                                                           trial, ...
                                                                                                           tlimb, ...
                                                                                                           affected, ...
-                                                                                                          cellfun(@(y)num2str(y,'%12.8f'),num2cell(bbstruct.(subj).(trial).data{z}.(bbmeta.BBGROUPS{b}).(tlabel)(:,c))','UniformOutput',false)];                                                                
+                                                                                                          num2cell(bbstruct.(subj).(trial).data{z}.(bbmeta.BBGROUPS{b}).(tlabel)(:,c))'];                                                                
                                     end
 
                                     % increment row
