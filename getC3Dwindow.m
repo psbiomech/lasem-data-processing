@@ -1,4 +1,4 @@
-function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
+function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial,calcspeed,speedmarker)
 
 
 %getC3Dwindow: Determine time window based on activity type
@@ -110,7 +110,7 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     fpnums = fpnums(isfp); 
     nfps = size(fpnums,2);
     fps = zeros(1,nfps);
-    for f=1:nfps, fps(f) = str2double(fpnums{f}{1}{1}); end;    
+    for f=1:nfps, fps(f) = str2double(fpnums{f}{1}{1}); end
     
     
     % generate info struct for evaluating C3D window
@@ -168,7 +168,7 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
             
     end
 
-    
+       
     % assign info struct variables
     trange = tstruct.trange;
     triallimb = tstruct.triallimb;
@@ -176,6 +176,7 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
     eframes = tstruct.eframes;
     ecodes = tstruct.ecodes;
     analysedlegs = tstruct.analysedlegs;
+    
     
     
     % if more than one leg analysed, do store results as cells
@@ -196,7 +197,30 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial)
             end            
         
     end
-       
+
+    
+    % calculate trial speed if required
+    if strcmpi(calcspeed,'yes')
+        
+        switch analysedlegs
+
+            case 1  % one leg
+                [trialspeed,stancespeed] = calcAverageGroundSpeed(itf,speedmarker,vfrange);
+
+            case 2  % two legs
+                for p=1:2
+                    [trialspeed{p},stancespeed{p}] = calcAverageGroundSpeed(itf,speedmarker,vfrange{p});
+                end            
+
+        end       
+              
+    else
+        trialspeed = [];
+        stancespeed = [];
+    end    
+    
+    
+    
     % close C3D file
     itf.Close();    
     

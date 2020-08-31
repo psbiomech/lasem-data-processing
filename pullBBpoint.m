@@ -81,7 +81,7 @@ function point = pullBBpoint(trialstruct,bbmeta,ampg)
                             point.(outgrps{g}).(qname) = zeros(vfrange(2)-vfrange(1)+1,3);
                             for s=1:size(fpseq,1)
                                 fpsuffix = fpseq(s,f);
-                                if (fpsuffix==0), continue; end;
+                                if (fpsuffix==0), continue; end
                                 cop = [bbmeta.fpvectors{1} num2str(fpsuffix)];
                                 grf = [bbmeta.fpvectors{2} num2str(fpsuffix)];
                                 copchan = find(strcmp(cop,vlist))-1;

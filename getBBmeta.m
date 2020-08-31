@@ -1,4 +1,4 @@
-function bbmeta = getBBmeta()
+    function bbmeta = getBBmeta()
 
 %getBBmeta: Return a struct containing Body Builder metadata
 %   Prasanna Sritharan, April 2018

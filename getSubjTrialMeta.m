@@ -1,4 +1,4 @@
-function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
+function meta = getSubjTrialMeta(flist,subtri,bbmeta,user)
 
 
 %getSubjTrialMeta: Build struct of subject and trial metadata
@@ -36,6 +36,8 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
     writemeta = user.WRITEMETATOFILE;
     xlsuploadfile = user.XLSMETAUPLOADFILE;
     xlswritefile = user.XLSMETAWRITEFILE;
+    calcspeed = user.CALCSPEED;
+    speedmarker = user.SPEEDMARKER;
 
     % failed
     en = 0;
@@ -59,13 +61,14 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user,writeflag)
                     
                     disp(' ');
                     disp(['Trial: ' subtri{g}{2}]);
-                    disp(['------------------------------']);
+                    disp('------------------------------');
                     
                     try
-                        meta.(subtri{g}{1}).(subtri{g}{2}) = getC3Dwindow(flist{g},task,bbmeta,subtri{g}{1},subtri{g}{2});
+                        meta.(subtri{g}{1}).(subtri{g}{2}) = getC3Dwindow(flist{g},task,bbmeta,subtri{g}{1},subtri{g}{2},calcspeed,speedmarker);
                         meta.(subtri{f}{1}).(subtri{g}{2}).filepath = flist{g};
                         meta.(subtri{f}{1}).(subtri{g}{2}).ignore = 0;
                     catch err
+                        rethrow err;
                         en = en + 1;
                         disp('ERROR: Skipping C3D file.');
                         errlist{en} = [subtri{g}{1} '_' subtri{g}{2}]; 
