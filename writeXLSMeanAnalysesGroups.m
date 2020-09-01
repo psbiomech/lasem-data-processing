@@ -59,9 +59,10 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
                 for c=1:3
                     for s=1:length(subjs)
                         if isfield(bbstruct.(subjs{s}),'mean')
-                            if isfield(bbstruct.(subjs{s}).mean,cond)                                       
+                            if isfield(bbstruct.(subjs{s}).mean,cond)
+                                if (~strcmpi(subjs{s},'MEAN'))&&(bbstruct.(subjs{s}).kinematicsonly)&&(~strcmpi(bbanalysis,'ANGLEEVENTVALS')), continue; end 
                                 dlen = length(bbstruct.(subjs{s}).mean.(cond).(bbanalysis).(quantlabel).segments.(bbmeta.dirs{c}));
-                                if dlen>dcols, dcols=dlen; end;
+                                if dlen>dcols, dcols=dlen; end
                             end
                         end
                     end
@@ -79,6 +80,9 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
                         if isfield(bbstruct.(subjs{s}),sdtype)                            
                             if isfield(bbstruct.(subjs{s}).(sdtype),cond)                                       
 
+                                % skip kinetics if kinematics only
+                                if (~strcmpi(subjs{s},'MEAN'))&&(bbstruct.(subjs{s}).kinematicsonly)&&(~strcmpi(bbanalysis,'ANGLEEVENTVALS')), continue; end                                 
+                                
                                 % allocate
                                 dcellvec = cell(15,4+dcols);
 

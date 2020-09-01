@@ -33,7 +33,7 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
     
     % collate data
     subjs = fieldnames(bbstruct);    
-    for b=1:length(bbmeta.BBGROUPS)
+    for b=1:length(bbmeta.BBGROUPS)        
         for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
             quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
             for f=1:3
@@ -51,6 +51,9 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
                         if isfield(bbstruct.(subjs{s}),'mean')
                             if isfield(bbstruct.(subjs{s}).mean,cond)
 
+                                % skip kinetics if kinematics only
+                                if (~strcmpi(subjs{s},'MEAN'))&&(bbstruct.(subjs{s}).kinematicsonly)&&(~strcmpi(bbmeta.BBGROUPS{b},'ANGLES')), continue; end                                
+                                
                                 % get data
                                 xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = ['Mean', ...
                                                                                                          subjs{s}, ...
@@ -75,6 +78,9 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
                         if isfield(bbstruct.(subjs{s}),'mean')
                             if isfield(bbstruct.(subjs{s}).sd,cond)
 
+                                % skip kinetics if kinematics only
+                                if (~strcmpi(subjs{s},'MEAN'))&&(bbstruct.(subjs{s}).kinematicsonly)&&(~strcmpi(bbmeta.BBGROUPS{b},'ANGLES')), continue; end                                 
+                                
                                 % get data
                                 xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = ['Stdev', ...
                                                                                                          subjs{s}, ...

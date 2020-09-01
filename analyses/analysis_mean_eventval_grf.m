@@ -22,8 +22,8 @@ function bbstruct = analysis_mean_eventval_grf(bbstruct,bbmeta)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % --------------------------------------------------------------------  
 
-
-    %disp('Analysis: Mean values at events - GRFs');
+    disp(' ');
+    disp('Analysis: Mean values at events - GRFs...');
 
     % input data group name
     DATAGRP = upper(bbmeta.BBANALYSES{7}); 
@@ -37,6 +37,12 @@ function bbstruct = analysis_mean_eventval_grf(bbstruct,bbmeta)
     subjs = fieldnames(bbstruct);
     for s=1:length(subjs)
 
+        % skip if MEAN field
+        if strcmpi(subjs{s},'MEAN'), continue; end          
+        
+        % skip if kinematics only
+        if bbstruct.(subjs{s}).kinematicsonly, continue; end       
+        
         % get list of trials        
         trials = fieldnames(bbstruct.(subjs{s}));
         ntrials = length(trials);        
@@ -134,28 +140,32 @@ function bbstruct = analysis_mean_eventval_grf(bbstruct,bbmeta)
     % collate individual means and sds
     subjs = fieldnames(bbstruct);
     alldata = struct;
-    for s=1:length(subjs)   
-        if isempty(find(strcmpi(subjs{s},{'MEAN'}),1))
-            for q=1:length(bbmeta.(SRCGRP))
-                quantlabel = bbmeta.(SRCGRP){q}; 
-                for f=1:3
-                    cond = bbmeta.conditions{f};
+    for q=1:length(bbmeta.(SRCGRP))
+        quantlabel = bbmeta.(SRCGRP){q}; 
+        for f=1:3
+            cond = bbmeta.conditions{f};
+            n = 1;
+             for s=1:length(subjs) 
+                if ~strcmpi(subjs{s},'MEAN')
+                    if bbstruct.(subjs{s}).kinematicsonly, continue; end                                       
                     if isfield(bbstruct.(subjs{s}),'mean')
                         if isfield(bbstruct.(subjs{s}).mean,cond)
                             try                            
-                                alldata.means.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel);
-                                alldata.sds.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel);
+                                alldata.means.(cond).(DATAGRP).(quantlabel)(:,:,n) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel);
+                                alldata.sds.(cond).(DATAGRP).(quantlabel)(:,:,n) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel);
+                                n = n + 1;
                             catch
                                 disp(['--ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s}]);
                             end
                         end
                     end
+                else
+                    continue
                 end
-            end
-        else    
-            continue;
+             end
         end
-    end        
+    end
+            
     
     % calculate mean and sd for all data
     % mean: mean of individual subject means
@@ -166,7 +176,7 @@ function bbstruct = analysis_mean_eventval_grf(bbstruct,bbmeta)
             cond = bbmeta.conditions{c};
             if isfield(alldata.means,cond)
                 bbstruct.MEAN.mean.(cond).(DATAGRP).(quantlabel) = mean(alldata.means.(cond).(DATAGRP).(quantlabel),3);
-                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel) = sqrt(sum((alldata.sds.(cond).(DATAGRP).(quantlabel)).^2,3));                                
+                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel) = std(alldata.means.(cond).(DATAGRP).(quantlabel),0,3);                                
             end
         end
     end   

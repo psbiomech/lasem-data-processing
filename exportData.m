@@ -1,6 +1,6 @@
-function exportBBdata(bbstruct,bbmeta,user)
+function exportData(bbstruct,bbmeta,user)
 
-%exportBBdata: Export Body Builder data to Excel spreadsheets
+%EXPORTDATA: Export Body Builder and analyses data to Excel spreadsheets
 %   Prasanna Sritharan, April 2018
 % 
 % -------------------------------------------------------------------- 
@@ -50,6 +50,7 @@ function exportBBdata(bbstruct,bbmeta,user)
     disp('Writing full subject and trial metadata...');    
     writeXLSFullMetaData(bbstruct,bbmeta,user)
 
-
+    disp(' ');
+    
 end
 

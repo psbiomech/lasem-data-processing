@@ -23,7 +23,8 @@ function bbstruct = analysis_mean_work_rotational(bbstruct,bbmeta)
 % -------------------------------------------------------------------- 
 
      
-    %disp('Analysis: Mean joint rotational work');
+    disp(' ');
+    disp('Analysis: Mean joint rotational work...');
 
     % input data group name
     DATAGRP = upper(bbmeta.BBANALYSES{1});
@@ -41,6 +42,12 @@ function bbstruct = analysis_mean_work_rotational(bbstruct,bbmeta)
     subjs = fieldnames(bbstruct);
     for s=1:length(subjs)
 
+        % skip if MEAN field
+        if strcmpi(subjs{s},'MEAN'), continue; end
+        
+        % skip if kinematics only
+        if bbstruct.(subjs{s}).kinematicsonly, continue; end
+        
         % get list of trials        
         trials = fieldnames(bbstruct.(subjs{s}));
         ntrials = length(trials);        
@@ -244,45 +251,51 @@ function bbstruct = analysis_mean_work_rotational(bbstruct,bbmeta)
     
     % collate individual means and sds
     subjs = fieldnames(bbstruct);
-    alldata = struct;
-    for s=1:length(subjs)   
-        if isempty(find(strcmpi(subjs{s},{'MEAN'}),1))
-            for q=1:length(bbmeta.(SRCGRP))
-                qpresuf = regexpi(bbmeta.(SRCGRP){q},['(\w*)' SRCMIDSTR '(\w*)'],'tokens');
-                quantlabel = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}]; 
-                for f=1:3
-                    cond = bbmeta.conditions{f};
+    alldata = struct;            
+    for q=1:length(bbmeta.(SRCGRP))
+        qpresuf = regexpi(bbmeta.(SRCGRP){q},['(\w*)' SRCMIDSTR '(\w*)'],'tokens');
+        quantlabel = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}]; 
+        for f=1:3
+            cond = bbmeta.conditions{f};
+            n = 1;
+            for s=1:length(subjs)   
+                if ~strcmpi(subjs{s},'MEAN')
+                    if bbstruct.(subjs{s}).kinematicsonly, continue; end                                        
                     if isfield(bbstruct.(subjs{s}),'mean')
                         if isfield(bbstruct.(subjs{s}).mean,cond)
                             try
 
                                 % net
-                                alldata.means.(cond).(DATAGRP).(quantlabel).net(:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).net;
-                                alldata.sds.(cond).(DATAGRP).(quantlabel).net(:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).net;
+                                alldata.means.(cond).(DATAGRP).(quantlabel).net(:,n) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).net;
+                                alldata.sds.(cond).(DATAGRP).(quantlabel).net(:,n) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).net;
 
                                 % positive
-                                alldata.means.(cond).(DATAGRP).(quantlabel).positive(:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).positive;
-                                alldata.sds.(cond).(DATAGRP).(quantlabel).positive(:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).positive;
+                                alldata.means.(cond).(DATAGRP).(quantlabel).positive(:,n) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).positive;
+                                alldata.sds.(cond).(DATAGRP).(quantlabel).positive(:,n) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).positive;
 
                                 % negative
-                                alldata.means.(cond).(DATAGRP).(quantlabel).negative(:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).negative;
-                                alldata.sds.(cond).(DATAGRP).(quantlabel).negative(:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).negative;                        
+                                alldata.means.(cond).(DATAGRP).(quantlabel).negative(:,n) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).negative;
+                                alldata.sds.(cond).(DATAGRP).(quantlabel).negative(:,n) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).negative;                        
 
                                 % half
-                                alldata.means.(cond).(DATAGRP).(quantlabel).half(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).half;
-                                alldata.sds.(cond).(DATAGRP).(quantlabel).half(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).half;                                  
+                                alldata.means.(cond).(DATAGRP).(quantlabel).half(:,:,n) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel).half;
+                                alldata.sds.(cond).(DATAGRP).(quantlabel).half(:,:,n) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel).half;                                  
+
+                                n = n + 1;
 
                             catch
                                 disp(['--ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s}]);
                             end
                         end
-                    end                    
+                    end
+                else
+                    continue
                 end
             end
-        else    
-            continue;
         end
-    end        
+    end
+                    
+           
     
     % calculate mean and sd for all data
     % mean: mean of individual subject means
@@ -296,19 +309,19 @@ function bbstruct = analysis_mean_work_rotational(bbstruct,bbmeta)
                 
                 % net
                 bbstruct.MEAN.mean.(cond).(DATAGRP).(quantlabel).net = mean(alldata.means.(cond).(DATAGRP).(quantlabel).net,2)';
-                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel).net = sqrt(sum((alldata.sds.(cond).(DATAGRP).(quantlabel).net).^2,2))';
+                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel).net = std(alldata.means.(cond).(DATAGRP).(quantlabel).net,0,2)';
                 
                 % positive
                 bbstruct.MEAN.mean.(cond).(DATAGRP).(quantlabel).positive = mean(alldata.means.(cond).(DATAGRP).(quantlabel).positive,2)';
-                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel).positive = sqrt(sum((alldata.sds.(cond).(DATAGRP).(quantlabel).positive).^2,2))';
+                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel).positive = std(alldata.means.(cond).(DATAGRP).(quantlabel).positive,0,2)';
                 
                 % negative
                 bbstruct.MEAN.mean.(cond).(DATAGRP).(quantlabel).negative = mean(alldata.means.(cond).(DATAGRP).(quantlabel).negative,2)';
-                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel).negative = sqrt(sum((alldata.sds.(cond).(DATAGRP).(quantlabel).negative).^2,2))';                
+                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel).negative = std(alldata.means.(cond).(DATAGRP).(quantlabel).negative,0,2)';                
                 
                 % half
                 bbstruct.MEAN.mean.(cond).(DATAGRP).(quantlabel).half = mean(alldata.means.(cond).(DATAGRP).(quantlabel).half,3);
-                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel).half = sqrt(sum((alldata.sds.(cond).(DATAGRP).(quantlabel).half).^2,3));                   
+                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel).half = std(alldata.means.(cond).(DATAGRP).(quantlabel).half,0,3);                   
                                 
             end
         end

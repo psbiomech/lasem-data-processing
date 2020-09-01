@@ -26,7 +26,7 @@ function bbstruct = extractBBdata(bbstruct,bbmeta,user)
     % assign struct fields
     ampg = user.AMPG;
     samp = user.SAMP;
-    structpath = user.DATASRCPATH;
+    metapath = user.DATASRCPATH;
         
             
     % pull Body Builder point data from C3D files
@@ -56,14 +56,14 @@ function bbstruct = extractBBdata(bbstruct,bbmeta,user)
                 switch bbstruct.(subjs{s}).(trials{t}).analysedlegs
                     
                     case 1  % one leg
-                        rawdatastruct = pullBBpoint(bbstruct.(subjs{s}).(trials{t}),bbmeta,ampg);    
+                        rawdatastruct = pullBBpoint(bbstruct.(subjs{s}).(trials{t}),bbmeta,ampg,bbstruct.(subjs{s}).kinematicsonly);    
                         bbstruct.(subj).(trial).data = resampleBBdata(rawdatastruct,samp);     
                         bbstruct.(subj).(trial) = addTimeVector(bbstruct.(subj).(trial),-1,samp);
             
                     case 2  % two legs
                         for p=1:2                           
                             tempstruct = buildTempStruct(bbstruct.(subjs{s}).(trials{t}),p);
-                            rawdatastruct = pullBBpoint(tempstruct,bbmeta,ampg);
+                            rawdatastruct = pullBBpoint(tempstruct,bbmeta,ampg,bbstruct.(subjs{s}).kinematicsonly);
                             bbstruct.(subj).(trial).data{p} = resampleBBdata(rawdatastruct,samp);  
                             bbstruct.(subj).(trial) = addTimeVector(bbstruct.(subj).(trial),p,samp);  
                         end

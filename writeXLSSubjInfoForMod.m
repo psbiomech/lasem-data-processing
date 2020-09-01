@@ -25,17 +25,17 @@ function writeXLSSubjInfoForMod(bbstruct,xlsname,xlspath)
 
 
     % create table
-    metaout = table('Size',[0 5],'VariableTypes',{'string','string','double','double','string'},'VariableNames',{'Subject','Cohort','Mass','Height','Affected'});
+    metaout = table('Size',[0 6],'VariableTypes',{'string','string','double','double','string','double'},'VariableNames',{'Subject','Cohort','Mass','Height','Affected','KinematicsOnly'});
               
     % collate data
     subjs = fieldnames(bbstruct);    
-    for s=1:length(subjs)
-        
+    for s=1:length(subjs)        
         datarow = {subjs{s}, ... 
                    upper(bbstruct.(subjs{s}).cohort), ...
                    bbstruct.(subjs{s}).mass, ...
                    bbstruct.(subjs{s}).height, ...
-                   upper(bbstruct.(subjs{s}).affected)};                                   
+                   upper(bbstruct.(subjs{s}).affected), ...
+                   bbstruct.(subjs{s}).kinematicsonly};
         metaout = [metaout; datarow];
     end
                                                                                 

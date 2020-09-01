@@ -1,7 +1,7 @@
-function [trialspeed,stancespeed] = calcAverageGroundSpeed(itf,speedmarker,vfrange)
+function speed = calcGroundSpeed(itf,speedmarker,vfrange)
 
 
-%CALCAVERAGEGROUNDSPEED Calculate the average ground speed
+%CALCGROUNDSPEED Calculate the average ground speed
 %   Prasanna Sritharan, August 2020
 
     % get the index of the marker used to calculate speed
@@ -33,12 +33,16 @@ function [trialspeed,stancespeed] = calcAverageGroundSpeed(itf,speedmarker,vfran
 
     % calculate average ground speed for stance
     % (assume: Y, foreaft; X, mediolateral; and units: mm)
-    dispXY = (marker.stance(end,1:2)-marker.stance(1,1:2))/1000;
-    delT = tfstance0(end)-tfstance0(1);
-    stancespeed = norm(dispXY)/delT;
+    dispXYstance = (marker.stance(end,1:2)-marker.stance(1,1:2))/1000;
+    delTstance = tfstance0(end)-tfstance0(1);
+    speed.stance = norm(dispXYstance)/delTstance;
     
     % calculate average ground speed for whole trial
-        
+    % (assume: Y, foreaft; X, mediolateral; and units: mm)
+    activeidx = find(marker.all(:,3));
+    dispXY = (marker.all(activeidx(end),1:2)-marker.all(activeidx(1),1:2))/1000;
+    delT = tfall0(activeidx(end))-tfall0(activeidx(1));
+    speed.trial = norm(dispXY)/delT;
     
     
     

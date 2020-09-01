@@ -26,31 +26,35 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg,samp)
     outgrps = bbmeta.BBGROUPS(logical(ampg));        
 
     % delete group MEAN field if it already exists
-    if isfield(bbstruct,'MEAN'), rmfield(bbstruct,'MEAN'); end      
+    if isfield(bbstruct,'MEAN'), bbstruct = rmfield(bbstruct,'MEAN'); end      
     
     % collate individual means and sds
     subjs = fieldnames(bbstruct);
-    alldata = struct;
-    for s=1:length(subjs)    
-        for b=1:length(outgrps)
-            for q=1:length(bbmeta.(outgrps{b}))
-                quantlabel = bbmeta.(outgrps{b}){q};
-                for f=1:3
-                    cond = bbmeta.conditions{f};
+    alldata = struct; 
+    for b=1:length(outgrps)
+        for q=1:length(bbmeta.(outgrps{b}))
+            quantlabel = bbmeta.(outgrps{b}){q};
+            for f=1:3
+                cond = bbmeta.conditions{f};
+                n = 1;
+                for s=1:length(subjs)
+                    if (bbstruct.(subjs{s}).kinematicsonly)&&(~strcmpi(outgrps{b},'ANGLES')), continue; end
                     if isfield(bbstruct.(subjs{s}),'mean')
                         if isfield(bbstruct.(subjs{s}).mean,cond)
                             try
-                                alldata.means.(cond).(outgrps{b}).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(outgrps{b}).(quantlabel);
-                                alldata.sds.(cond).(outgrps{b}).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(outgrps{b}).(quantlabel);
+                                alldata.means.(cond).(outgrps{b}).(quantlabel)(:,:,n) = bbstruct.(subjs{s}).mean.(cond).(outgrps{b}).(quantlabel);
+                                alldata.sds.(cond).(outgrps{b}).(quantlabel)(:,:,n) = bbstruct.(subjs{s}).sd.(cond).(outgrps{b}).(quantlabel);
+                                n = n + 1;
                             catch                            
                                 disp(['--Error processing: ' outgrps{b} ' ' quantname ' for foot ' bbmeta.limbs{f} ' and subject ' subjs{s}]); 
                             end
                         end
-                    end
+                    end                    
                 end
             end
         end
     end
+
 
     
     % calculate mean and sd for all data
@@ -63,7 +67,7 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg,samp)
                 cond = bbmeta.conditions{c};
                 if isfield(alldata.means,cond)
                     bbstruct.MEAN.mean.(cond).(outgrps{b}).(quantlabel) = mean(alldata.means.(cond).(outgrps{b}).(quantlabel),3);
-                    bbstruct.MEAN.sd.(cond).(outgrps{b}).(quantlabel) = sqrt(sum((alldata.sds.(cond).(outgrps{b}).(quantlabel)).^2,3));
+                    bbstruct.MEAN.sd.(cond).(outgrps{b}).(quantlabel) = std(alldata.means.(cond).(outgrps{b}).(quantlabel),0,3);
                 end
             end
         end
@@ -98,7 +102,7 @@ function bbstruct = meanBBall(bbstruct,bbmeta,ampg,samp)
             
             % total elapsed time
             bbstruct.MEAN.mean.(cond).TIMES.elapsed = mean(alldata.means.(cond).TIMES.elapsed);
-            bbstruct.MEAN.sd.(cond).TIMES.elapsed = sqrt(sum((alldata.sds.(cond).TIMES.elapsed).^2,3));
+            bbstruct.MEAN.sd.(cond).TIMES.elapsed = std(alldata.means.(cond).TIMES.elapsed);
             
             % construct relative time vector (applies to mean only)
             bbstruct.MEAN.mean.(cond).TIMES.relative = linspace(0,bbstruct.MEAN.mean.(cond).TIMES.elapsed,samp);

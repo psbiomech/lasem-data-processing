@@ -1,4 +1,4 @@
-function point = pullBBpoint(trialstruct,bbmeta,ampg)
+function point = pullBBpoint(trialstruct,bbmeta,ampg,kinematicsonly)
 
 %pullBBpoint: Get Body Builder point data from C3D file
 %   Prasanna Sritharan, April 2018
@@ -73,7 +73,8 @@ function point = pullBBpoint(trialstruct,bbmeta,ampg)
                     
                     % Body Builder GRF point data
                     % merge all individual FP streams for each foot into a single channel
-                    case 'GRFS'                        
+                    case 'GRFS'     
+                        if kinematicsonly, continue; end
                         fpnums = regexp(vlist,[bbmeta.fpvectors{1} '(\d+)'],'tokens');
                         fpnums = fpnums(~cellfun('isempty',fpnums)); 
                         for f=1:2
@@ -96,6 +97,7 @@ function point = pullBBpoint(trialstruct,bbmeta,ampg)
                             
                     % all other Body Builder data
                     otherwise
+                        if (kinematicsonly)&&(~strcmpi(outgrps{g},'ANGLES')), continue; end
                         for f=1:2
                             qname = [bbmeta.limbs{f} bbmeta.(outgrps{g}){q}];
                             vchan = find(strcmp(qname,vlist))-1;

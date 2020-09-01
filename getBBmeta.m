@@ -30,14 +30,14 @@
     bbmeta.TIMES = {'absolute','relative'};   
     bbmeta.fpvectors = {'CofP','Vector'};    
     bbmeta.units.ANGLES = 'deg';
-    bbmeta.units.MOMENTS = 'Nm';
-    bbmeta.units.POWERS = 'Nms-1';
+    bbmeta.units.MOMENTS = 'Nmm';
+    bbmeta.units.POWERS = 'mW';
     bbmeta.units.GRFS = 'N';
     bbmeta.dirs = {'X','Y','Z'};
     bbmeta.limbs = {'R','L','C'};
     bbmeta.cohorts = {'AFF','CON'};
     bbmeta.conditions = {'SYM','ASYM','CON'};
-    bbmeta.SUBJECTFIELDS = {'cohort','affected','mass','height','mean','sd'};
+    bbmeta.SUBJECTFIELDS = {'cohort','affected','mass','height','kinematicsonly','speed','mean','sd'};
     
     % analyses
     bbmeta.BBANALYSES = {'RotWork','RotImpulse','GRFImpulse','AngleEventVals','MomentEventVals','PowerEventVals','GRFEventVals'};

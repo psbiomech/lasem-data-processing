@@ -50,17 +50,21 @@ function bbstruct = runAnalyses(bbstruct,bbmeta,user)
                         datastruct = bbstruct.(subjs{s}).(trials{t}).data;
                         vfrange = bbstruct.(subjs{s}).(trials{t}).vfrange;
                         ecodes = bbstruct.(subjs{s}).(trials{t}).ecodes;
-                        eframes = bbstruct.(subjs{s}).(trials{t}).eframes;
+                        eframes = bbstruct.(subjs{s}).(trials{t}).eframes;                       
                         
-                        % analyses
-                        datastruct = analysis_work_rotational(datastruct,bbmeta);     
-                        datastruct = analysis_impulse_rotational(datastruct,bbmeta);                
-                        datastruct = analysis_impulse_grf(datastruct,bbmeta);   
-                        datastruct = analysis_eventval_angle(datastruct,bbmeta,user,vfrange,ecodes,eframes);
-                        datastruct = analysis_eventval_moment(datastruct,bbmeta,user,vfrange,ecodes,eframes);
-                        datastruct = analysis_eventval_power(datastruct,bbmeta,user,vfrange,ecodes,eframes);
-                        datastruct = analysis_eventval_grf(datastruct,bbmeta,user,vfrange,ecodes,eframes);
-                
+                        % kinetics analyses
+                        if ~bbstruct.(subjs{s}).kinematicsonly
+                            datastruct = analysis_work_rotational(datastruct,bbmeta);     
+                            datastruct = analysis_impulse_rotational(datastruct,bbmeta);                
+                            datastruct = analysis_impulse_grf(datastruct,bbmeta);                           
+                            datastruct = analysis_eventval_moment(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                            datastruct = analysis_eventval_power(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                            datastruct = analysis_eventval_grf(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                        end
+                        
+                        % kinematics analyses
+                        datastruct = analysis_eventval_angle(datastruct,bbmeta,user,vfrange,ecodes,eframes); 
+                        
                         % re-assign to BB struct
                         bbstruct.(subjs{s}).(trials{t}).data = datastruct;
                         
@@ -74,15 +78,19 @@ function bbstruct = runAnalyses(bbstruct,bbmeta,user)
                             ecodes = bbstruct.(subjs{s}).(trials{t}).ecodes{p};
                             eframes = bbstruct.(subjs{s}).(trials{t}).eframes{p};
 
-                            % analyses
-                            datastruct = analysis_work_rotational(datastruct,bbmeta);     
-                            datastruct = analysis_impulse_rotational(datastruct,bbmeta);                
-                            datastruct = analysis_impulse_grf(datastruct,bbmeta);   
-                            datastruct = analysis_eventval_angle(datastruct,bbmeta,user,vfrange,ecodes,eframes);
-                            datastruct = analysis_eventval_moment(datastruct,bbmeta,user,vfrange,ecodes,eframes);
-                            datastruct = analysis_eventval_power(datastruct,bbmeta,user,vfrange,ecodes,eframes);
-                            datastruct = analysis_eventval_grf(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                            % kinetics analyses
+                            if ~bbstruct.(subjs{s}).kinematicsonly
+                                datastruct = analysis_work_rotational(datastruct,bbmeta);     
+                                datastruct = analysis_impulse_rotational(datastruct,bbmeta);                
+                                datastruct = analysis_impulse_grf(datastruct,bbmeta);   
+                                datastruct = analysis_eventval_moment(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                                datastruct = analysis_eventval_power(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                                datastruct = analysis_eventval_grf(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                            end
 
+                            % kinematics analyses
+                            datastruct = analysis_eventval_angle(datastruct,bbmeta,user,vfrange,ecodes,eframes);
+                                                       
                             % re-assign to BB struct
                             bbstruct.(subjs{s}).(trials{t}).data{p} = datastruct;
                             

@@ -22,8 +22,8 @@ function bbstruct = analysis_mean_eventval_angle(bbstruct,bbmeta)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % -------------------------------------------------------------------- 
 
-
-    %disp('Analysis: Mean values at events - angles');
+    disp(' ');
+    disp('Analysis: Mean values at events - angles...');
 
     % input data group name
     DATAGRP = upper(bbmeta.BBANALYSES{4}); 
@@ -134,29 +134,32 @@ function bbstruct = analysis_mean_eventval_angle(bbstruct,bbmeta)
     % collate individual means and sds
     subjs = fieldnames(bbstruct);
     alldata = struct;
-    for s=1:length(subjs)   
-        if isempty(find(strcmpi(subjs{s},{'MEAN'}),1))
-            for q=1:length(bbmeta.(SRCGRP))
-                quantlabel = bbmeta.(SRCGRP){q}; 
-                for f=1:3
-                    cond = bbmeta.conditions{f};
+    for q=1:length(bbmeta.(SRCGRP))
+        quantlabel = bbmeta.(SRCGRP){q}; 
+        for f=1:3
+            cond = bbmeta.conditions{f};
+            n = 1;
+            for s=1:length(subjs)   
+                if isempty(find(strcmpi(subjs{s},{'MEAN'}),1))                                        
                     if isfield(bbstruct.(subjs{s}),'mean')
                         if isfield(bbstruct.(subjs{s}).mean,cond)
                             try                            
-                                alldata.means.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel);
-                                alldata.sds.(cond).(DATAGRP).(quantlabel)(:,:,s) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel);
+                                alldata.means.(cond).(DATAGRP).(quantlabel)(:,:,n) = bbstruct.(subjs{s}).mean.(cond).(DATAGRP).(quantlabel);
+                                alldata.sds.(cond).(DATAGRP).(quantlabel)(:,:,n) = bbstruct.(subjs{s}).sd.(cond).(DATAGRP).(quantlabel);
+                                n = n + 1;
                             catch
                                 disp(['--ERROR: Unable to process quantity ' quantlabel ' for condition ' cond ' for subject ' subjs{s}]);
                             end
                         end
                     end
+                else
+                    continue
                 end
             end
-        else    
-            continue;
         end
-    end        
-    
+    end
+                        
+                                           
     % calculate mean and sd for all data
     % mean: mean of individual subject means
     % sd: sqrt of sum of squares of individual subject sds
@@ -166,7 +169,7 @@ function bbstruct = analysis_mean_eventval_angle(bbstruct,bbmeta)
             cond = bbmeta.conditions{c};
             if isfield(alldata.means,cond)
                 bbstruct.MEAN.mean.(cond).(DATAGRP).(quantlabel) = mean(alldata.means.(cond).(DATAGRP).(quantlabel),3);
-                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel) = sqrt(sum((alldata.sds.(cond).(DATAGRP).(quantlabel)).^2,3));                                
+                bbstruct.MEAN.sd.(cond).(DATAGRP).(quantlabel) = std(alldata.means.(cond).(DATAGRP).(quantlabel),0,3);                                
             end
         end
     end   

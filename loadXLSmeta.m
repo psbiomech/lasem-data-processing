@@ -30,6 +30,7 @@ function    bbstruct = loadXLSmeta(bbstruct,xlsname,xlspath)
 % Column 3: Mass
 % Column 4: Height
 % Column 5: Affected limb (L/R)
+% Column 6: Kinematics only (1/0)
 
 
     % add XLSX extension if necessary
@@ -57,6 +58,9 @@ function    bbstruct = loadXLSmeta(bbstruct,xlsname,xlspath)
             if upper(bbstruct.(rawdata.Subject{r}).affected)=='Z'
                 bbstruct.(rawdata.Subject{r}).affected = rawdata.Affected{r};
             end
+            
+            % use kinematics only, ignore kinetics
+            bbstruct.(rawdata.Subject{r}).kinematicsonly = rawdata.KinematicsOnly(r);
             
         end                   
     end   

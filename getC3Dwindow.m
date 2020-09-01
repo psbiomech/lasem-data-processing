@@ -199,27 +199,27 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial,calcspeed,speedmar
     end
 
     
-    % calculate trial speed if required
-    if strcmpi(calcspeed,'yes')
-        
-        switch analysedlegs
+    % calculate trial speed if required        
+    switch analysedlegs
 
-            case 1  % one leg
-                [trialspeed,stancespeed] = calcAverageGroundSpeed(itf,speedmarker,vfrange);
+        case 1  % one leg
+            speed.trial = [];
+            speed.stance = [];
+            if strcmpi(calcspeed,'yes')
+                speed = calcGroundSpeed(itf,speedmarker,vfrange);
+            end
 
-            case 2  % two legs
-                for p=1:2
-                    [trialspeed{p},stancespeed{p}] = calcAverageGroundSpeed(itf,speedmarker,vfrange{p});
-                end            
+        case 2  % two legs
+            for p=1:2
+                speed{p}.trial = [];
+                speed{p}.stance = [];
+                if strcmpi(calcspeed,'yes')
+                    speed{p} = calcGroundSpeed(itf,speedmarker,vfrange{p});
+                end
+            end            
 
-        end       
-              
-    else
-        trialspeed = [];
-        stancespeed = [];
-    end    
-    
-    
+    end       
+
     
     % close C3D file
     itf.Close();    
@@ -237,6 +237,7 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial,calcspeed,speedmar
     c3dout.analysedlegs = analysedlegs;
     c3dout.ecodes = ecodes;
     c3dout.eframes = eframes;
+    c3dout.speed = speed;
     
     % write info to stdout
     switch analysedlegs
@@ -244,14 +245,17 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial,calcspeed,speedmar
             disp(['Trial limb: ' triallimb]);
             disp(['Time range: ' mat2str(trange,4)]);
             disp(['Force plate sequence: ' mat2str(fpseq)]);
+            disp(['Trial speed: ' num2str(speed.trial)]);
         case 2
             disp(['Trial limb: ' triallimb{1}]);
             disp(['Time range: ' mat2str(trange{1},4)]);
-            disp(['Force plate sequence: ' mat2str(fpseq{1})]);            
+            disp(['Force plate sequence: ' mat2str(fpseq{1})]);
+            disp(['Trial speed: ' num2str(speed{1}.trial)]);
             disp(' ');
             disp(['Trial limb: ' triallimb{2}]);
             disp(['Time range: ' mat2str(trange{2},4)]);
-            disp(['Force plate sequence: ' mat2str(fpseq{2})]);     
+            disp(['Force plate sequence: ' mat2str(fpseq{2})]);  
+            disp(['Trial speed: ' num2str(speed{2}.trial)]);
     end
 end
 

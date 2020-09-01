@@ -29,10 +29,8 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg,samp)
     if isfield(bbstruct,'MEAN'), bbstruct = rmfield(bbstruct,'MEAN'); end    
     
     % collate point data
-    subjs = fieldnames(bbstruct);
-    
+    subjs = fieldnames(bbstruct);    
     for s=1:length(subjs)            
- 
         
         % delete subject mean and sd fields if they already exist
         if isfield(bbstruct.(subjs{s}),'mean')
@@ -47,6 +45,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg,samp)
         % get point data
         alldata = struct;
         for b=1:length(outgrps)
+            if (bbstruct.(subjs{s}).kinematicsonly)&&(~strcmpi(outgrps{b},'ANGLES')), continue; end
             for q=1:length(bbmeta.(outgrps{b}))                                                
                 for f=1:2
                     quantlabel = bbmeta.(outgrps{b}){q};
@@ -116,6 +115,7 @@ function bbstruct = meanBBsubject(bbstruct,bbmeta,ampg,samp)
 
         % subject means and sd for point data
         for b=1:length(outgrps)
+            if (bbstruct.(subjs{s}).kinematicsonly)&&(~strcmpi(outgrps{b},'ANGLES')), continue; end
             for q=1:length(bbmeta.(outgrps{b}))
                 quantlabel = bbmeta.(outgrps{b}){q};
                 for c=1:3

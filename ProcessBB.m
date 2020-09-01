@@ -75,6 +75,10 @@ bb = extractBBdata(bb,bbmeta,user);
 disp('Calculating means and standard deviations for Body Builder data...');
 bb = calcBBmean(bb,bbmeta,user);
 
+% calculate and export average ground speeds
+disp('Calculating and exporting means and standard deviations for ground speed...');
+exportMeanGroundSpeeds(bbstruct,bbmeta,user);
+
 
 %% ********************
 % ADDITIONAL ANALYSES
@@ -97,7 +101,7 @@ disp(' ');
 
 % export to Excel spreadsheet from Body Builder struct
 disp('Exporting Body Builder and analyses data to Excel spreadsheet...');
-exportBBdata(bb,bbmeta,user);
+exportData(bb,bbmeta,user);
 
 % save Body Builder struct
 disp('Saving complete data set (Body Builder data and additional analyses) as Matlab struct...');

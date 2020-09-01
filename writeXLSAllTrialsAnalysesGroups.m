@@ -49,7 +49,8 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
             for d=1:3
                 for s=1:length(subjs)
                     subj = subjs{s};
-                    if isempty(find(strcmpi(subj,'MEAN'),1))
+                    if ~strcmpi(subj,'MEAN')
+                        if (bbstruct.(subj).kinematicsonly)&&(~strcmpi(bbanalysis,'ANGLEEVENTVALS')), continue; end 
                         affected = bbstruct.(subj).affected;
                         trials = fieldnames(bbstruct.(subj));
                         for t=1:length(trials)                        
@@ -97,7 +98,8 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
             subjs = fieldnames(bbstruct);    
             for s=1:length(subjs)                        
                 subj = subjs{s};
-                if isempty(find(strcmpi(subj,'MEAN'),1))
+                if ~strcmpi(subj,'MEAN')
+                    if (bbstruct.(subj).kinematicsonly)&&(~strcmpi(bbanalysis,'ANGLEEVENTVALS')), continue; end
                     affected = bbstruct.(subj).affected;
                     trials = fieldnames(bbstruct.(subj));
                     for t=1:length(trials)                        

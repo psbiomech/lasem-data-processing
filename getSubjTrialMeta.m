@@ -67,8 +67,7 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user)
                         meta.(subtri{g}{1}).(subtri{g}{2}) = getC3Dwindow(flist{g},task,bbmeta,subtri{g}{1},subtri{g}{2},calcspeed,speedmarker);
                         meta.(subtri{f}{1}).(subtri{g}{2}).filepath = flist{g};
                         meta.(subtri{f}{1}).(subtri{g}{2}).ignore = 0;
-                    catch err
-                        rethrow err;
+                    catch
                         en = en + 1;
                         disp('ERROR: Skipping C3D file.');
                         errlist{en} = [subtri{g}{1} '_' subtri{g}{2}]; 

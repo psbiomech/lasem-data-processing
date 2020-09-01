@@ -28,41 +28,16 @@ function bbstruct = calcAnalysesMeans(bbstruct,bbmeta,user)
     % assign struct fields
     structpath = user.DATASRCPATH;
     
-    % joint rotational work (angular work)
-    disp(' ');
-    disp('Calculating mean rotational work...');
+    % kinetics analyses
     bbstruct = analysis_mean_work_rotational(bbstruct,bbmeta);     
-
-    
-    % joint rotational impulse
-    disp(' ');
-    disp('Calculating mean joint rotational impulse...');
     bbstruct = analysis_mean_impulse_rotational(bbstruct,bbmeta);                
-
-    
-    % GRF impulse
-    disp(' ');
-    disp('Calculating mean GRF impulse...');
     bbstruct = analysis_mean_impulse_grf(bbstruct,bbmeta);   
-
-    
-    % Body Builder data values at events
-    disp(' ');
-    disp('Calculating mean data values at events...');
-    bbstruct = analysis_mean_eventval_angle(bbstruct,bbmeta);
-    
-    disp(' ');
-    disp('Calculating mean moments at events...');
-    bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta);
-    
-    disp(' ');
-    disp('Calculating mean powers at events...');    
-    bbstruct = analysis_mean_eventval_power(bbstruct,bbmeta);
-    
-    disp(' ');
-    disp('Calculating mean GRFs at events...');    
+    bbstruct = analysis_mean_eventval_moment(bbstruct,bbmeta);  
+    bbstruct = analysis_mean_eventval_power(bbstruct,bbmeta);  
     bbstruct = analysis_mean_eventval_grf(bbstruct,bbmeta);
-
+    
+    % kinematics analyses
+    bbstruct = analysis_mean_eventval_angle(bbstruct,bbmeta);    
     
     % save struct
     save(fullfile(structpath,'bb.mat'),'-struct','bbstruct');    
