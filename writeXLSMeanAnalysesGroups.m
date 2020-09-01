@@ -28,7 +28,8 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
     warning('off');
 
     % assign struct fields
-    xlsprefix = user.TRIALPREFIX;
+    subjprefix = user.SUBJECTPREFIX;
+    trialprefix = user.TRIALPREFIX;
     xlspath = user.SUMMARYPATH;
     samp = user.SAMP;
     
@@ -149,7 +150,7 @@ function writeXLSMeanAnalysesGroups(bbstruct,bbmeta,user)
                 bbanalysis = upper(bbmeta.BBANALYSES{b});
                 if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end       % skip if not RotImpulse or RotWork                        
                 s = 1;
-                xlsname = [xlsprefix '_' cond '_' bbanalysis '.xlsx'];                
+                xlsname = [upper(subjprefix) '_' upper(trialprefix) '_' cond '_' bbanalysis '.xlsx'];                
                 for q=1:length(bbmeta.(bbanalysis))
                     quantlabel = bbmeta.(bbanalysis){q};                    
                     sheetname = [quantlabel '_' bbmeta.units.(bbanalysis)];

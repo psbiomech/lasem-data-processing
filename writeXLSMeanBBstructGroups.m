@@ -26,7 +26,8 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
     warning('off');
 
     % assign struct fields
-    xlsprefix = user.TRIALPREFIX;
+    subjprefix = user.SUBJECTPREFIX;
+    trialprefix = user.TRIALPREFIX;
     xlspath = user.SUMMARYPATH;
     samp = user.SAMP;
 
@@ -107,7 +108,7 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
         if isfield(xldata,cond)
             for b=1:length(bbmeta.BBGROUPS)
                 s = 1;
-                xlsname = [xlsprefix '_' cond '_' bbmeta.BBGROUPS{b} '.xlsx'];                
+                xlsname = [upper(subjprefix) '_' upper(trialprefix) '_' cond '_' bbmeta.BBGROUPS{b} '.xlsx'];                
                 for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
                     quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
                     for c=1:length(bbmeta.dirs)

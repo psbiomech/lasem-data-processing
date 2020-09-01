@@ -26,7 +26,7 @@ function bbstruct = extractBBdata(bbstruct,bbmeta,user)
     % assign struct fields
     ampg = user.AMPG;
     samp = user.SAMP;
-    metapath = user.DATASRCPATH;
+    structpath = user.DATASRCPATH;
         
             
     % pull Body Builder point data from C3D files

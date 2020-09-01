@@ -26,7 +26,8 @@ function writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user)
     warning('off');
 
     % assign struct fields
-    xlsprefix = user.TRIALPREFIX;
+    subjprefix = user.SUBJECTPREFIX;
+    trialprefix = user.TRIALPREFIX;
     xlspath = user.SUMMARYPATH;
     samp = user.SAMP;
 
@@ -111,7 +112,7 @@ function writeXLSAllTrialsBBstructGroups(bbstruct,bbmeta,user)
     mkdir([xlspath '\XLS\']);
     for b=1:length(bbmeta.BBGROUPS)
         s = 1;
-        xlsname = [xlsprefix '_ALLTRIALS_' bbmeta.BBGROUPS{b} '.xlsx'];                
+        xlsname = [upper(subjprefix) '_' upper(trialprefix) '_ALLTRIALS_' bbmeta.BBGROUPS{b} '.xlsx'];                
         for q=1:length(bbmeta.(bbmeta.BBGROUPS{b}))
             quantlabel = bbmeta.(bbmeta.BBGROUPS{b}){q};
             for c=1:length(bbmeta.dirs)

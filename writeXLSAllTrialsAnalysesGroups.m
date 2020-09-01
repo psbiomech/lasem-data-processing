@@ -26,7 +26,8 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
     warning('off');
 
     % assign struct fields
-    xlsprefix = user.TRIALPREFIX;
+    subjprefix = user.SUBJECTPREFIX;
+    trialprefix = user.TRIALPREFIX;
     xlspath = user.SUMMARYPATH;
     samp = user.SAMP;
     
@@ -196,7 +197,7 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
         bbanalysis = upper(bbmeta.BBANALYSES{b});
         if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end       % skip if not RotImpulse or RotWork
         s = 1;
-        xlsname = [xlsprefix '_ALLTRIALS_' bbanalysis '.xlsx'];                
+        xlsname = [upper(subjprefix) '_' upper(trialprefix) '_ALLTRIALS_' bbanalysis '.xlsx'];                
         for q=1:length(bbmeta.(bbanalysis))
             quantlabel = bbmeta.(bbanalysis){q};
             sheetname = [quantlabel '_' bbmeta.units.(bbanalysis)];

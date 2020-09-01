@@ -109,8 +109,8 @@ function writeXLSFullMetaData(bbstruct,bbmeta,user)
                                                                                 
   
     % write Excel spreadsheet
-    xlsname = [upper(subjprefix) '_' upper(trialprefix) '_SubjectTrial_Metadata.xlsx']; 
-    writecell(xldata,[xlspath '\' xlsname],'FileType','spreadsheet');        
+    xlsname = [upper(subjprefix) '_' upper(trialprefix) '_trial_metadata.xlsx']; 
+    writecell(xldata,fullfile(xlspath,xlsname),'FileType','spreadsheet');        
     
 
 end

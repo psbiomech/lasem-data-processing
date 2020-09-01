@@ -299,7 +299,7 @@ function bbstruct = analysis_mean_work_rotational(bbstruct,bbmeta)
     
     % calculate mean and sd for all data
     % mean: mean of individual subject means
-    % sd: sqrt of sum of squares of individual subject sds
+    % sd: sd of subject means
     for q=1:length(bbmeta.(SRCGRP))
         qpresuf = regexpi(bbmeta.(SRCGRP){q},['(\w*)' SRCMIDSTR '(\w*)'],'tokens');
         quantlabel = [qpresuf{1}{1} DATAMIDSTR qpresuf{1}{2}];   
