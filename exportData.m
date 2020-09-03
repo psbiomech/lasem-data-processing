@@ -22,10 +22,15 @@ function exportData(bbstruct,bbmeta,user)
 % -------------------------------------------------------------------- 
 
 
+    disp(' ');
+    disp('Export data to Excel spreadsheets');
+    disp('------------------------------');
+    disp('(this may take some time!)');
+
 
     % write Body Builder mean data to Excel spreadsheets
     disp(' ');
-    disp('Writing group means and stdevs for Body Builder data... (this may take some time)');
+    disp('Writing group means and stdevs for Body Builder data...');
     writeXLSMeanBBstructGroups(bbstruct,bbmeta,user);
     
     % write analysis mean data to spreadsheets

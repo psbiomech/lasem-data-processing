@@ -65,16 +65,9 @@ function writeXLSMeanBBstructGroups(bbstruct,bbmeta,user)
 
                             end
                         end
-                    end                    
-                    
-                    % sheet header row (sds)
-                    r = r + 1;
-                    xldata.(cond).(bbmeta.BBGROUPS{b}).(quantlabel).(bbmeta.dirs{c})(r,:) = ['Type', ...
-                                                                                             'Time', ...
-                                                                                             num2cell(1:samp)];                          
+                    end                                                               
                                         
                     % get sds
-                    r = r + 1;
                     for s=1:length(subjs)
                         if isfield(bbstruct.(subjs{s}),'mean')
                             if isfield(bbstruct.(subjs{s}).sd,cond)
