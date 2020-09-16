@@ -22,7 +22,7 @@ function structin = addTimeVector(structin,p,samp)
 % -------------------------------------------------------------------- 
 
 
-    % create time vectors, absolute and relative
+    % create time vectors, absolute and relative to first step
     if p<0
         structin.data.TIMES.absolute = linspace(structin.trange(1),structin.trange(2),samp);
         structin.data.TIMES.relative = structin.data.TIMES.absolute-structin.data.TIMES.absolute(1);        
