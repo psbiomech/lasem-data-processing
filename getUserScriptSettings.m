@@ -32,8 +32,8 @@ user.XLSMETASF = 'META';   % metadata subfolder
 user.ERRORSF = 'ERROR';      % error logs subfolder
 
 % task
-user.TASKTYPE = 'run-swing-predefined-limb';   % activity/task/motion type code
-user.TASKSHORT = 'run-swing';   % abbreviated name for task, used for Excel file names
+user.TASKTYPE = 'run-gaitcycle-predefined-limb';   % activity/task/motion type code
+user.TASKSHORT = 'run-gaitcycle';   % abbreviated name for task, used for Excel file names
 
 % full subfolder paths based on TASKSHORT
 user.SUMMARYPATH = fullfile(user.DATASRCPATH,['zz-' user.TASKSHORT],user.SUMMARYSF);   % location to which all output data summary files are written

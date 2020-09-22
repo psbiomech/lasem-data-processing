@@ -152,6 +152,17 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial,calcspeed,speedmar
         case 'run-stance'
             tstruct = task_run_stance(itf,tinfo,bbmeta);             
 
+        % run swing:
+        % same lazy code as run-stance
+        case 'run-swing'
+            tstruct = task_run_swing(itf,tinfo,bbmeta); 
+            
+        % run gait cycle:
+        % same lazy code as run-stance
+        case 'run-gaitcycle'
+            tstruct = task_run_gaitcycle(itf,tinfo,bbmeta);             
+        
+        % run stance, predefined limb:
         % run stance, with stance limb predefined based on subfolder:
         % same lazy code as run-stance, but originally written to process
         % Mark Scholes' running data, using subfolder name (Left/Right) to 
@@ -159,12 +170,17 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial,calcspeed,speedmar
         case 'run-stance-predefined-limb'
             tstruct = task_run_stance_predefined_limb(itf,tinfo,bbmeta);               
 
+        % run swing, predefined limb:
         % run swing, with stance limb predefined based on subfolder:
-        % same lazy code as run-stance, but originally written to process
-        % Mark Scholes' running data, using subfolder name (Left/Right) to 
-        % predefine the swing limb, rather than make assumptions
+        % same lazy code as run-stance-predefined-limb
         case 'run-swing-predefined-limb'
             tstruct = task_run_swing_predefined_limb(itf,tinfo,bbmeta);
+
+        % run gait cycle, predefined limb:            
+        % run gait cycle, with stance limb predefined based on subfolder:
+        % same lazy code as run-stance-predefined-limb
+        case 'run-gaitcycle-predefined-limb'
+            tstruct = task_run_gaitcycle_predefined_limb(itf,tinfo,bbmeta);            
             
         % single-leg drop and jump: 
         case 'sldj'            

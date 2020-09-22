@@ -43,12 +43,12 @@ function tstruct = task_run_swing(itf,tinfo,bbmeta)
     for n=1:eused-1
         if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))   % stance
             if strcmpi(econtext{n+1},econtext{n+4})&&strcmpi(elabel{n+1},LAB.FO)&&strcmpi(elabel{n+4},LAB.FS)   % swing            
-                trange = [etime(n+1) etime(n+4)];
+                trange = [etime(n) etime(n+4)];
                 triallimb = upper(econtext{n}(1));
-                elabels = elabel(n+1:n+4);
-                econtexts = econtext(n+1:n+4);
-                eframes = eframe(n+1:n+4); 
-                ecodes = ecode(n+1:n+4);
+                elabels = elabel(n:n+4);
+                econtexts = econtext(n:n+4);
+                eframes = eframe(n:n+4); 
+                ecodes = ecode(n:n+4);
                 break;
             end
         end

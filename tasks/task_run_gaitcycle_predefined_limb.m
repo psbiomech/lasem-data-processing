@@ -1,7 +1,9 @@
-function tstruct = task_run_swing(itf,tinfo,bbmeta)
+function tstruct = task_run_gaitcycle_predefined_limb(itf,tinfo,bbmeta)
 
-%task_run_stance: Auto generate trial info: run - swing only
+%task_run_gaitcycle_predefined_limb: Auto generate trial info: run - gc
 %   Prasanna Sritharan, April 2018
+%
+% Last updated: August 2020
 % 
 % -------------------------------------------------------------------- 
 %     Copyright (C) 2018 Prasanna Sritharan
@@ -31,7 +33,17 @@ function tstruct = task_run_swing(itf,tinfo,bbmeta)
     ecode = tinfo.ecode;
     fps = tinfo.fps;
     LAB = tinfo.LAB;
-       
+    c3dfile = tinfo.c3dfile;
+    
+    % get trial foot from subfolder, if this is not available, then just
+    % assume trial foot is first stance phase found as per run-stance
+    tlimb = [];
+    if contains(c3dfile,'\Left\','IgnoreCase',true)
+        tlimb = 'Left';
+    elseif contains(c3dfile,'\Right\','IgnoreCase',true)
+        tlimb = 'Right';
+    end
+               
     % find consective FS, FO, FS on same leg
     % assume:
     %   1. stance must occur before swing
@@ -41,17 +53,35 @@ function tstruct = task_run_swing(itf,tinfo,bbmeta)
     %       (event1=RFS, event2=RFO), then find right leg swing
     %       (event2=RFO, event5=RFS), assume event3=LFS and event4=LFO
     for n=1:eused-1
-        if strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))   % stance
+        
+        % if no predefined trial limb found from subfolder, then just
+        % assume trial foot is the first stance phase found, as per
+        % run-stance        
+        if isempty(tlimb)&&strcmpi(econtext{n},econtext{n+1})&&strcmpi(elabel{n},LAB.FS)&&strcmpi(elabel{n+1},LAB.FO)   % stance
             if strcmpi(econtext{n+1},econtext{n+4})&&strcmpi(elabel{n+1},LAB.FO)&&strcmpi(elabel{n+4},LAB.FS)   % swing            
-                trange = [etime(n+1) etime(n+4)];
+                trange = [etime(n) etime(n+4)];
                 triallimb = upper(econtext{n}(1));
-                elabels = elabel(n+1:n+4);
-                econtexts = econtext(n+1:n+4);
-                eframes = eframe(n+1:n+4); 
-                ecodes = ecode(n+1:n+4);
+                elabels = elabel(n:n+4);
+                econtexts = econtext(n:n+4);
+                eframes = eframe(n:n+4); 
+                ecodes = ecode(n:n+4);
+                break; 
+            end
+            
+        % otherwise find the first stance phase that matches the predefined
+        % trial foot
+        elseif strcmpi(econtext{n},tlimb)&&strcmpi(econtext{n},econtext{n+1})&&(strcmpi(elabel{n},LAB.FS))&&(strcmpi(elabel{n+1},LAB.FO))   % stance
+            if strcmpi(econtext{n+1},econtext{n+4})&&strcmpi(elabel{n+1},LAB.FO)&&strcmpi(elabel{n+4},LAB.FS)   % swing                 
+                trange = [etime(n) etime(n+4)];
+                triallimb = upper(econtext{n}(1));
+                elabels = elabel(n:n+4);
+                econtexts = econtext(n:n+4);
+                eframes = eframe(n:n+4); 
+                ecodes = ecode(n:n+4);
                 break;
             end
         end
+        
     end 
 
     % compute force plate sequence
