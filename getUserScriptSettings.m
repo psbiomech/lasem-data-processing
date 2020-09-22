@@ -23,17 +23,27 @@ function user = getUserScriptSettings()
 % -------------------------------------------------------------------- 
 
 
-% folder paths
+% data root
 user.DATASRCPATH = 'C:\Users\psrit\Documents\data\Force Running\';  % root directory of source C3D files with Body Builder data
-user.SUMMARYPATH = 'C:\Users\psrit\Documents\data\Force Running\zz_SUMMARY\';   % location to which all output data summary files are written
-user.XLSMETAPATH = 'C:\Users\psrit\Documents\data\Force Running\zz_META\';   % if used, write location of XLS file with subject/trial metadata
-user.ERRORPATH = 'C:\Users\psrit\Documents\data\Force Running\zz_ERROR\';      % write location of error output logs
+
+% subfolders
+user.SUMMARYSF = 'SUMMARY';   % summary files subfolder
+user.XLSMETASF = 'META';   % metadata subfolder
+user.ERRORSF = 'ERROR';      % error logs subfolder
+
+% task
+user.TASKTYPE = 'run-swing-predefined-limb';   % activity/task/motion type code
+user.TASKSHORT = 'run-swing';   % abbreviated name for task, used for Excel file names
+
+% full subfolder paths based on TASKSHORT
+user.SUMMARYPATH = fullfile(user.DATASRCPATH,['zz-' user.TASKSHORT],user.SUMMARYSF);   % location to which all output data summary files are written
+user.XLSMETAPATH = fullfile(user.DATASRCPATH,['zz-' user.TASKSHORT],user.XLSMETASF);   % if used, write location of XLS file with subject/trial metadata
+user.ERRORPATH = fullfile(user.DATASRCPATH,['zz-' user.TASKSHORT],user.ERRORSF);      % write location of error output logs
 
 % data processing settings
 user.SAMP = 101;    % resample data to standardised number of time steps
 user.AMPG = [1 1 1 1];   % what Body Builder data to extract from C3D file: angles, moments, powers, GRFs (1=yes,0=no)
 user.FILESELECTMODE = 'auto';   % 'auto': process C3D files matching file name format, 'manual': manually select which files to process
-user.TASKTYPE = 'run-stance-predefined-limb';   % activity/task/motion type code
 user.COHORTSUBFOLDERS = {'Symptomatics','Control'};     % format: {test folder name, control folder name}, set to empty [] if not used
 user.CALCSPEED = 'yes';     % flag to calculate trial speed (yes/no)
 user.SPEEDMARKER = 'SACR';      % trial speed marker
@@ -55,15 +65,15 @@ user.AFFECTED = 'Z';    % affected limb (L/R/C/Z), z indicates that the affected
 % XLSMETAUPLOADFILE in folder DATASRCPATH and set
 % UPDATEMETAFROMFILE='update'. Refer to function loadXLSmeta() for the 
 % spreadsheet format. If WRITEMETATOFILE='write', these processing scripts
-% automatically also output, a spreadsheet XLSMETAWRITEFILE which can be 
+% automatically also output a spreadsheet XLSMETAWRITEFILE which can be 
 % used for future metadata upload or as a template for manually creating a 
 % new one. To use this auto generated spreasheet for future upload, copy it
 % from XLSMETAPATH to DATASRCPATH, rename it to be XLSMETAUPLOADFILE and
 % set UPDATEMETAFROMFILE='update'.
 user.UPDATEMETAFROMFILE = 'update';  % update subject metadata from XLS file (update/noupdate)
 user.WRITEMETATOFILE = 'write';    % write subject metadata to XLS file (write/nowrite)
-user.XLSMETAUPLOADFILE = 'FAILT_RUN_subject_metadata.xlsx';     % input file containing metadata to be read from Excel spreadsheet into struct
-user.XLSMETAWRITEFILE = 'FAILT_RUN_subject_metadata.xlsx';      % output file for writing metadata from struct to Excel spreadheet
+user.XLSMETAUPLOADFILE = [upper(user.SUBJECTPREFIX) '_' upper(user.TRIALPREFIX) '_subject_metadata.xlsx'];     % input file containing metadata to be read from Excel spreadsheet into struct
+user.XLSMETAWRITEFILE = [upper(user.SUBJECTPREFIX) '_' upper(user.TRIALPREFIX) '_subject_metadata.xlsx'];      % output file for writing metadata from struct to Excel spreadheet
 
 
 end

@@ -25,10 +25,11 @@ function saveBBstruct(bb,user)
     % assign struct fields
     subjprefix = user.SUBJECTPREFIX;
     trialprefix = user.TRIALPREFIX;
+    taskshort = user.TASKSHORT;
     bbfilepath = user.SUMMARYPATH;
 
     % add MAT extension if necessary
-    bbfilename = upper([subjprefix '_' trialprefix]);
+    bbfilename = upper([upper(subjprefix) '_' upper(trialprefix) '_' upper(taskshort)]);
     if isempty(regexpi(bbfilename,'.mat')), bbfilename = [bbfilename '.mat']; end
 
     % save Body Builder struct

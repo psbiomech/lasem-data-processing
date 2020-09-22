@@ -51,7 +51,7 @@ function meta = getSubjTrialMeta(flist,subtri,bbmeta,user)
             
             % subject cohort and affected limb
             disp(['Subject: ' subtri{f}{1}]);
-            disp(['==============================']);
+            disp('==============================');
             meta.(subtri{f}{1}).cohort = labelSubjectCohort(bbmeta,cohmode,flist{f},user);
             meta.(subtri{f}{1}).affected = labelAffectedLimb(meta.(subtri{f}{1}).cohort,bbmeta,affmode);
                         

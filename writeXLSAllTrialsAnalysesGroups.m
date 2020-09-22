@@ -29,6 +29,7 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
     subjprefix = user.SUBJECTPREFIX;
     trialprefix = user.TRIALPREFIX;
     xlspath = user.SUMMARYPATH;
+    taskshort = user.TASKSHORT;
     samp = user.SAMP;
     
     
@@ -197,7 +198,7 @@ function writeXLSAllTrialsAnalysesGroups(bbstruct,bbmeta,user)
         bbanalysis = upper(bbmeta.BBANALYSES{b});
         if all(~strcmpi(bbanalysis,{'ROTIMPULSE','ROTWORK'})), continue; end       % skip if not RotImpulse or RotWork
         s = 1;
-        xlsname = [upper(subjprefix) '_' upper(trialprefix) '_ALLTRIALS_' bbanalysis '.xlsx'];                
+        xlsname = [upper(subjprefix) '_' upper(trialprefix) '_' upper(taskshort) '_ALLTRIALS_' bbanalysis '.xlsx'];                
         for q=1:length(bbmeta.(bbanalysis))
             quantlabel = bbmeta.(bbanalysis){q};
             sheetname = [quantlabel '_' bbmeta.units.(bbanalysis)];

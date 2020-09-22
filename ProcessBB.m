@@ -61,6 +61,12 @@ disp('Generating list of available C3D files matching file name format...');
 disp('Generating subject and trial metadata and settings...');
 bb = getSubjTrialMeta(flist,subtri,bbmeta,user);
 
+% *** Mark Scholes Running Data only ***
+% update ignore flag to ignore non-gaitcycle trials
+disp(' ');
+disp('Updating ignore flags for non-gaitcycle trials (Mark Scholes FAILT running data only)...');
+bb = gcUpdateIgnore(bb,bbmeta,user);
+
 
 %% ********************
 % EXTRACT & PROCESS BODY BUILDER DATA

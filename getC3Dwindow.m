@@ -153,11 +153,18 @@ function c3dout = getC3Dwindow(c3dfile,task,bbmeta,subj,trial,calcspeed,speedmar
             tstruct = task_run_stance(itf,tinfo,bbmeta);             
 
         % run stance, with stance limb predefined based on subfolder:
-        % (same lazy code as run-stance, but originally written to process
+        % same lazy code as run-stance, but originally written to process
         % Mark Scholes' running data, using subfolder name (Left/Right) to 
-        % predefine the stance limb, rather than make assumptions)
+        % predefine the stance limb, rather than make assumptions
         case 'run-stance-predefined-limb'
             tstruct = task_run_stance_predefined_limb(itf,tinfo,bbmeta);               
+
+        % run swing, with stance limb predefined based on subfolder:
+        % same lazy code as run-stance, but originally written to process
+        % Mark Scholes' running data, using subfolder name (Left/Right) to 
+        % predefine the swing limb, rather than make assumptions
+        case 'run-swing-predefined-limb'
+            tstruct = task_run_swing_predefined_limb(itf,tinfo,bbmeta);
             
         % single-leg drop and jump: 
         case 'sldj'            
