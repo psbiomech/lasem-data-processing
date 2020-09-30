@@ -89,7 +89,7 @@ If you create a new analysis function, please consider submitting it for merging
 **Prasanna Sritharan**  
 La Trobe Sports and Exercise Medicine Research Centre  
 La Trobe University, Victoria, Australia  
-psritharan@ltu.edu.au
+p.sritharan@latrobe.edu.au
 
 ## License
 
